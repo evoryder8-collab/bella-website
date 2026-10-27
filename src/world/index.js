@@ -96,13 +96,7 @@ export function initWorld() {
   atmosphere.uniforms.uDim.value = html.classList.contains('portal-open') ? 1 : 0;
   const hero = document.querySelector('[data-hero]');
   const hint = hero.querySelector('[data-hero-hint]');
-  const anchors = {
-    portrait: document.querySelector('.hero-media'),
-    glide: document.querySelector('[data-approach-stage]'),
-    stroke: document.querySelector('.method-media'),
-    orbit: document.querySelector('.rating-value'),
-    finale: document.querySelector('.footer-mark'),
-  };
+  const portraitEl = document.querySelector('.hero-media');
   const boxOf = (el) => (el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el).getBoundingClientRect();
 
   // ---- Layout: sizes, and everything built from the page height ----
@@ -148,75 +142,37 @@ export function initWorld() {
   let slow = 0;
   let degraded = false;
   let pulse = 0;
-  let lastKind = null;
   let lastTouchChime = 0;
   window.addEventListener('bb:pulse', () => (pulse = 1));
 
-  const chapter = () => {
-    let best = null;
-    let bestScore = 0.3;
-    for (const [kind, el] of Object.entries(anchors)) {
-      if (!el) continue;
-      const rect = boxOf(el);
-      const overlap = Math.min(rect.bottom, vh) - Math.max(rect.top, 0);
-      const score = overlap / Math.min(rect.height || 1, vh);
-      if (score > bestScore) {
-        bestScore = score;
-        best = { kind, rect };
-      }
+  // The stone belongs to the hero: presented alone in the portal, then resting
+  // by Bella's cheek and following a finger over her portrait. It leaves with
+  // the hero as you scroll rather than following you down the page.
+  const target = (now, t) => {
+    if (html.classList.contains('portal-open')) return { x: vw / 2, y: vh * 0.25, scale: q.coarse ? 0.62 : 0.72, glow: 0.45, follow: false, portrait: false };
+    const rect = portraitEl.getBoundingClientRect();
+    const scale = q.coarse ? 0.55 : 0.7;
+    const touching =
+      rect.bottom > vh * 0.35 &&
+      now - pointer.moved < 2200 &&
+      pointer.x > rect.left - 40 &&
+      pointer.x < rect.right + 40 &&
+      pointer.y > rect.top - 40 &&
+      pointer.y < rect.bottom + 40;
+    if (touching) {
+      hint?.classList.add('is-done');
+      // On touch, hover the stone just above the fingertip so the finger never hides it.
+      return { x: pointer.x, y: pointer.y - (q.coarse ? 70 : 0), scale, glow: 0.08, follow: true, portrait: true };
     }
-    return best;
-  };
-
-  const target = (active, now, t) => {
-    // First-visit portal: the stone is presented alone, turning in the light.
-    if (html.classList.contains('portal-open')) return { x: vw / 2, y: vh * 0.25, scale: q.coarse ? 0.62 : 0.72, glow: 0.45, follow: false };
-    if (!active) return { x: vw + 180, y: vh * 0.4, scale: 0.45, glow: 0.03, follow: false };
-    const { kind, rect } = active;
-    const progress = (a) => MathUtils.clamp(a, 0, 1);
-    switch (kind) {
-      case 'portrait': {
-        const touching =
-          now - pointer.moved < 2200 &&
-          pointer.x > rect.left - 40 &&
-          pointer.x < rect.right + 40 &&
-          pointer.y > rect.top - 40 &&
-          pointer.y < rect.bottom + 40;
-        if (touching) {
-          hint?.classList.add('is-done');
-          // On touch, hover the stone just above the fingertip so the finger never hides it.
-          return { x: pointer.x, y: pointer.y - (q.coarse ? 70 : 0), scale: q.coarse ? 0.55 : 0.7, glow: 0.08, follow: true };
-        }
-        // Idle: a slow figure-of-eight over the cheek, a gua sha ritual on its own.
-        return {
-          x: rect.left + rect.width * (0.74 + 0.05 * Math.sin(t * 0.9)),
-          y: rect.top + rect.height * (q.coarse ? 0.36 : 0.42) + rect.height * 0.04 * Math.sin(t * 1.3),
-          scale: q.coarse ? 0.55 : 0.7,
-          glow: 0.05,
-          follow: false,
-        };
-      }
-      case 'glide': {
-        const p = progress(-rect.top / Math.max(1, rect.height - vh));
-        return { x: vw * (0.16 + 0.68 * p), y: vh * (0.42 - 0.2 * p + 0.05 * Math.sin(p * Math.PI * 3)), scale: 0.6, glow: 0.12, follow: false };
-      }
-      case 'stroke': {
-        const p = MathUtils.smoothstep((vh - rect.top) / (vh + rect.height), 0.3, 0.7);
-        return { x: rect.left + rect.width * (0.25 + 0.45 * p), y: rect.top + rect.height * (0.82 - 0.62 * p), scale: 0.55, glow: 0.1, follow: false };
-      }
-      case 'orbit':
-        return {
-          x: Math.min(vw - 70, rect.left + rect.width * 0.9 + 40 * Math.cos(t * 0.8)),
-          y: rect.top + rect.height * 0.45 + 16 * Math.sin(t * 0.8),
-          scale: 0.48,
-          glow: 0.35,
-          follow: false,
-        };
-      case 'finale':
-        return { x: vw / 2, y: rect.top - Math.min(80, vh * 0.1), scale: 0.62, glow: 0.6, follow: false };
-      default:
-        return { x: vw + 180, y: vh * 0.4, scale: 0.45, glow: 0.03, follow: false };
-    }
+    // Idle: a slow figure-of-eight over the cheek, a gua sha ritual on its own.
+    return {
+      x: rect.left + rect.width * (0.74 + 0.05 * Math.sin(t * 0.9)),
+      y: rect.top + rect.height * (q.coarse ? 0.36 : 0.42) + rect.height * 0.04 * Math.sin(t * 1.3),
+      scale,
+      glow: 0.05,
+      follow: false,
+      portrait: true,
+    };
   };
 
   const frame = (time, deltaTime) => {
@@ -226,7 +182,8 @@ export function initWorld() {
     const scrollY = window.scrollY;
 
     // Scroll speed bends the photos a little, like silk.
-    const speed = (scrollY - lastScroll) / Math.max(dt, 1e-3);
+    const scrolled = scrollY - lastScroll;
+    const speed = scrolled / Math.max(dt, 1e-3);
     lastScroll = scrollY;
     bend += (MathUtils.clamp(speed / 3200, -1, 1) - bend) * Math.min(1, dt * 6);
 
@@ -271,11 +228,13 @@ export function initWorld() {
       setBrightness(dark ? 0.15 : 1);
     }
 
-    // Stone.
-    const active = chapter();
-    const goal = target(active, now, elapsed);
+    // Stone. Outside the portal it scrolls with the page like a thing placed
+    // on it, and eases only the rest of the way.
+    const goal = target(now, elapsed);
+    if (!portalOpen) stone.y -= scrolled;
     const ease = 1 - Math.exp(-dt * (goal.follow ? 9 : 3.2));
     const px = stone.x;
+    // Measured after the scroll shift, so only movement over the page counts as a stroke.
     const py = stone.y;
     stone.x += (goal.x - stone.x) * ease;
     stone.y += (goal.y - stone.y) * ease;
@@ -283,18 +242,13 @@ export function initWorld() {
     stone.vy = (stone.y - py) / Math.max(dt, 1e-3);
     stone.scale += (goal.scale - stone.scale) * Math.min(1, dt * 3);
     stone.glow += (goal.glow + pulse * 0.9 - stone.glow) * Math.min(1, dt * 2.5);
-    // A chime whenever the stone moves on to a new chapter, and as a finger leads it fast.
-    const kind = portalOpen ? 'portal' : active?.kind ?? null;
-    if (kind !== lastKind) {
-      if (lastKind !== null && kind) chime(0.45);
-      lastKind = kind;
-    }
+    // A chime as a finger leads the stone fast across the portrait.
     const stoneSpeed = Math.hypot(stone.vx, stone.vy);
     if (goal.follow && stoneSpeed > 500 && now - lastTouchChime > 240) {
       lastTouchChime = now;
       chime(Math.min(0.7, stoneSpeed / 3000));
     }
-    const portrait = active?.kind === 'portrait';
+    const portrait = goal.portrait;
     stone.spin += dt * (portrait ? 0 : 0.45);
     stone.rz += ((portrait ? -0.55 : 0) - stone.rz) * Math.min(1, dt * 3);
 
@@ -309,16 +263,19 @@ export function initWorld() {
     );
     quartz.material.emissiveIntensity = stone.glow;
     quartz.light.intensity = 0.2 + stone.glow * 2.5;
+    // Off screen the stone isn't drawn at all, which also skips the costly refraction pass.
+    const stoneVisible = stone.y > -160 && stone.y < vh + 160;
+    g.visible = stoneVisible;
 
     // The stone (and, elsewhere, the finger) makes the photos flow.
     const stoneMoved = Math.hypot(stone.x - px, stone.y - py);
-    if (stoneMoved > 0.4) media.stroke(stone.x, stone.y, stone.x - px, stone.y - py, goal.follow ? 1 : 0.55);
+    if (stoneVisible && stoneMoved > 0.4) media.stroke(stone.x, stone.y, stone.x - px, stone.y - py, goal.follow ? 1 : 0.55);
     if ((pointer.dx || pointer.dy) && !goal.follow) media.stroke(pointer.x, pointer.y, pointer.dx, pointer.dy, 1);
     pointer.dx = 0;
     pointer.dy = 0;
 
     media.update({ vw, vh, k, dt, bend });
-    media.light(stone.x, stone.y, Math.min(1, 0.6 + stone.glow));
+    media.light(stone.x, stone.y, stoneVisible ? Math.min(1, 0.6 + stone.glow) : 0);
 
     renderer.render(scene, camera);
 

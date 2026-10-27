@@ -94,8 +94,8 @@ decorative lines that looked like placeholders.
   space between chapters so light text never sits on a light background.
 - **The rose-quartz stone** (procedural gua sha shape, physical transmission material) refracts whatever is
   behind it. It rests by Bella's cheek and follows a finger over the portrait, which flows where it passes;
-  it then glides across the pinned Beauty/Balance/Glow photos, performs a stroke over the Femina Bella Est
-  photo, orbits the 4.9 rating and glows above the footer wordmark.
+  it stays with the hero and scrolls away with it (after review, following the reader down the page felt
+  intrusive).
 - **The satin ribbon** sweeps in front of the hero, then rides one screen edge per chapter and crosses only
   between chapters. It parts around a finger.
 - **Photos are liquid.** Every photo is redrawn in WebGL over its DOM box: an organic dissolve instead of a

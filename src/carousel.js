@@ -57,4 +57,42 @@ export function initCarousel(root, chipsRoot) {
   prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reducedMotion ? 'auto' : 'smooth' }));
   next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reducedMotion ? 'auto' : 'smooth' }));
   update();
+  if (!reducedMotion) nudge(track);
+}
+
+// The first time the cards come into view they lean to the left and spring
+// back, saying "there is more this way"; a smaller second nudge follows if
+// nobody has swiped yet. The track itself moves (not its scroll position), so
+// scroll snapping never fights it.
+function nudge(track) {
+  let touched = false;
+  for (const type of ['pointerdown', 'touchstart', 'wheel']) {
+    track.addEventListener(type, () => (touched = true), { passive: true, once: true });
+  }
+
+  const lean = (distance) =>
+    track.animate(
+      [
+        { transform: 'translateX(0)', easing: 'cubic-bezier(0.45, 0, 0.2, 1)' },
+        { transform: `translateX(${-distance}px)`, offset: 0.4, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
+        { transform: `translateX(${distance * 0.12}px)`, offset: 0.76, easing: 'ease-in-out' },
+        { transform: 'translateX(0)' },
+      ],
+      { duration: 1600 },
+    );
+
+  const seen = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      seen.disconnect();
+      setTimeout(() => {
+        if (touched) return;
+        chime(0.25);
+        lean(Math.min(96, track.clientWidth * 0.22));
+        setTimeout(() => !touched && lean(Math.min(48, track.clientWidth * 0.11)), 3600);
+      }, 450);
+    },
+    { threshold: 0.6 },
+  );
+  seen.observe(track);
 }

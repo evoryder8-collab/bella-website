@@ -1348,6 +1348,25 @@ main,
   color: var(--wine-soft);
 }
 
+.carousel-swipe::after {
+  content: '→';
+  display: inline-block;
+  margin-left: 8px;
+  animation: swipe-hint 1.8s var(--ease) infinite;
+}
+
+@keyframes swipe-hint {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(6px);
+    opacity: 1;
+  }
+}
+
 .carousel-buttons {
   display: none;
   gap: 10px;

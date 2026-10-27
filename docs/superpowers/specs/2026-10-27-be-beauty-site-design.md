@@ -1,7 +1,9 @@
 # BE BEAUTY website: design
 
 First approved in chat on 2026-10-27 ("Quiet luxe", placeholder content). Revised and approved the same
-day as **version 2**: real content from Bella's own site, mobile-first, "Rose luxe".
+day as **version 2**: real content from Bella's own site, mobile-first, "Rose luxe". **Version 3**, approved the same day,
+turns the page into one continuous 3D world ("Rose Quartz Ritual") with a first-visit sound and language
+portal; see the section below.
 
 ## Client
 
@@ -80,3 +82,31 @@ Preview at 375px first, then desktop, in both languages: the hero shader respond
 carousel chips, deck throws, map chips, all links (Bokadirekt, mailto, Instagram, directions, anchors), no
 horizontal scroll on phones, no console errors in the production build. Then push to `main` and check the
 live URL.
+
+## Version 3: "Rose Quartz Ritual"
+
+Asked for because version 2 still read as blocks: hard colour cuts between sections, boxed photos and
+decorative lines that looked like placeholders.
+
+- **One world, no hard cuts.** A fixed WebGL scene sits behind the whole page (`src/world`). Sections no
+  longer paint their own backgrounds: `data-tone` on each section feeds one blended gradient
+  (`src/tones.js`) that both the CSS fallback and the WebGL backdrop use, and every blend finishes inside the
+  space between chapters so light text never sits on a light background.
+- **The rose-quartz stone** (procedural gua sha shape, physical transmission material) refracts whatever is
+  behind it. It rests by Bella's cheek and follows a finger over the portrait, which flows where it passes;
+  it then glides across the pinned Beauty/Balance/Glow photos, performs a stroke over the Femina Bella Est
+  photo, orbits the 4.9 rating and glows above the footer wordmark.
+- **The satin ribbon** sweeps in front of the hero, then rides one screen edge per chapter and crosses only
+  between chapters. It parts around a finger.
+- **Photos are liquid.** Every photo is redrawn in WebGL over its DOM box: an organic dissolve instead of a
+  wipe, a flow under the finger, a slight bend with scroll speed and the stone's light pooled on it.
+- **Glass surfaces** for cards, reviews, offers and the booking bar; the map melts into the page.
+- **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the
+  language, detected from the device and picked after a five-second countdown that can be paused. A
+  `?lang=` link skips the language step; `?intro` shows the portal again. The portal sits over the dark 3D
+  world with the stone turning alone; entering dissolves it into the hero's entrance.
+- **Sound** (`src/sound.js`), composed live with Web Audio: an ambient pad through four chords, an air layer
+  that follows scroll speed, crystal chimes for the stone's chapters and the treatment cards, a silk swish for
+  thrown review cards. A header toggle mutes it; returning visitors who chose sound hear it from their first tap.
+- **Fallbacks**: without WebGL the page keeps its photos and blended colours; with reduced motion there is no
+  world, pinning or countdown animation; the portal still asks, without effects.

@@ -11,6 +11,7 @@ All copy and contact details live in [`src/content.js`](src/content.js), in Swed
 - [ ] Reviews. The six quotes are from her site and are shown in English in both languages, as published there.
 - [ ] Academy: no new dates are listed yet ("Nya kursdatum släpps snart"). Interest goes to her email with a prefilled subject.
 - [ ] Whether to show a WhatsApp or phone number. None is published, so booking goes to Bokadirekt and contact goes to email and Instagram.
+- [ ] The first-visit portal copy ("Ljud på?" / "Välj språk", `portal` in `src/content.js`) and the soundscape, which is composed in the browser and can be changed in `src/sound.js`.
 
 ## Contact (`contact` and `studios` in `src/content.js`)
 

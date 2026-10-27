@@ -2,6 +2,8 @@
 // and it flies off and slides in at the back. Without this script the cards
 // are a plain swipeable row.
 
+import { whoosh } from './sound.js';
+
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const THROW = 90; // px of drag before a release counts as a throw
 
@@ -36,6 +38,7 @@ export function initDeck(root) {
 
   // Fling the top card off to one side, then send it to the back of the stack.
   const toss = (card, direction) => {
+    whoosh(0.8);
     if (reducedMotion) return advance(1);
     card.style.transition = `transform 0.45s ${ease}`;
     card.style.transform = `translate3d(${direction * 120}%, -4%, 0) rotate(${direction * 14}deg)`;

@@ -20,12 +20,54 @@
       document.documentElement.classList.add('motion');
       setTimeout(() => document.documentElement.classList.contains('motion-ready') || document.documentElement.classList.remove('motion'), 3000);
     }
+    // First visit (or ?intro): open the sound and language portal before anything else paints.
+    try {
+      if (!localStorage.getItem('bebeauty-entered') || /[?&]intro\b/.test(location.search)) document.documentElement.classList.add('portal-open');
+    } catch {
+      document.documentElement.classList.add('portal-open');
+    }
   </script>
   <link rel="stylesheet" href="./src/styles.css">
   <script type="module" src="./src/main.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
+
+  <!-- First visit: sound, then language (src/portal.js). It only shows while the
+       head script's .portal-open is set, so without JavaScript the site opens directly. -->
+  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
+    <p class="portal-mark" aria-hidden="true">BE <em>BEAUTY</em></p>
+    <div class="portal-step" data-step="sound">
+      <span class="portal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <h2 class="portal-title" id="portal-title" data-portal-text="soundTitle"></h2>
+      <p class="portal-lead" data-portal-text="soundLead"></p>
+      <div class="portal-actions">
+        <button type="button" class="portal-yes" data-sound-choice="on">
+          <span class="portal-yes-label"><span data-portal-text="yes"></span><span class="portal-yes-tag" data-portal-text="recommended"></span></span>
+          <span class="portal-yes-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="portal-no" data-sound-choice="off" data-portal-text="no"></button>
+      </div>
+    </div>
+    <div class="portal-step" data-step="lang" hidden>
+      <h2 class="portal-title" data-portal-text="langTitle"></h2>
+      <p class="portal-lead" data-portal-text="langLead"></p>
+      <div class="portal-langs" role="group">
+        <button type="button" class="portal-lang" data-pick="sv" lang="sv">
+          <span class="portal-lang-name">Svenska</span><span class="portal-lang-code">SV</span>
+          <span class="portal-progress" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="portal-lang" data-pick="en" lang="en">
+          <span class="portal-lang-name">English</span><span class="portal-lang-code">EN</span>
+          <span class="portal-progress" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="portal-auto">
+        <p aria-live="polite"><span data-portal-detected></span> · <span data-portal-count></span></p>
+        <button type="button" class="portal-pause" data-portal-pause aria-pressed="false"><span class="portal-pause-icon" aria-hidden="true"></span><span class="visually-hidden" data-portal-pause-label></span></button>
+      </div>
+    </div>
+  </div>
 
   <header class="site-header" data-header>
     <div class="header-inner">
@@ -40,6 +82,7 @@
         </ul>
       </nav>
       <div class="header-actions">
+        <button type="button" class="sound-toggle" data-sound-toggle aria-pressed="false" data-i18n-attr="aria-label:ui.sound"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
         <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
           <button type="button" data-lang="sv" aria-pressed="true">SV</button>
           <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -74,8 +117,8 @@
 
   <main id="main">
     <!-- Hero: the portrait becomes a touch-reactive WebGL surface (src/hero-sculpt.js). -->
-    <section class="hero" id="top" data-hero>
-      <div class="hero-media" data-hero-media>
+    <section class="hero" id="top" data-hero data-tone="light">
+      <div class="hero-media" data-hero-media data-gl-media>
         <div class="hero-frame" data-hero-frame>
           <img class="hero-img" src="./src/images/hero-bella.jpg" width="996" height="1343" alt="" data-i18n-attr="alt:hero.imageAlt" fetchpriority="high">
         </div>
@@ -98,13 +141,13 @@
     </section>
 
     <!-- Beauty. Balance. Glow. Pinned and scrubbed with motion, stacked panels without. -->
-    <section class="approach" aria-labelledby="approach-title" data-approach>
+    <section class="approach" aria-labelledby="approach-title" data-approach data-tone="dark">
       <h2 class="visually-hidden" id="approach-title" data-i18n="approach.label"></h2>
       <div class="approach-stage" data-approach-stage>
         <p class="section-label approach-label" aria-hidden="true" data-i18n="approach.label"></p>
         <ol class="approach-list">
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media">
+            <figure class="approach-media" data-gl-media>
               <img src="./src/images/studio.jpg" width="1179" height="1150" loading="lazy" alt="" data-i18n-attr="alt:approach.items.0.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -114,7 +157,7 @@
             </div>
           </li>
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media">
+            <figure class="approach-media" data-gl-media>
               <img src="./src/images/guasha.jpg" width="1179" height="1291" loading="lazy" alt="" data-i18n-attr="alt:approach.items.1.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -124,7 +167,7 @@
             </div>
           </li>
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media">
+            <figure class="approach-media" data-gl-media>
               <img src="./src/images/treatment-light.jpg" width="1120" height="1400" loading="lazy" alt="" data-i18n-attr="alt:approach.items.2.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -139,16 +182,10 @@
     </section>
 
     <!-- Femina Bella Est -->
-    <section class="method section" id="metoden" aria-labelledby="method-title">
+    <section class="method section" id="metoden" data-tone="light" aria-labelledby="method-title">
       <div class="wrap method-grid">
-        <figure class="method-media" data-reveal-image>
+        <figure class="method-media" data-reveal-image data-gl-media>
           <img data-parallax src="./src/images/treatment-hands.jpg" width="1344" height="1400" loading="lazy" alt="" data-i18n-attr="alt:method.imageAlt">
-          <!-- Gua sha strokes: drawn in on scroll, always lifting up and out. -->
-          <svg class="lift-lines" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <path data-lift pathLength="1" d="M14 115 C 24 92, 30 70, 26 38" />
-            <path data-lift pathLength="1" d="M40 120 C 52 95, 58 68, 56 25" />
-            <path data-lift pathLength="1" d="M66 117 C 78 97, 86 72, 88 42" />
-          </svg>
         </figure>
         <div class="method-copy">
           <p class="section-label" data-reveal data-i18n="method.label"></p>
@@ -168,7 +205,7 @@
     </section>
 
     <!-- Treatments: one swipeable track, chips jump between groups. -->
-    <section class="treatments section" id="behandlingar" aria-labelledby="treatments-title">
+    <section class="treatments section" id="behandlingar" data-tone="light" aria-labelledby="treatments-title">
       <div class="wrap">
         <p class="section-label" data-reveal data-i18n="treatments.label"></p>
         <h2 class="section-title" id="treatments-title" data-reveal data-i18n="treatments.title"></h2>
@@ -281,7 +318,7 @@
     </section>
 
     <!-- Proof: rating, numbers, press -->
-    <section class="proof section" aria-labelledby="proof-title">
+    <section class="proof section" data-tone="rose" aria-labelledby="proof-title">
       <div class="wrap proof-grid">
         <div class="proof-rating">
           <h2 class="section-label" id="proof-title" data-reveal data-i18n="proof.label"></h2>
@@ -296,7 +333,7 @@
           <li data-reveal><span class="stat-value stat-word" data-i18n="proof.stats.3.value"></span><span class="stat-label" data-i18n="proof.stats.3.label"></span></li>
         </ul>
         <div class="proof-images">
-          <figure class="proof-paris" data-reveal-image>
+          <figure class="proof-paris" data-reveal-image data-gl-media>
             <img data-parallax src="./src/images/paris-championship.jpg" width="1000" height="959" loading="lazy" alt="" data-i18n-attr="alt:proof.parisAlt">
           </figure>
           <figure class="press" data-tilt>
@@ -308,9 +345,9 @@
     </section>
 
     <!-- About Bella -->
-    <section class="about section" id="om" aria-labelledby="about-title">
+    <section class="about section" id="om" data-tone="light" aria-labelledby="about-title">
       <div class="wrap about-grid">
-        <figure class="about-media" data-reveal-image>
+        <figure class="about-media" data-reveal-image data-gl-media>
           <img data-parallax src="./src/images/bella-studio.jpg" width="1051" height="1130" loading="lazy" alt="" data-i18n-attr="alt:about.imageAlt">
         </figure>
         <div class="about-copy">
@@ -329,7 +366,7 @@
       </figure>
 
       <div class="wrap about-lists">
-        <figure class="about-jury" data-reveal-image>
+        <figure class="about-jury" data-reveal-image data-gl-media>
           <img data-parallax src="./src/images/jury-asia.jpg" width="1120" height="1400" loading="lazy" alt="" data-i18n-attr="alt:about.juryAlt">
         </figure>
         <div class="awards">
@@ -358,7 +395,7 @@
     </section>
 
     <!-- Reviews: a deck you swipe through -->
-    <section class="reviews section" id="omdomen" aria-labelledby="reviews-title">
+    <section class="reviews section" id="omdomen" data-tone="dark" aria-labelledby="reviews-title">
       <div class="wrap">
         <p class="section-label" data-reveal data-i18n="reviews.label"></p>
         <h2 class="section-title" id="reviews-title" data-reveal data-i18n="reviews.title"></h2>
@@ -403,11 +440,11 @@
     </section>
 
     <!-- Academy and Corporate Wellness -->
-    <section class="offers section" id="academy" aria-labelledby="offers-title">
+    <section class="offers section" id="academy" data-tone="dark" aria-labelledby="offers-title">
       <div class="wrap">
         <p class="section-label" id="offers-title" data-reveal data-i18n="offers.label"></p>
         <div class="offer-grid">
-          <article class="offer offer-academy" data-reveal>
+          <article class="offer offer-academy" data-reveal data-gl-media>
             <img class="offer-bg" src="./src/images/academy.jpg" width="787" height="1400" loading="lazy" alt="" data-i18n-attr="alt:offers.academyAlt">
             <div class="offer-body">
               <h2 class="offer-title" data-i18n="offers.academyTitle"></h2>
@@ -434,7 +471,7 @@
     </section>
 
     <!-- Two studios -->
-    <section class="studios section" id="studior" aria-labelledby="studios-title">
+    <section class="studios section" id="studior" data-tone="light" aria-labelledby="studios-title">
       <div class="wrap">
         <p class="section-label" data-reveal data-i18n="studios.label"></p>
         <h2 class="section-title" id="studios-title" data-reveal data-i18n="studios.title"></h2>
@@ -473,7 +510,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" data-tone="dark">
     <div class="wrap footer-inner">
       <p class="footer-mark" aria-hidden="true">BE BEAUTY</p>
       <p class="footer-tagline">Beauty. Balance. <em>Glow.</em></p>

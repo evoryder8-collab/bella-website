@@ -1,12 +1,18 @@
 import { copy } from './content.js';
 import { currentLang, initI18n } from './i18n.js';
-import { initMotion, lockScroll, scrollToTarget } from './motion.js';
+import { initMotion, lockScroll, playIntro, scrollToTarget } from './motion.js';
 import { initCarousel } from './carousel.js';
 import { initDeck } from './deck.js';
 import { initMap } from './map.js';
+import { initPortal } from './portal.js';
+import { isPlaying, onSoundChange, setMuted, soundPreference, startSound } from './sound.js';
+import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+paintCssBackground();
+window.addEventListener('load', paintCssBackground);
+new ResizeObserver(() => paintCssBackground()).observe(document.body);
 initI18n();
 initMenu();
 initHeader();
@@ -19,7 +25,42 @@ document.querySelector('[data-year]').textContent = new Date().getFullYear();
 
 if (!reducedMotion) {
   initMotion();
-  initSculpt();
+  loadWorld();
+}
+
+// The page waits behind the portal on a first visit; its entrance plays once
+// the visitor is in.
+const portalOpen = document.documentElement.classList.contains('portal-open');
+if (portalOpen) lockScroll(true);
+initSoundToggle(portalOpen);
+initPortal({
+  onEnter: () => {
+    lockScroll(false);
+    if (!reducedMotion) playIntro();
+  },
+});
+
+function initSoundToggle(portalOpen) {
+  const toggle = document.querySelector('[data-sound-toggle]');
+  const render = (on) => {
+    toggle.setAttribute('aria-pressed', String(on));
+    toggle.classList.toggle('is-playing', on);
+  };
+  onSoundChange(render);
+  toggle.addEventListener('click', () => (isPlaying() ? setMuted(true) : startSound()));
+
+  // Browsers only start audio after a gesture, so a returning visitor who chose
+  // sound hears it from their first tap or key press (unless that tap is the toggle).
+  if (portalOpen || soundPreference() !== 'on') return;
+  render(true);
+  const arm = (event) => {
+    if (event.target.closest?.('[data-sound-toggle]')) return;
+    window.removeEventListener('pointerdown', arm);
+    window.removeEventListener('keydown', arm);
+    startSound();
+  };
+  window.addEventListener('pointerdown', arm);
+  window.addEventListener('keydown', arm);
 }
 
 function initMenu() {
@@ -73,12 +114,29 @@ function initHeader() {
   update();
 }
 
-// The phone booking bar slides up once the hero (which has its own button) is mostly gone.
+// The phone booking bar appears once the hero (which has its own button) is
+// mostly gone, steps aside while you read downwards, and comes back when you
+// scroll up or pause.
 function initBookBar() {
   const bar = document.querySelector('[data-book-bar]');
-  const update = () => bar.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+  let lastY = window.scrollY;
+  let reading = false;
+  let pause = 0;
+  const show = () => bar.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6 && !reading);
+  const update = () => {
+    const y = window.scrollY;
+    if (y > lastY + 3) reading = true;
+    else if (y < lastY - 3) reading = false;
+    lastY = y;
+    clearTimeout(pause);
+    pause = setTimeout(() => {
+      reading = false;
+      show();
+    }, 900);
+    show();
+  };
   window.addEventListener('scroll', update, { passive: true });
-  update();
+  show();
 }
 
 function initAnchors() {
@@ -93,14 +151,14 @@ function initAnchors() {
   }
 }
 
-// three.js and the shader load after the page is up, so they never delay the first paint.
-function initSculpt() {
+// The 3D world (three.js) loads after the page is up, so it never delays the
+// first paint; until then, and without WebGL, the page is complete without it.
+function loadWorld() {
   if (navigator.connection?.saveData) return;
-  const hero = document.querySelector('[data-hero]');
   const start = () =>
-    import('./hero-sculpt.js')
-      .then(({ initHeroSculpt }) => initHeroSculpt(hero))
-      .catch((error) => console.warn('Hero effect unavailable:', error));
+    import('./world/index.js')
+      .then(({ initWorld }) => initWorld())
+      .catch((error) => console.warn('3D world unavailable:', error));
   const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2500 }) : setTimeout(start, 600));
   if (document.readyState === 'complete') whenIdle();
   else window.addEventListener('load', whenIdle, { once: true });

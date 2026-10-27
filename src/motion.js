@@ -5,6 +5,7 @@ import 'lenis/dist/lenis.css';
 import { copy } from './content.js';
 import { currentLang, onLangChange } from './i18n.js';
 import { lookup } from './i18n-lookup.js';
+import { paintCssBackground } from './tones.js';
 
 gsap.registerPlugin(ScrollTrigger);
 // Phone address bars resize the viewport while scrolling; don't re-measure pins for that.
@@ -31,12 +32,11 @@ export function initMotion() {
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  heroIntro();
+  heroSink();
   approachScene();
   textReveals();
   imageReveals();
   parallax();
-  liftLines();
   counters();
   stars();
   pressTilt();
@@ -46,19 +46,31 @@ export function initMotion() {
 
   document.documentElement.classList.add('motion-ready');
 
-  // Copy length changes with language and web fonts, so trigger positions move.
+  // Copy length changes with language and web fonts, so trigger positions move,
+  // and with them where the section tones blend.
+  ScrollTrigger.addEventListener('refresh', paintCssBackground);
   onLangChange(() => ScrollTrigger.refresh());
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
 }
 
-function heroIntro() {
+// Reveals animate --reveal from 0 to 1. CSS turns it into a clip for plain
+// images; src/world/media.js turns the same value into a liquid dissolve.
+const reveal = (target, vars) => gsap.fromTo(target, { '--reveal': 0 }, { '--reveal': 1, ...vars });
+
+// The hero's entrance, played once the visitor is in (after the first-visit portal).
+export function playIntro() {
   const tl = gsap.timeline({ delay: 0.1, defaults: { ease: 'expo.out' } });
-  tl.fromTo('.hero-media', { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' })
+  tl.add(reveal('.hero-media', { duration: 1.8, ease: 'power2.inOut' }))
     .fromTo('[data-hero-frame]', { scale: 1.25 }, { scale: 1, duration: 2.6 }, 0.1)
     // y: 0 clears the pixel offset GSAP reads from the CSS starting transform.
     .fromTo('[data-hero-line]', { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.4, stagger: 0.1 }, 0.55)
     .fromTo('[data-hero-fade]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, stagger: 0.08 }, 0.85);
+}
 
+function heroSink() {
+  // Hidden until the intro plays. Set inline, because the WebGL portrait reads
+  // --reveal from the element's own style.
+  gsap.set('.hero-media', { '--reveal': 0 });
   // Scrolling away, the portrait sinks a little behind the copy.
   gsap.to('[data-hero-frame]', {
     yPercent: 10,
@@ -103,9 +115,9 @@ function approachScene() {
   panels.slice(1).forEach((panel, i) => {
     const previous = panels[i];
     tl.to(part(previous, '.approach-copy'), { yPercent: -40, opacity: 0, duration: 0.5 })
-      .fromTo(panel, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1, ease: 'power2.inOut' }, '<0.1')
+      .fromTo(panel, { '--reveal': 0 }, { '--reveal': 1, duration: 1, ease: 'power1.inOut' }, '<0.1')
       .fromTo(part(panel, 'img'), { scale: 1.35 }, { scale: 1.02, duration: 1.3 }, '<')
-      .fromTo(part(panel, '.approach-word'), { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '<0.45')
+      .fromTo([part(panel, '.approach-index'), part(panel, '.approach-word')], { yPercent: 70, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, '<0.45')
       .fromTo(part(panel, '.approach-text'), { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }, '<0.15')
       .to({}, { duration: 0.4 });
   });
@@ -126,7 +138,7 @@ function imageReveals() {
   for (const el of gsap.utils.toArray('[data-reveal-image]')) {
     const img = el.querySelector('img');
     const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-    tl.fromTo(el, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' });
+    tl.add(reveal(el, { duration: 1.9, ease: 'power2.inOut' }));
     if (img) tl.fromTo(img, { scale: 1.35 }, { scale: 1.14, duration: 2.2, ease: 'expo.out' }, 0.1);
   }
 }
@@ -144,22 +156,6 @@ function parallax() {
       },
     );
   }
-}
-
-// The gua sha strokes over the method photo draw themselves upward as you scroll.
-function liftLines() {
-  const paths = gsap.utils.toArray('[data-lift]');
-  if (!paths.length) return;
-  gsap.fromTo(
-    paths,
-    { strokeDashoffset: 1 },
-    {
-      strokeDashoffset: 0,
-      ease: 'none',
-      stagger: 0.25,
-      scrollTrigger: { trigger: paths[0].closest('figure'), start: 'top 70%', end: 'bottom 45%', scrub: true },
-    },
-  );
 }
 
 function counters() {

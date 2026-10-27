@@ -1733,7 +1733,10 @@ main,
   padding: 30px 26px 26px;
   border: 1px solid var(--glass-line-dark);
   border-radius: var(--radius);
-  background: rgb(58 31 38 / 0.82);
+  background:
+    linear-gradient(140deg, rgb(255 244 238 / 0.14), rgb(255 244 238 / 0) 46%),
+    rgb(58 31 38 / 0.4);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   color: var(--cream);
@@ -1741,11 +1744,15 @@ main,
 }
 
 .review-card:nth-child(3n + 2) {
-  background: rgb(142 70 81 / 0.84);
+  background:
+    linear-gradient(140deg, rgb(255 244 238 / 0.16), rgb(255 244 238 / 0) 46%),
+    rgb(142 70 81 / 0.42);
 }
 
 .review-card:nth-child(3n + 3) {
-  background: rgb(36 20 26 / 0.86);
+  background:
+    linear-gradient(140deg, rgb(255 244 238 / 0.12), rgb(255 244 238 / 0) 46%),
+    rgb(36 20 26 / 0.46);
 }
 
 .review-card blockquote {
@@ -1796,24 +1803,17 @@ main,
   cursor: grab;
   user-select: none;
   will-change: transform;
-  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+  box-shadow:
+    0 30px 60px -30px rgb(0 0 0 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
-/* Only the top card is frosted glass (on phones too: one blurred card is cheap).
-   The cards under it are blank glass sheets, so their words never show through
-   the top card; the next card's words fade in as the top one is dragged away. */
+/* The cards are see-through glass: the cards behind stay visible through the
+   top one, but its heavy frost (on phones too: one blurred card is cheap)
+   melts their words into soft colour, so only the top card reads. */
 .deck.is-ready .review-card[aria-hidden='false'] {
-  backdrop-filter: blur(26px) saturate(1.3);
-  -webkit-backdrop-filter: blur(26px) saturate(1.3);
-}
-
-.deck.is-ready .review-card > * {
-  transition: opacity 0.45s var(--ease);
-}
-
-.deck.is-ready .review-card[aria-hidden='true'] > * {
-  opacity: var(--peek, 0);
-  transition-duration: 0.15s;
+  backdrop-filter: blur(22px) saturate(1.45);
+  -webkit-backdrop-filter: blur(22px) saturate(1.45);
 }
 
 .deck.is-ready .review-card:active {
@@ -2706,6 +2706,184 @@ main,
   border-left: 9px solid currentColor;
   border-right: 0;
   margin-left: 3px;
+}
+
+/* ---------- Treatment figure (src/figures.js) ---------- */
+
+.figure-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 250px;
+  margin-top: 26px;
+  pointer-events: none;
+}
+
+.figure-stage:empty {
+  display: none;
+}
+
+/* A soft rose aura breathing behind the figure. */
+.figure-stage::before {
+  content: '';
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(231 163 160 / 0.5), rgb(231 163 160 / 0.12) 45%, transparent 70%);
+  filter: blur(8px);
+  animation: figure-aura 6s ease-in-out infinite alternate;
+}
+
+.figure-stage svg {
+  position: relative;
+  width: auto;
+  height: 250px;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgb(231 163 160 / 0.55));
+  animation: figure-float 7s ease-in-out infinite;
+}
+
+.figure {
+  opacity: 0;
+  transition: opacity 0.8s var(--ease);
+}
+
+.figure.is-active {
+  opacity: 1;
+}
+
+.figure .ln {
+  fill: none;
+  stroke: url(#fg-line);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.motion .figure .ln {
+  stroke-dashoffset: 1;
+}
+
+.motion .figure.is-drawing .ln {
+  animation: figure-draw 1.9s var(--ease) forwards;
+  animation-delay: calc(var(--d, 0) * 90ms);
+}
+
+.figure .qi {
+  fill: none;
+  stroke: var(--rose-deep);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-dasharray: 0.012 0.026;
+  opacity: 0.7;
+  animation: figure-qi 6s linear infinite;
+}
+
+.figure .pt {
+  fill: var(--cream);
+  stroke: var(--rose-deep);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: figure-point 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--d, 0) * 0.22s);
+}
+
+.figure .bronze {
+  fill: url(#fg-bronze);
+  opacity: 0.38;
+}
+
+.figure .ground {
+  fill: rgb(142 70 81 / 0.16);
+}
+
+.figure .stone {
+  fill: url(#fg-quartz);
+  stroke: #c98a8e;
+  stroke-width: 0.6;
+}
+
+.figure .spark {
+  fill: var(--rose);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: figure-spark 3.4s ease-in-out infinite;
+  animation-delay: calc(var(--d, 0) * 0.5s);
+}
+
+@keyframes figure-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes figure-qi {
+  to {
+    stroke-dashoffset: -1;
+  }
+}
+
+@keyframes figure-point {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.55);
+    opacity: 1;
+  }
+}
+
+@keyframes figure-spark {
+  0%,
+  100% {
+    transform: scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(45deg);
+    opacity: 1;
+  }
+}
+
+@keyframes figure-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.6deg);
+  }
+}
+
+@keyframes figure-aura {
+  to {
+    transform: scale(1.12);
+    opacity: 0.75;
+  }
+}
+
+@media (min-width: 900px) {
+  .treatments > .wrap {
+    position: relative;
+  }
+
+  .figure-stage {
+    position: absolute;
+    top: 0;
+    right: var(--gutter);
+    height: 330px;
+    margin: 0;
+  }
+
+  .figure-stage svg {
+    height: 330px;
+  }
 }
 
 /* ---------- Phones: glass without the per-frame blur ----------

@@ -109,6 +109,9 @@ decorative lines that looked like placeholders.
   view, hands over to the rose street map with 3D buildings, then orbits slowly.
 - **Scrolling on phones** is driven by Lenis (`syncTouch`) so the WebGL layer and the text move in the same frame,
   and phones use near-opaque glass instead of a per-frame blur.
+- **Treatment figures** (`src/figures.js`): a floating line-art figure that follows the group in view: a serene
+  face, the face mapped with acupoints and a gliding gua sha stone (signature TCM), and a traditional acupuncture
+  figure with flowing meridians (body).
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
 - **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the

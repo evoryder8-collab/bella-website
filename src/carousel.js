@@ -22,6 +22,11 @@ export function initCarousel(root, chipsRoot) {
 
   let frame = 0;
   let lastActive = 0;
+  let lastGroup = null;
+  // A tapped chip holds its group while the track glides there, so the figure
+  // doesn't flicker through the groups in between.
+  let pinned = null;
+  let unpin = 0;
   const update = () => {
     frame = 0;
     const { scrollLeft, scrollWidth, clientWidth } = track;
@@ -34,7 +39,12 @@ export function initCarousel(root, chipsRoot) {
     }
 
     progress.style.transform = `scaleX(${Math.min(1, (scrollLeft + clientWidth) / scrollWidth)})`;
-    const group = cards[active].dataset.cardGroup;
+    const group = pinned ?? cards[active].dataset.cardGroup;
+    // The floating figure (src/figures.js) follows the group in view.
+    if (group !== lastGroup) {
+      lastGroup = group;
+      document.dispatchEvent(new CustomEvent('treatmentgroup', { detail: Number(group) }));
+    }
     for (const chip of chips) chip.setAttribute('aria-pressed', String(chip.dataset.group === group));
     prev.disabled = scrollLeft <= 2;
     next.disabled = scrollLeft + clientWidth >= scrollWidth - 2;
@@ -52,7 +62,16 @@ export function initCarousel(root, chipsRoot) {
   track.addEventListener('scroll', schedule, { passive: true });
   window.addEventListener('resize', schedule);
   for (const chip of chips) {
-    chip.addEventListener('click', () => goTo(cards.find((card) => card.dataset.cardGroup === chip.dataset.group)));
+    chip.addEventListener('click', () => {
+      pinned = chip.dataset.group;
+      clearTimeout(unpin);
+      unpin = setTimeout(() => {
+        pinned = null;
+        schedule();
+      }, 900);
+      goTo(cards.find((card) => card.dataset.cardGroup === chip.dataset.group));
+      schedule();
+    });
   }
   prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reducedMotion ? 'auto' : 'smooth' }));
   next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reducedMotion ? 'auto' : 'smooth' }));

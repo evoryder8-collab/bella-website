@@ -1,23 +1,302 @@
 <!doctype html>
-<html lang="en">
+<!-- Text marked data-i18n / data-contact and hrefs marked data-link are filled
+     from src/content.js at build time (vite.config.js) and on language change. -->
+<html lang="sv">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<title>Bella · Coming soon</title>
-<style>
-  :root { color-scheme: light dark; }
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center;
-         font-family: system-ui, sans-serif; background: #faf8f5; color: #222; text-align: center; padding: 16px; }
-  @media (prefers-color-scheme: dark) { body { background: #141414; color: #eee; } }
-  h1 { font-weight: 500; font-size: clamp(1.8rem, 5vw, 3rem); margin: 0 0 .4em; }
-  p { opacity: .65; margin: 0; }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title data-i18n="meta.title"></title>
+  <meta name="description" content="" data-i18n-attr="content:meta.description">
+  <meta name="theme-color" content="#FAF8F4">
+  <link rel="icon" href="./src/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap">
+  <script>
+    // Hide reveal targets until the motion script runs; show them anyway if it never does.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion');
+      setTimeout(() => document.documentElement.classList.contains('motion-ready') || document.documentElement.classList.remove('motion'), 3000);
+    }
+  </script>
+  <link rel="stylesheet" href="./src/styles.css">
+  <script type="module" src="./src/main.js"></script>
 </head>
 <body>
-  <main>
-    <h1>Bella</h1>
-    <p>New website coming soon.</p>
+  <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
+
+  <header class="site-header" data-header>
+    <div class="wrap header-inner">
+      <a class="wordmark" href="#top">Be <em>Beauty</em></a>
+      <nav class="nav" data-i18n-attr="aria-label:ui.menu">
+        <ul>
+          <li><a href="#behandlingar" data-i18n="nav.treatments"></a></li>
+          <li><a href="#om" data-i18n="nav.about"></a></li>
+          <li><a href="#galleri" data-i18n="nav.gallery"></a></li>
+          <li><a href="#omdomen" data-i18n="nav.reviews"></a></li>
+          <li><a href="#kontakt" data-i18n="nav.contact"></a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
+          <button type="button" data-lang="sv" aria-pressed="true">SV</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-outline btn-small header-book" data-link="whatsapp" href="#" target="_blank" rel="noopener">
+          <span class="wa-icon"></span><span data-i18n="ui.book"></span>
+        </a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+          <span class="visually-hidden" data-i18n="ui.menu"></span>
+          <span class="menu-toggle-lines" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav class="mobile-nav" data-i18n-attr="aria-label:ui.menu">
+      <ul>
+        <li><a href="#behandlingar" data-i18n="nav.treatments"></a></li>
+        <li><a href="#om" data-i18n="nav.about"></a></li>
+        <li><a href="#galleri" data-i18n="nav.gallery"></a></li>
+        <li><a href="#omdomen" data-i18n="nav.reviews"></a></li>
+        <li><a href="#kontakt" data-i18n="nav.contact"></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu-foot">
+      <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
+        <button type="button" data-lang="sv" aria-pressed="true">SV</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn btn-solid" data-link="whatsapp" href="#" target="_blank" rel="noopener">
+        <span class="wa-icon"></span><span data-i18n="ui.whatsappFab"></span>
+      </a>
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" data-hero-fade data-i18n="hero.eyebrow"></p>
+          <h1 class="hero-title">
+            <span class="line"><span data-hero-line data-i18n="hero.line1"></span></span>
+            <span class="line line-indent"><span data-hero-line data-i18n="hero.line2"></span></span>
+          </h1>
+          <p class="hero-lead" data-hero-fade data-i18n="hero.lead"></p>
+          <div class="hero-actions" data-hero-fade>
+            <a class="btn btn-solid" data-link="whatsapp" href="#" target="_blank" rel="noopener">
+              <span class="wa-icon"></span><span data-i18n="hero.cta"></span>
+            </a>
+            <a class="link-arrow" href="#behandlingar"><span data-i18n="hero.secondary"></span><span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <figure class="hero-media" data-hero-media>
+          <div class="frame">
+            <img src="./src/images/hero.jpg" width="1400" height="2099" alt="" data-i18n-attr="alt:hero.imageAlt" data-parallax fetchpriority="high">
+          </div>
+        </figure>
+      </div>
+      <a class="scroll-cue" href="#behandlingar" data-hero-fade>
+        <span data-i18n="hero.scroll"></span><span class="scroll-cue-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-group">
+          <span data-i18n="marquee.0"></span><i>✦</i><span data-i18n="marquee.1"></span><i>✦</i><span data-i18n="marquee.2"></span><i>✦</i><span data-i18n="marquee.3"></span><i>✦</i><span data-i18n="marquee.4"></span><i>✦</i>
+        </div>
+        <div class="marquee-group">
+          <span data-i18n="marquee.0"></span><i>✦</i><span data-i18n="marquee.1"></span><i>✦</i><span data-i18n="marquee.2"></span><i>✦</i><span data-i18n="marquee.3"></span><i>✦</i><span data-i18n="marquee.4"></span><i>✦</i>
+        </div>
+      </div>
+    </div>
+
+    <section class="section treatments" id="behandlingar" aria-labelledby="treatments-title">
+      <div class="wrap split">
+        <div class="split-aside">
+          <p class="label" data-reveal data-i18n="treatments.label"></p>
+          <h2 class="h2" id="treatments-title" data-reveal data-i18n="treatments.title"></h2>
+          <p class="body-muted" data-reveal data-i18n="treatments.intro"></p>
+        </div>
+        <div class="split-main">
+          <ol class="treatment-list">
+            <li class="treatment" data-reveal>
+              <span class="treatment-num">01</span>
+              <div class="treatment-main">
+                <h3 class="treatment-name" data-i18n="treatments.items.0.name"></h3>
+                <p class="treatment-desc" data-i18n="treatments.items.0.description"></p>
+              </div>
+              <p class="treatment-meta"><span data-i18n="treatments.items.0.duration"></span><span class="treatment-price" data-i18n="treatments.items.0.price"></span></p>
+            </li>
+            <li class="treatment" data-reveal>
+              <span class="treatment-num">02</span>
+              <div class="treatment-main">
+                <h3 class="treatment-name" data-i18n="treatments.items.1.name"></h3>
+                <p class="treatment-desc" data-i18n="treatments.items.1.description"></p>
+              </div>
+              <p class="treatment-meta"><span data-i18n="treatments.items.1.duration"></span><span class="treatment-price" data-i18n="treatments.items.1.price"></span></p>
+            </li>
+            <li class="treatment" data-reveal>
+              <span class="treatment-num">03</span>
+              <div class="treatment-main">
+                <h3 class="treatment-name" data-i18n="treatments.items.2.name"></h3>
+                <p class="treatment-desc" data-i18n="treatments.items.2.description"></p>
+              </div>
+              <p class="treatment-meta"><span data-i18n="treatments.items.2.duration"></span><span class="treatment-price" data-i18n="treatments.items.2.price"></span></p>
+            </li>
+            <li class="treatment" data-reveal>
+              <span class="treatment-num">04</span>
+              <div class="treatment-main">
+                <h3 class="treatment-name" data-i18n="treatments.items.3.name"></h3>
+                <p class="treatment-desc" data-i18n="treatments.items.3.description"></p>
+              </div>
+              <p class="treatment-meta"><span data-i18n="treatments.items.3.duration"></span><span class="treatment-price" data-i18n="treatments.items.3.price"></span></p>
+            </li>
+            <li class="treatment treatment-signature" data-reveal>
+              <span class="treatment-num">05</span>
+              <div class="treatment-main">
+                <h3 class="treatment-name" data-i18n="treatments.items.4.name"></h3>
+                <p class="treatment-desc" data-i18n="treatments.items.4.description"></p>
+              </div>
+              <p class="treatment-meta"><span data-i18n="treatments.items.4.duration"></span><span class="treatment-price" data-i18n="treatments.items.4.price"></span></p>
+            </li>
+          </ol>
+          <p class="treatment-note" data-reveal>
+            <a data-link="whatsapp" href="#" target="_blank" rel="noopener"><span class="wa-icon"></span><span data-i18n="treatments.note"></span></a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about" id="om" aria-labelledby="about-title">
+      <div class="wrap about-grid">
+        <figure class="about-media" data-reveal-image>
+          <div class="frame">
+            <img src="./src/images/about.jpg" width="1400" height="1050" alt="" data-i18n-attr="alt:about.imageAlt" loading="lazy" decoding="async" data-parallax>
+          </div>
+        </figure>
+        <div class="about-copy">
+          <p class="label" data-reveal data-i18n="about.label"></p>
+          <h2 class="h2" id="about-title" data-reveal data-i18n="about.title"></h2>
+          <p class="about-lead" data-reveal data-i18n="about.lead"></p>
+          <p class="body-muted" data-reveal data-i18n="about.body1"></p>
+          <p class="body-muted" data-reveal data-i18n="about.body2"></p>
+          <p class="signature" data-reveal data-i18n="about.signature"></p>
+          <dl class="stats" data-reveal>
+            <div><dt data-i18n="about.stat1Label"></dt><dd data-i18n="about.stat1Value"></dd></div>
+            <div><dt data-i18n="about.stat2Label"></dt><dd data-i18n="about.stat2Value"></dd></div>
+            <div><dt data-i18n="about.stat3Label"></dt><dd data-i18n="about.stat3Value"></dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="section gallery" id="galleri" aria-labelledby="gallery-title">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="label" data-reveal data-i18n="gallery.label"></p>
+          <h2 class="h2" id="gallery-title" data-reveal data-i18n="gallery.title"></h2>
+        </div>
+        <div class="gallery-grid">
+          <figure class="g g1" data-reveal-image><div class="frame"><img src="./src/images/gallery-1.jpg" width="1200" height="1715" alt="" data-i18n-attr="alt:gallery.alt1" loading="lazy" decoding="async" data-parallax></div></figure>
+          <figure class="g g2" data-reveal-image><div class="frame"><img src="./src/images/gallery-2.jpg" width="1200" height="800" alt="" data-i18n-attr="alt:gallery.alt2" loading="lazy" decoding="async" data-parallax></div></figure>
+          <figure class="g g3" data-reveal-image><div class="frame"><img src="./src/images/gallery-3.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt3" loading="lazy" decoding="async" data-parallax></div></figure>
+          <figure class="g g4" data-reveal-image><div class="frame"><img src="./src/images/gallery-4.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt4" loading="lazy" decoding="async" data-parallax></div></figure>
+          <figure class="g g5" data-reveal-image><div class="frame"><img src="./src/images/gallery-5.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt5" loading="lazy" decoding="async" data-parallax></div></figure>
+          <div class="gallery-quote" data-reveal>
+            <p class="gallery-quote-text" data-i18n="gallery.quote"></p>
+            <p class="body-muted" data-i18n="gallery.caption"></p>
+          </div>
+          <figure class="g g6" data-reveal-image><div class="frame"><img src="./src/images/gallery-6.jpg" width="1200" height="1639" alt="" data-i18n-attr="alt:gallery.alt6" loading="lazy" decoding="async" data-parallax></div></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section reviews" id="omdomen" aria-labelledby="reviews-title">
+      <div class="wrap">
+        <div class="section-head section-head-center">
+          <p class="label" data-reveal data-i18n="reviews.label"></p>
+          <h2 class="h2" id="reviews-title" data-reveal data-i18n="reviews.title"></h2>
+        </div>
+        <div class="review-grid">
+          <figure class="review" data-reveal>
+            <blockquote data-i18n="reviews.items.0.quote"></blockquote>
+            <figcaption data-i18n="reviews.items.0.name"></figcaption>
+          </figure>
+          <figure class="review" data-reveal>
+            <blockquote data-i18n="reviews.items.1.quote"></blockquote>
+            <figcaption data-i18n="reviews.items.1.name"></figcaption>
+          </figure>
+          <figure class="review" data-reveal>
+            <blockquote data-i18n="reviews.items.2.quote"></blockquote>
+            <figcaption data-i18n="reviews.items.2.name"></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="kontakt" aria-labelledby="contact-title">
+      <div class="wrap contact-grid">
+        <div class="contact-copy">
+          <p class="label" data-reveal data-i18n="contact.label"></p>
+          <h2 class="h2" id="contact-title" data-reveal data-i18n="contact.title"></h2>
+          <p class="body-muted" data-reveal data-i18n="contact.lead"></p>
+          <p data-reveal>
+            <a class="btn btn-solid btn-large" data-link="whatsapp" href="#" target="_blank" rel="noopener">
+              <span class="wa-icon"></span><span data-i18n="contact.whatsapp"></span>
+            </a>
+          </p>
+          <dl class="contact-list" data-reveal>
+            <div>
+              <dt data-i18n="contact.phoneLabel"></dt>
+              <dd>
+                <a data-link="tel" href="#" data-contact="phoneDisplay"></a>
+                <span class="contact-actions"><a data-link="tel" href="#" data-i18n="contact.call"></a><a data-link="sms" href="#" data-i18n="contact.sms"></a></span>
+              </dd>
+            </div>
+            <div>
+              <dt data-i18n="contact.emailLabel"></dt>
+              <dd><a data-link="mailto" href="#" data-contact="email"></a></dd>
+            </div>
+            <div>
+              <dt data-i18n="contact.studioLabel"></dt>
+              <dd>
+                <span data-i18n="contact.address"></span>
+                <a class="link-arrow link-arrow-small" data-link="maps" href="#" target="_blank" rel="noopener"><span data-i18n="contact.mapLink"></span><span aria-hidden="true">↗</span></a>
+              </dd>
+            </div>
+            <div>
+              <dt data-i18n="contact.hoursLabel"></dt>
+              <dd data-i18n="contact.hours"></dd>
+            </div>
+          </dl>
+        </div>
+        <div class="contact-map" data-reveal-image>
+          <div class="map" data-map role="img" data-i18n-attr="aria-label:contact.mapAlt"></div>
+          <span class="map-pin-fallback" aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="footer-mark" aria-hidden="true">Be <em>Beauty</em></p>
+      <div class="footer-row">
+        <p data-i18n="footer.tagline"></p>
+        <p>© <span data-year>2026</span> Be Beauty. <span data-i18n="footer.rights"></span></p>
+        <a class="link-arrow link-arrow-small" href="#top"><span data-i18n="footer.top"></span><span aria-hidden="true">↑</span></a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="wa-fab" data-link="whatsapp" data-fab href="#" target="_blank" rel="noopener">
+    <span class="wa-icon"></span><span data-i18n="ui.whatsappFab"></span>
+  </a>
 </body>
 </html>

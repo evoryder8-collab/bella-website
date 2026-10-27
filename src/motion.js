@@ -26,8 +26,11 @@ export function lockScroll(locked) {
 }
 
 export function initMotion() {
-  // Lenis smooths wheel scrolling only; touch keeps the phone's native momentum.
-  lenis = new Lenis({ lerp: 0.09 });
+  // Lenis drives touch scrolling too (syncTouch). Native touch scrolling runs on
+  // its own thread, a frame ahead of the WebGL world, which made the backdrop
+  // and photos trail the text; with Lenis both move in the same frame. Sideways
+  // scrollers (the treatment cards) keep their own native scrolling.
+  lenis = new Lenis({ lerp: 0.09, syncTouch: true, syncTouchLerp: 0.085, touchInertiaExponent: 1.6, allowNestedScroll: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);

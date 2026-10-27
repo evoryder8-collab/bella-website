@@ -104,6 +104,11 @@ decorative lines that looked like placeholders.
   being a fixed rectangle, a pearl rim of light travels round it, a rose aura glows outside it, a glint sweeps
   across as it scrolls, and the frame tilts in 3D towards the finger.
 - **Glass surfaces** for cards, reviews, offers and the booking bar; the map melts into the page.
+- **The studio map** (MapLibre GL JS 6.12, the same version as the AusMC site) opens on a NASA Blue Marble globe in
+  a painted starfield (`src/starfield.js`), flies down from orbit to the Vasastan studio when the section comes into
+  view, hands over to the rose street map with 3D buildings, then orbits slowly.
+- **Scrolling on phones** is driven by Lenis (`syncTouch`) so the WebGL layer and the text move in the same frame,
+  and phones use near-opaque glass instead of a per-frame blur.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
 - **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the

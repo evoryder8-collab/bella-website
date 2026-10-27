@@ -1990,7 +1990,7 @@ main,
 
 .studio-map {
   position: relative;
-  height: clamp(380px, 62svh, 640px);
+  height: clamp(460px, 76svh, 760px);
   margin-top: 32px;
   overflow: hidden;
   /* Melts into the page above and below instead of sitting in a box. */
@@ -2002,6 +2002,31 @@ main,
 .studio-map > .map {
   position: absolute;
   inset: 0;
+}
+
+/* Deep space behind the globe (src/starfield.js); it fades out as the camera lands. */
+.studio-map > .space {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.studio-map.has-map > .space {
+  transition: opacity 0.6s linear;
+}
+
+/* MapLibre sets opacity on the marker itself, so hide its contents instead. */
+.map-pin > * {
+  transition: opacity 0.8s var(--ease);
+}
+
+.is-orbit .map-pin > * {
+  opacity: 0;
 }
 
 .map-chips {
@@ -2386,6 +2411,12 @@ main,
   display: none;
 }
 
+/* The language choice sits in the middle of the screen, where the eye and thumb already are. */
+.portal-step[data-step='lang'] {
+  margin-block: auto;
+  padding-top: 8vh;
+}
+
 .portal-step > * {
   opacity: 0;
 }
@@ -2658,6 +2689,45 @@ main,
   border-left: 9px solid currentColor;
   border-right: 0;
   margin-left: 3px;
+}
+
+/* ---------- Phones: glass without the per-frame blur ----------
+   The WebGL world behind the page redraws every frame, so every frosted card
+   above it had to re-blur every frame, which made scrolling stutter on phones.
+   Near-opaque glass keeps the look; only the small booking bar keeps its blur. */
+@media (hover: none) and (pointer: coarse) {
+  .t-card,
+  .team,
+  .review-card,
+  .offer,
+  .portal-lang {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .t-card {
+    background: rgb(255 248 245 / 0.9);
+  }
+
+  .t-card-signature {
+    background: rgb(58 31 38 / 0.92);
+  }
+
+  .t-card-body {
+    background: rgb(239 214 207 / 0.92);
+  }
+
+  .team {
+    background: rgb(255 248 245 / 0.86);
+  }
+
+  .offer {
+    background: rgb(36 20 26 / 0.82);
+  }
+
+  .portal-lang {
+    background: rgb(255 244 238 / 0.1);
+  }
 }
 
 /* ---------- Motion starting states (only while the motion script runs) ---------- */

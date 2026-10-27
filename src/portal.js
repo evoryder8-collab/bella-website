@@ -84,7 +84,7 @@ export function initPortal({ onEnter }) {
     // Keep the portal on screen while it dissolves; the page and the world
     // (stone, light) start their entrance underneath at the same moment.
     portal.classList.add('is-leaving');
-    html.classList.remove('portal-open');
+    html.classList.remove('portal-open', 'portal-picking');
     window.scrollTo(0, 0);
     onEnter();
     setTimeout(() => portal.remove(), 1400);
@@ -93,6 +93,8 @@ export function initPortal({ onEnter }) {
   const languageStep = () => {
     const lang = step('lang');
     lang.hidden = false;
+    // The options sit in the middle of the screen; the stone rises above them.
+    html.classList.add('portal-picking');
     const options = [...lang.querySelectorAll('[data-pick]')];
     const auto = options.find((option) => option.dataset.pick === detected);
     const bar = auto.querySelector('.portal-progress');

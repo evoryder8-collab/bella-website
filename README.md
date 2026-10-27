@@ -22,7 +22,7 @@ Then open http://localhost:5173. `npm run build` writes the static site to `dist
 - First-visit portal, sound then language with a 5-second auto-pick: [`src/portal.js`](src/portal.js). Add `?intro` to any URL to see it again.
 - Soundscape, composed live with Web Audio (no audio files): [`src/sound.js`](src/sound.js).
 - Treatment carousel: [`src/carousel.js`](src/carousel.js). Review deck: [`src/deck.js`](src/deck.js).
-- Studio map (MapLibre, OpenFreeMap tiles recoloured to the palette): [`src/map.js`](src/map.js).
+- Studio map (MapLibre GL JS 6.12): a NASA Blue Marble globe in space (`src/starfield.js`) that flies down to the studio, then OpenFreeMap streets recoloured to the palette with 3D buildings: [`src/map.js`](src/map.js).
 
 All motion, the 3D world and the map fly-in are skipped under `prefers-reduced-motion`; without WebGL the page shows its plain photos over the same blended colours.
 

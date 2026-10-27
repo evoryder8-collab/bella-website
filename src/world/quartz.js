@@ -21,11 +21,12 @@ function stoneShape() {
 
 export function createQuartz({ transmission }) {
   let geometry = new ExtrudeGeometry(stoneShape(), {
-    depth: 0.12,
+    // About 5 mm on a 9 cm stone, like a real gua sha: a slim body with a softly rounded edge.
+    depth: 0.03,
     bevelEnabled: true,
-    bevelThickness: 0.09,
-    bevelSize: 0.08,
-    bevelSegments: 10,
+    bevelThickness: 0.04,
+    bevelSize: 0.05,
+    bevelSegments: 8,
     curveSegments: 80,
   });
   // Merge the cap and bevel vertices so normals are shared: a smooth pebble, not facets.
@@ -54,7 +55,7 @@ export function createQuartz({ transmission }) {
     emissiveIntensity: 0.03,
     envMapIntensity: 1.1,
     ...(transmission
-      ? { transmission: 1, thickness: 0.28, attenuationColor: new Color('#f4b4ba'), attenuationDistance: 1.1 }
+      ? { transmission: 1, thickness: 0.12, attenuationColor: new Color('#f4b4ba'), attenuationDistance: 1.1 }
       : { transparent: true, opacity: 0.88 }),
   });
 

@@ -62,7 +62,9 @@ const fragmentShader = /* glsl */ `
     color *= mix(0.9, 1.0, vignette);
     gl_FragColor = vec4(color, 1.0);
     #include <colorspace_fragment>
-    gl_FragColor.rgb += (hash(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) * 0.022;
+    // Static grain: animating it changed every pixel every frame, which made
+    // the glass surfaces above re-blur constantly.
+    gl_FragColor.rgb += (hash(gl_FragCoord.xy) - 0.5) * 0.02;
   }
 `;
 

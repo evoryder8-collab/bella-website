@@ -47,7 +47,7 @@ function quality() {
   const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
   return {
     coarse,
-    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 1.6 : 1.75),
+    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 1.5 : 1.75),
     transmission: lowEnd ? 0 : coarse ? 0.5 : 0.7,
     pearls: lowEnd ? 80 : coarse ? 140 : 230,
     step: coarse ? 26 : 18,
@@ -149,7 +149,10 @@ export function initWorld() {
   // by Bella's cheek and following a finger over her portrait. It leaves with
   // the hero as you scroll rather than following you down the page.
   const target = (now, t) => {
-    if (html.classList.contains('portal-open')) return { x: vw / 2, y: vh * 0.25, scale: q.coarse ? 0.62 : 0.72, glow: 0.45, follow: false, portrait: false };
+    if (html.classList.contains('portal-open')) {
+      const lang = html.classList.contains('portal-picking');
+      return { x: vw / 2, y: vh * (lang ? 0.15 : 0.25), scale: (q.coarse ? 0.62 : 0.72) * (lang ? 0.8 : 1), glow: 0.45, follow: false, portrait: false };
+    }
     const rect = portraitEl.getBoundingClientRect();
     const scale = q.coarse ? 0.55 : 0.7;
     const touching =

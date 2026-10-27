@@ -1,62 +1,70 @@
-# Be Beauty: content checklist
+# BE BEAUTY: content checklist
 
-Everything below is a placeholder until Bella confirms or replaces it. All copy and
-contact details live in [`src/content.js`](src/content.js), in Swedish (`sv`) and English (`en`).
+Copy now comes from Bella's own site (bebeautyfacesculptor.com) and her Bokadirekt page, as read on
+2026-10-27. Everything both sites said is recorded in [`docs/current-site-audit.md`](docs/current-site-audit.md).
+All copy and contact details live in [`src/content.js`](src/content.js), in Swedish (`sv`) and English (`en`).
 
-## Contact details (`contact` in `src/content.js`)
+## For Bella to confirm
 
-- [ ] WhatsApp number: `46701740605` (a number from PTS's range reserved for fiction, so it never reaches anyone)
-- [ ] Phone, shown and dialled: `+46 70 174 06 05`
-- [ ] Email: `hej@bebeauty.example` (`.example` is a reserved domain)
-- [ ] Studio address: `Exempelgatan 12, 114 35 Stockholm`
-- [ ] Map pin coordinates: `[18.0786, 59.3368]` (Östermalm, placeholder)
-- [ ] Opening hours: Tue–Fri 10–19, Sat 10–15, Sun–Mon closed (`contact.hours` in both languages)
-- [ ] Pre-written WhatsApp message (`ui.whatsappMessage`)
+- [ ] Opening hours: Mon–Fri 09–19, Sat–Sun 10–19. These are the Västmannagatan hours on Bokadirekt; check that Jaktgatan keeps the same hours.
+- [ ] Swedish copy. Her own site is in English, so the Swedish text is our translation. The Bokadirekt descriptions were the source for the treatments.
+- [ ] Reviews. The six quotes are from her site and are shown in English in both languages, as published there.
+- [ ] Academy: no new dates are listed yet ("Nya kursdatum släpps snart"). Interest goes to her email with a prefilled subject.
+- [ ] Whether to show a WhatsApp or phone number. None is published, so booking goes to Bokadirekt and contact goes to email and Instagram.
+
+## Contact (`contact` and `studios` in `src/content.js`)
+
+- Booking: [Bokadirekt](https://www.bokadirekt.se/places/be-beauty-face-sculpting-sthlm-130492)
+- Email: `bebeautyfacesculpting@gmail.com`
+- Instagram: `@bebeauty_facesculpt`
+- Vasastan: Västmannagatan 12, 111 24 Stockholm
+- Norra Djurgården: Jaktgatan 29, 115 47 Stockholm
 
 ## Treatments and prices
 
-Durations and prices are in the `treatments` list at the top of `src/content.js`; names
-and descriptions are under `treatments.items` in each language.
+Regular Bokadirekt prices; campaign prices that ended 31 October 2026 are left out. Durations and prices
+are in the `treatments` list at the top of `src/content.js`; names and descriptions are under
+`treatments.items` in each language. To add or remove a treatment, change that list, both languages and
+the matching `<li class="t-card">` in `index.html`.
 
-| # | Treatment | Duration | Price |
-|---|---|---|---|
-| 1 | Sculpting face massage | 60 min | 1 195 kr |
-| 2 | Buccal sculpting | 75 min | 1 495 kr |
-| 3 | Lymphatic drainage | 60 min | 995 kr |
-| 4 | Gua sha treatment | 45 min | 850 kr |
-| 5 | Be Beauty Signature | 90 min | 1 795 kr |
+| # | Treatment | Group | Duration | Price |
+|---|---|---|---|---|
+| 1 | Femina Bella Est® Gua Sha facelift | Face | 60 min | 1 495 kr |
+| 2 | Sculpt & Buccal Facial | Face | 75 min | 2 395 kr |
+| 3 | Buccal massage & jaw treatment | Face | 60 min | 1 895 kr |
+| 4 | Jaw Release + Femina Bella Est | Face | 75 min | 1 895 kr |
+| 5 | Sculpt Facial with Bella (consultation) | Face | 45 min | 1 895 kr |
+| 6 | Buccal Release & Sculpt Facial | Signature TCM | 90 min | 3 495 kr |
+| 7 | Symmetry Sculpt Facial™ | Signature TCM | 90 min | 3 495 kr |
+| 8 | Bojin Acupressure Lift™ | Signature TCM | 60 min | 2 395 kr |
+| 9 | Glow & Lymphatic Sculpt Facial | Signature TCM | 75 min | 2 895 kr |
+| 10 | Heart Space Gua Sha Release | Body | 75 min | 1 895 kr |
+| 11 | Abdominal Sculpt™ | Body | 75 min | 1 895 kr |
+| 12 | Gua Sha body & face | Body | 120 min | 2 395 kr |
 
-To add or remove a treatment, change both the list in `src/content.js` and the matching
-`<li class="treatment">` rows in `index.html`.
-
-## About Bella
-
-- [ ] Bio (`about.lead`, `about.body1`, `about.body2`)
-- [ ] Stats: 8+ years, 2 000+ treatments, 1 client at a time (`about.stat*`)
-- [ ] Portrait: `src/images/about.jpg` is a stock stand-in, not Bella
-
-## Reviews
-
-- [ ] Three quotes and names (`reviews.items`). These are invented; replace them with real ones, used with the clients' permission.
+Left out (all on Bokadirekt): lash and brow lifts, Gua Sha body 75 min, Gua Sha body & abdomen,
+Yngre Imorgon™ and the other packages.
 
 ## Photos
 
-All photos are stand-ins from [Unsplash](https://unsplash.com), free to use under the
-[Unsplash License](https://unsplash.com/license). Replace them with Bella's own photos when she has them,
-keeping the same file names, or update the `src` in `index.html`.
+All photos are Bella's own, downloaded from her site with the user's approval and resized for the web.
+`treatment-hands.jpg` is cropped to remove a photographer watermark (iConstantine Photography). If the
+originals are available without watermarks or in higher resolution, swap them in with the same file names.
 
-| File | Use | Photographer | Unsplash photo |
-|---|---|---|---|
-| `src/images/hero.jpg` | Hero | Dominique Rivu | [rWwuf8yKw4Y](https://unsplash.com/photos/rWwuf8yKw4Y) |
-| `src/images/about.jpg` | About Bella | manitosilk | [DSKNz2MZWW4](https://unsplash.com/photos/DSKNz2MZWW4) |
-| `src/images/gallery-1.jpg` | Gallery | Anna Keibalo | [BJ7i-96glwM](https://unsplash.com/photos/BJ7i-96glwM) |
-| `src/images/gallery-2.jpg` | Gallery | Ionela Mat | [16mHHrY3PUk](https://unsplash.com/photos/16mHHrY3PUk) |
-| `src/images/gallery-3.jpg` | Gallery | Angélica Echeverry | [5KY5LP_zc44](https://unsplash.com/photos/5KY5LP_zc44) |
-| `src/images/gallery-4.jpg` | Gallery | Mayur Roxan | [JnsuyfJrxQw](https://unsplash.com/photos/JnsuyfJrxQw) |
-| `src/images/gallery-5.jpg` | Gallery | Kadarius Seegars | [Mxy5gokl8mE](https://unsplash.com/photos/Mxy5gokl8mE) |
-| `src/images/gallery-6.jpg` | Gallery | Sunny Ng | [KVIlNRoGwxk](https://unsplash.com/photos/KVIlNRoGwxk) |
+| File | Use |
+|---|---|
+| `src/images/hero-bella.jpg` | Hero portrait (also the WebGL texture) |
+| `src/images/studio.jpg` | Approach: Beauty |
+| `src/images/guasha.jpg` | Approach: Balance |
+| `src/images/treatment-light.jpg` | Approach: Glow |
+| `src/images/treatment-hands.jpg` | Femina Bella Est |
+| `src/images/paris-championship.jpg` | Proof: European Massage Championship |
+| `src/images/hudterapeuten.jpg` | Proof: Hudterapeuten cover |
+| `src/images/bella-studio.jpg` | About Bella |
+| `src/images/jury-asia.jpg` | About: jury, Asia Massage Championship 2026 |
+| `src/images/academy.jpg` | Academy card |
 
 ## Before launch
 
 - [ ] Remove `<meta name="robots" content="noindex">` from `index.html`
-- [ ] Decide on a domain
+- [ ] Decide on a domain (her current site is bebeautyfacesculptor.com)

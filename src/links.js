@@ -1,14 +1,19 @@
-import { contact, copy } from './content.js';
+import { contact, copy, studios } from './content.js';
 
-// Every outbound contact link, for a given language.
+const mail = (subject) => `mailto:${contact.email}${subject ? `?subject=${encodeURIComponent(subject)}` : ''}`;
+const directions = ({ street, postcode }) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${street}, ${postcode} Stockholm`)}`;
+
+// Every outbound link, for a given language (only the email subjects change).
 export function links(lang) {
-  const [lng, lat] = contact.coords;
-  const message = encodeURIComponent(copy[lang].ui.whatsappMessage);
+  const { offers } = copy[lang];
   return {
-    whatsapp: `https://wa.me/${contact.whatsapp}?text=${message}`,
-    tel: `tel:${contact.phoneHref}`,
-    sms: `sms:${contact.phoneHref}`,
-    mailto: `mailto:${contact.email}`,
-    maps: `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`,
+    book: contact.bokadirekt,
+    mailto: mail(),
+    academy: mail(offers.academySubject),
+    corporate: mail(offers.corporateSubject),
+    instagram: contact.instagramUrl,
+    directions0: directions(studios[0]),
+    directions1: directions(studios[1]),
   };
 }

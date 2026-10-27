@@ -4,15 +4,16 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex">
   <title data-i18n="meta.title"></title>
   <meta name="description" content="" data-i18n-attr="content:meta.description">
-  <meta name="theme-color" content="#FAF8F4">
+  <meta name="theme-color" content="#F6E9E4">
   <link rel="icon" href="./src/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Jost:wght@300;400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
+  <link rel="preload" as="image" href="./src/images/hero-bella.jpg" fetchpriority="high">
   <script>
     // Hide reveal targets until the motion script runs; show them anyway if it never does.
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -27,26 +28,23 @@
   <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
 
   <header class="site-header" data-header>
-    <div class="wrap header-inner">
-      <a class="wordmark" href="#top">Be <em>Beauty</em></a>
+    <div class="header-inner">
+      <a class="wordmark" href="#top">BE <em>BEAUTY</em></a>
       <nav class="nav" data-i18n-attr="aria-label:ui.menu">
         <ul>
+          <li><a href="#metoden" data-i18n="nav.method"></a></li>
           <li><a href="#behandlingar" data-i18n="nav.treatments"></a></li>
           <li><a href="#om" data-i18n="nav.about"></a></li>
-          <li><a href="#galleri" data-i18n="nav.gallery"></a></li>
           <li><a href="#omdomen" data-i18n="nav.reviews"></a></li>
-          <li><a href="#kontakt" data-i18n="nav.contact"></a></li>
+          <li><a href="#studior" data-i18n="nav.studios"></a></li>
         </ul>
       </nav>
       <div class="header-actions">
         <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
           <button type="button" data-lang="sv" aria-pressed="true">SV</button>
-          <span aria-hidden="true">/</span>
           <button type="button" data-lang="en" aria-pressed="false">EN</button>
         </div>
-        <a class="btn btn-outline btn-small header-book" data-link="whatsapp" href="#" target="_blank" rel="noopener">
-          <span class="wa-icon"></span><span data-i18n="ui.book"></span>
-        </a>
+        <a class="btn btn-solid btn-small header-book" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
           <span class="visually-hidden" data-i18n="ui.menu"></span>
           <span class="menu-toggle-lines" aria-hidden="true"></span>
@@ -57,246 +55,441 @@
 
   <div class="mobile-menu" id="mobile-menu" data-menu hidden>
     <nav class="mobile-nav" data-i18n-attr="aria-label:ui.menu">
-      <ul>
-        <li><a href="#behandlingar" data-i18n="nav.treatments"></a></li>
-        <li><a href="#om" data-i18n="nav.about"></a></li>
-        <li><a href="#galleri" data-i18n="nav.gallery"></a></li>
-        <li><a href="#omdomen" data-i18n="nav.reviews"></a></li>
-        <li><a href="#kontakt" data-i18n="nav.contact"></a></li>
-      </ul>
+      <ol>
+        <li><a href="#metoden"><span class="mobile-nav-num">01</span><span data-i18n="nav.method"></span></a></li>
+        <li><a href="#behandlingar"><span class="mobile-nav-num">02</span><span data-i18n="nav.treatments"></span></a></li>
+        <li><a href="#om"><span class="mobile-nav-num">03</span><span data-i18n="nav.about"></span></a></li>
+        <li><a href="#omdomen"><span class="mobile-nav-num">04</span><span data-i18n="nav.reviews"></span></a></li>
+        <li><a href="#studior"><span class="mobile-nav-num">05</span><span data-i18n="nav.studios"></span></a></li>
+      </ol>
     </nav>
     <div class="mobile-menu-foot">
-      <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
-        <button type="button" data-lang="sv" aria-pressed="true">SV</button>
-        <span aria-hidden="true">/</span>
-        <button type="button" data-lang="en" aria-pressed="false">EN</button>
-      </div>
-      <a class="btn btn-solid" data-link="whatsapp" href="#" target="_blank" rel="noopener">
-        <span class="wa-icon"></span><span data-i18n="ui.whatsappFab"></span>
-      </a>
+      <a class="btn btn-solid" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.bookFull"></a>
+      <p class="mobile-menu-contact">
+        <a data-link="mailto" href="#" data-contact="email"></a>
+        <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
+      </p>
     </div>
   </div>
 
   <main id="main">
-    <section class="hero" id="top">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow" data-hero-fade data-i18n="hero.eyebrow"></p>
-          <h1 class="hero-title">
-            <span class="line"><span data-hero-line data-i18n="hero.line1"></span></span>
-            <span class="line line-indent"><span data-hero-line data-i18n="hero.line2"></span></span>
-          </h1>
-          <p class="hero-lead" data-hero-fade data-i18n="hero.lead"></p>
-          <div class="hero-actions" data-hero-fade>
-            <a class="btn btn-solid" data-link="whatsapp" href="#" target="_blank" rel="noopener">
-              <span class="wa-icon"></span><span data-i18n="hero.cta"></span>
-            </a>
-            <a class="link-arrow" href="#behandlingar"><span data-i18n="hero.secondary"></span><span aria-hidden="true">→</span></a>
-          </div>
+    <!-- Hero: the portrait becomes a touch-reactive WebGL surface (src/hero-sculpt.js). -->
+    <section class="hero" id="top" data-hero>
+      <div class="hero-media" data-hero-media>
+        <div class="hero-frame" data-hero-frame>
+          <img class="hero-img" src="./src/images/hero-bella.jpg" width="996" height="1343" alt="" data-i18n-attr="alt:hero.imageAlt" fetchpriority="high">
         </div>
-        <figure class="hero-media" data-hero-media>
-          <div class="frame">
-            <img src="./src/images/hero.jpg" width="1400" height="2099" alt="" data-i18n-attr="alt:hero.imageAlt" data-parallax fetchpriority="high">
-          </div>
+        <p class="hero-hint" data-hero-hint aria-hidden="true"><span class="hint-dot"></span><span data-i18n="hero.hint"></span></p>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow" data-hero-fade data-i18n="hero.eyebrow"></p>
+        <h1 class="hero-title">
+          <span class="line"><span data-hero-line>BE</span></span>
+          <span class="line"><span data-hero-line>BEAUTY</span></span>
+        </h1>
+        <p class="hero-tagline" data-hero-fade>Beauty. Balance. <em>Glow.</em></p>
+        <p class="hero-lead" data-hero-fade data-i18n="hero.lead"></p>
+        <div class="hero-actions" data-hero-fade>
+          <a class="btn btn-cream" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="hero.cta"></a>
+          <a class="btn btn-ghost" href="#behandlingar" data-i18n="hero.secondary"></a>
+        </div>
+        <p class="hero-founder" data-hero-fade data-i18n="hero.founder"></p>
+      </div>
+    </section>
+
+    <!-- Beauty. Balance. Glow. Pinned and scrubbed with motion, stacked panels without. -->
+    <section class="approach" aria-labelledby="approach-title" data-approach>
+      <h2 class="visually-hidden" id="approach-title" data-i18n="approach.label"></h2>
+      <div class="approach-stage" data-approach-stage>
+        <p class="section-label approach-label" aria-hidden="true" data-i18n="approach.label"></p>
+        <ol class="approach-list">
+          <li class="approach-panel" data-approach-panel>
+            <figure class="approach-media">
+              <img src="./src/images/studio.jpg" width="1179" height="1150" loading="lazy" alt="" data-i18n-attr="alt:approach.items.0.imageAlt">
+            </figure>
+            <div class="approach-copy">
+              <span class="approach-index">01</span>
+              <p class="approach-word" data-i18n="approach.items.0.word"></p>
+              <p class="approach-text" data-i18n="approach.items.0.text"></p>
+            </div>
+          </li>
+          <li class="approach-panel" data-approach-panel>
+            <figure class="approach-media">
+              <img src="./src/images/guasha.jpg" width="1179" height="1291" loading="lazy" alt="" data-i18n-attr="alt:approach.items.1.imageAlt">
+            </figure>
+            <div class="approach-copy">
+              <span class="approach-index">02</span>
+              <p class="approach-word" data-i18n="approach.items.1.word"></p>
+              <p class="approach-text" data-i18n="approach.items.1.text"></p>
+            </div>
+          </li>
+          <li class="approach-panel" data-approach-panel>
+            <figure class="approach-media">
+              <img src="./src/images/treatment-light.jpg" width="1120" height="1400" loading="lazy" alt="" data-i18n-attr="alt:approach.items.2.imageAlt">
+            </figure>
+            <div class="approach-copy">
+              <span class="approach-index">03</span>
+              <p class="approach-word" data-i18n="approach.items.2.word"></p>
+              <p class="approach-text" data-i18n="approach.items.2.text"></p>
+            </div>
+          </li>
+        </ol>
+        <div class="approach-progress" aria-hidden="true"><span data-approach-bar></span></div>
+      </div>
+    </section>
+
+    <!-- Femina Bella Est -->
+    <section class="method section" id="metoden" aria-labelledby="method-title">
+      <div class="wrap method-grid">
+        <figure class="method-media" data-reveal-image>
+          <img data-parallax src="./src/images/treatment-hands.jpg" width="1344" height="1400" loading="lazy" alt="" data-i18n-attr="alt:method.imageAlt">
+          <!-- Gua sha strokes: drawn in on scroll, always lifting up and out. -->
+          <svg class="lift-lines" viewBox="0 0 100 125" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <path data-lift pathLength="1" d="M14 115 C 24 92, 30 70, 26 38" />
+            <path data-lift pathLength="1" d="M40 120 C 52 95, 58 68, 56 25" />
+            <path data-lift pathLength="1" d="M66 117 C 78 97, 86 72, 88 42" />
+          </svg>
         </figure>
-      </div>
-      <a class="scroll-cue" href="#behandlingar" data-hero-fade>
-        <span data-i18n="hero.scroll"></span><span class="scroll-cue-line" aria-hidden="true"></span>
-      </a>
-    </section>
-
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track">
-        <div class="marquee-group">
-          <span data-i18n="marquee.0"></span><i>✦</i><span data-i18n="marquee.1"></span><i>✦</i><span data-i18n="marquee.2"></span><i>✦</i><span data-i18n="marquee.3"></span><i>✦</i><span data-i18n="marquee.4"></span><i>✦</i>
-        </div>
-        <div class="marquee-group">
-          <span data-i18n="marquee.0"></span><i>✦</i><span data-i18n="marquee.1"></span><i>✦</i><span data-i18n="marquee.2"></span><i>✦</i><span data-i18n="marquee.3"></span><i>✦</i><span data-i18n="marquee.4"></span><i>✦</i>
+        <div class="method-copy">
+          <p class="section-label" data-reveal data-i18n="method.label"></p>
+          <h2 class="method-title" id="method-title" data-reveal data-i18n="method.title"></h2>
+          <p class="method-lead" data-reveal data-i18n="method.lead"></p>
+          <p class="method-body" data-reveal data-i18n="method.body"></p>
+          <p class="method-stage" data-reveal><span class="stage-mark">Tokyo 2026</span><span data-i18n="method.stage"></span></p>
+          <a class="btn btn-solid" data-reveal data-link="book" href="#" target="_blank" rel="noopener" data-i18n="method.cta"></a>
         </div>
       </div>
-    </div>
-
-    <section class="section treatments" id="behandlingar" aria-labelledby="treatments-title">
-      <div class="wrap split">
-        <div class="split-aside">
-          <p class="label" data-reveal data-i18n="treatments.label"></p>
-          <h2 class="h2" id="treatments-title" data-reveal data-i18n="treatments.title"></h2>
-          <p class="body-muted" data-reveal data-i18n="treatments.intro"></p>
-        </div>
-        <div class="split-main">
-          <ol class="treatment-list">
-            <li class="treatment" data-reveal>
-              <span class="treatment-num">01</span>
-              <div class="treatment-main">
-                <h3 class="treatment-name" data-i18n="treatments.items.0.name"></h3>
-                <p class="treatment-desc" data-i18n="treatments.items.0.description"></p>
-              </div>
-              <p class="treatment-meta"><span data-i18n="treatments.items.0.duration"></span><span class="treatment-price" data-i18n="treatments.items.0.price"></span></p>
-            </li>
-            <li class="treatment" data-reveal>
-              <span class="treatment-num">02</span>
-              <div class="treatment-main">
-                <h3 class="treatment-name" data-i18n="treatments.items.1.name"></h3>
-                <p class="treatment-desc" data-i18n="treatments.items.1.description"></p>
-              </div>
-              <p class="treatment-meta"><span data-i18n="treatments.items.1.duration"></span><span class="treatment-price" data-i18n="treatments.items.1.price"></span></p>
-            </li>
-            <li class="treatment" data-reveal>
-              <span class="treatment-num">03</span>
-              <div class="treatment-main">
-                <h3 class="treatment-name" data-i18n="treatments.items.2.name"></h3>
-                <p class="treatment-desc" data-i18n="treatments.items.2.description"></p>
-              </div>
-              <p class="treatment-meta"><span data-i18n="treatments.items.2.duration"></span><span class="treatment-price" data-i18n="treatments.items.2.price"></span></p>
-            </li>
-            <li class="treatment" data-reveal>
-              <span class="treatment-num">04</span>
-              <div class="treatment-main">
-                <h3 class="treatment-name" data-i18n="treatments.items.3.name"></h3>
-                <p class="treatment-desc" data-i18n="treatments.items.3.description"></p>
-              </div>
-              <p class="treatment-meta"><span data-i18n="treatments.items.3.duration"></span><span class="treatment-price" data-i18n="treatments.items.3.price"></span></p>
-            </li>
-            <li class="treatment treatment-signature" data-reveal>
-              <span class="treatment-num">05</span>
-              <div class="treatment-main">
-                <h3 class="treatment-name" data-i18n="treatments.items.4.name"></h3>
-                <p class="treatment-desc" data-i18n="treatments.items.4.description"></p>
-              </div>
-              <p class="treatment-meta"><span data-i18n="treatments.items.4.duration"></span><span class="treatment-price" data-i18n="treatments.items.4.price"></span></p>
-            </li>
-          </ol>
-          <p class="treatment-note" data-reveal>
-            <a data-link="whatsapp" href="#" target="_blank" rel="noopener"><span class="wa-icon"></span><span data-i18n="treatments.note"></span></a>
-          </p>
+      <div class="technique-band" aria-hidden="true">
+        <div class="technique-track">
+          <span data-i18n="method.techniques.0"></span><span data-i18n="method.techniques.1"></span><span data-i18n="method.techniques.2"></span><span data-i18n="method.techniques.3"></span><span data-i18n="method.techniques.4"></span><span data-i18n="method.techniques.5"></span>
+          <span data-i18n="method.techniques.0"></span><span data-i18n="method.techniques.1"></span><span data-i18n="method.techniques.2"></span><span data-i18n="method.techniques.3"></span><span data-i18n="method.techniques.4"></span><span data-i18n="method.techniques.5"></span>
         </div>
       </div>
     </section>
 
-    <section class="section about" id="om" aria-labelledby="about-title">
+    <!-- Treatments: one swipeable track, chips jump between groups. -->
+    <section class="treatments section" id="behandlingar" aria-labelledby="treatments-title">
+      <div class="wrap">
+        <p class="section-label" data-reveal data-i18n="treatments.label"></p>
+        <h2 class="section-title" id="treatments-title" data-reveal data-i18n="treatments.title"></h2>
+        <p class="section-intro" data-reveal data-i18n="treatments.intro"></p>
+        <div class="chips" role="group" data-i18n-attr="aria-label:treatments.label" data-chips>
+          <button type="button" class="chip" data-group="0" aria-pressed="true" data-i18n="treatments.groups.0"></button>
+          <button type="button" class="chip" data-group="1" aria-pressed="false" data-i18n="treatments.groups.1"></button>
+          <button type="button" class="chip" data-group="2" aria-pressed="false" data-i18n="treatments.groups.2"></button>
+        </div>
+      </div>
+      <div class="carousel" data-carousel>
+        <ul class="card-track" data-track>
+          <li class="t-card" data-card data-card-group="0">
+            <p class="t-top"><span class="t-num">01</span><span class="t-tag" data-i18n="treatments.items.0.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.0.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.0.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.0.duration"></span><span class="t-price" data-i18n="treatments.items.0.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card" data-card data-card-group="0">
+            <p class="t-top"><span class="t-num">02</span><span class="t-tag" data-i18n="treatments.items.1.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.1.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.1.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.1.duration"></span><span class="t-price" data-i18n="treatments.items.1.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card" data-card data-card-group="0">
+            <p class="t-top"><span class="t-num">03</span><span class="t-tag" data-i18n="treatments.items.2.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.2.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.2.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.2.duration"></span><span class="t-price" data-i18n="treatments.items.2.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card" data-card data-card-group="0">
+            <p class="t-top"><span class="t-num">04</span><span class="t-tag" data-i18n="treatments.items.3.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.3.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.3.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.3.duration"></span><span class="t-price" data-i18n="treatments.items.3.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card" data-card data-card-group="0">
+            <p class="t-top"><span class="t-num">05</span><span class="t-tag" data-i18n="treatments.items.4.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.4.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.4.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.4.duration"></span><span class="t-price" data-i18n="treatments.items.4.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-signature" data-card data-card-group="1">
+            <p class="t-top"><span class="t-num">06</span><span class="t-tag" data-i18n="treatments.items.5.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.5.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.5.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.5.duration"></span><span class="t-price" data-i18n="treatments.items.5.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-signature" data-card data-card-group="1">
+            <p class="t-top"><span class="t-num">07</span><span class="t-tag" data-i18n="treatments.items.6.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.6.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.6.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.6.duration"></span><span class="t-price" data-i18n="treatments.items.6.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-signature" data-card data-card-group="1">
+            <p class="t-top"><span class="t-num">08</span><span class="t-tag" data-i18n="treatments.items.7.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.7.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.7.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.7.duration"></span><span class="t-price" data-i18n="treatments.items.7.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-signature" data-card data-card-group="1">
+            <p class="t-top"><span class="t-num">09</span><span class="t-tag" data-i18n="treatments.items.8.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.8.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.8.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.8.duration"></span><span class="t-price" data-i18n="treatments.items.8.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-body" data-card data-card-group="2">
+            <p class="t-top"><span class="t-num">10</span><span class="t-tag" data-i18n="treatments.items.9.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.9.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.9.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.9.duration"></span><span class="t-price" data-i18n="treatments.items.9.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-body" data-card data-card-group="2">
+            <p class="t-top"><span class="t-num">11</span><span class="t-tag" data-i18n="treatments.items.10.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.10.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.10.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.10.duration"></span><span class="t-price" data-i18n="treatments.items.10.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+          <li class="t-card t-card-body" data-card data-card-group="2">
+            <p class="t-top"><span class="t-num">12</span><span class="t-tag" data-i18n="treatments.items.11.tag"></span></p>
+            <h3 class="t-name" data-i18n="treatments.items.11.name"></h3>
+            <p class="t-desc" data-i18n="treatments.items.11.description"></p>
+            <p class="t-meta"><span data-i18n="treatments.items.11.duration"></span><span class="t-price" data-i18n="treatments.items.11.price"></span></p>
+            <a class="t-book" data-link="book" href="#" target="_blank" rel="noopener"><span data-i18n="ui.book"></span><span class="arrow" aria-hidden="true">→</span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="wrap carousel-foot">
+        <div class="carousel-progress" aria-hidden="true"><span data-progress></span></div>
+        <p class="carousel-swipe" aria-hidden="true" data-i18n="treatments.swipe"></p>
+        <div class="carousel-buttons">
+          <button type="button" class="round-btn" data-prev data-i18n-attr="aria-label:ui.prev"><span aria-hidden="true">←</span></button>
+          <button type="button" class="round-btn" data-next data-i18n-attr="aria-label:ui.next"><span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+      <div class="wrap">
+        <a class="text-link" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.allTreatments"></a>
+      </div>
+    </section>
+
+    <!-- Proof: rating, numbers, press -->
+    <section class="proof section" aria-labelledby="proof-title">
+      <div class="wrap proof-grid">
+        <div class="proof-rating">
+          <h2 class="section-label" id="proof-title" data-reveal data-i18n="proof.label"></h2>
+          <p class="rating-value" data-reveal><span data-count="4.9" data-i18n="proof.rating"></span></p>
+          <p class="stars" aria-hidden="true"><span class="stars-base">★★★★★</span><span class="stars-fill" data-stars>★★★★★</span></p>
+          <p class="rating-label" data-reveal data-i18n="proof.ratingLabel"></p>
+        </div>
+        <ul class="stats">
+          <li data-reveal><span class="stat-value" data-count="10" data-i18n="proof.stats.0.value"></span><span class="stat-label" data-i18n="proof.stats.0.label"></span></li>
+          <li data-reveal><span class="stat-value" data-count="3" data-i18n="proof.stats.1.value"></span><span class="stat-label" data-i18n="proof.stats.1.label"></span></li>
+          <li data-reveal><span class="stat-value" data-count="3" data-i18n="proof.stats.2.value"></span><span class="stat-label" data-i18n="proof.stats.2.label"></span></li>
+          <li data-reveal><span class="stat-value stat-word" data-i18n="proof.stats.3.value"></span><span class="stat-label" data-i18n="proof.stats.3.label"></span></li>
+        </ul>
+        <div class="proof-images">
+          <figure class="proof-paris" data-reveal-image>
+            <img data-parallax src="./src/images/paris-championship.jpg" width="1000" height="959" loading="lazy" alt="" data-i18n-attr="alt:proof.parisAlt">
+          </figure>
+          <figure class="press" data-tilt>
+            <img src="./src/images/hudterapeuten.jpg" width="573" height="809" loading="lazy" alt="" data-i18n-attr="alt:proof.pressAlt">
+            <figcaption data-i18n="proof.press"></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Bella -->
+    <section class="about section" id="om" aria-labelledby="about-title">
       <div class="wrap about-grid">
         <figure class="about-media" data-reveal-image>
-          <div class="frame">
-            <img src="./src/images/about.jpg" width="1400" height="1050" alt="" data-i18n-attr="alt:about.imageAlt" loading="lazy" decoding="async" data-parallax>
-          </div>
+          <img data-parallax src="./src/images/bella-studio.jpg" width="1051" height="1130" loading="lazy" alt="" data-i18n-attr="alt:about.imageAlt">
         </figure>
         <div class="about-copy">
-          <p class="label" data-reveal data-i18n="about.label"></p>
-          <h2 class="h2" id="about-title" data-reveal data-i18n="about.title"></h2>
+          <p class="section-label" data-reveal data-i18n="about.label"></p>
+          <h2 class="about-title" id="about-title" data-reveal data-i18n="about.title"></h2>
+          <p class="about-roles" data-reveal data-i18n="about.roles"></p>
           <p class="about-lead" data-reveal data-i18n="about.lead"></p>
-          <p class="body-muted" data-reveal data-i18n="about.body1"></p>
-          <p class="body-muted" data-reveal data-i18n="about.body2"></p>
-          <p class="signature" data-reveal data-i18n="about.signature"></p>
-          <dl class="stats" data-reveal>
-            <div><dt data-i18n="about.stat1Label"></dt><dd data-i18n="about.stat1Value"></dd></div>
-            <div><dt data-i18n="about.stat2Label"></dt><dd data-i18n="about.stat2Value"></dd></div>
-            <div><dt data-i18n="about.stat3Label"></dt><dd data-i18n="about.stat3Value"></dd></div>
-          </dl>
+          <p data-reveal data-i18n="about.body1"></p>
+          <p data-reveal data-i18n="about.body2"></p>
+        </div>
+      </div>
+
+      <figure class="about-quote wrap">
+        <blockquote><p data-scrub-words data-i18n="about.quote"></p></blockquote>
+        <figcaption data-i18n="about.quoteBy"></figcaption>
+      </figure>
+
+      <div class="wrap about-lists">
+        <figure class="about-jury" data-reveal-image>
+          <img data-parallax src="./src/images/jury-asia.jpg" width="1120" height="1400" loading="lazy" alt="" data-i18n-attr="alt:about.juryAlt">
+        </figure>
+        <div class="awards">
+          <h3 class="list-title" data-reveal data-i18n="about.awardsTitle"></h3>
+          <ol class="timeline" data-timeline>
+            <li><span class="t-year">2026</span><span data-i18n="about.awards.0"></span></li>
+            <li><span class="t-year">2026</span><span data-i18n="about.awards.1"></span></li>
+            <li><span class="t-year">2026</span><span data-i18n="about.awards.2"></span></li>
+            <li><span class="t-year">2025</span><span data-i18n="about.awards.3"></span></li>
+            <li><span class="t-year">2025</span><span data-i18n="about.awards.4"></span></li>
+            <li><span class="t-year">2025</span><span data-i18n="about.awards.5"></span></li>
+            <li><span class="t-year">2024</span><span data-i18n="about.awards.6"></span></li>
+          </ol>
+        </div>
+        <div class="education">
+          <h3 class="list-title" data-reveal data-i18n="about.educationTitle"></h3>
+          <ul class="edu-list">
+            <li data-reveal data-i18n="about.education.0"></li>
+            <li data-reveal data-i18n="about.education.1"></li>
+            <li data-reveal data-i18n="about.education.2"></li>
+            <li data-reveal data-i18n="about.education.3"></li>
+          </ul>
+          <p class="team" data-reveal data-i18n="about.team"></p>
         </div>
       </div>
     </section>
 
-    <section class="section gallery" id="galleri" aria-labelledby="gallery-title">
+    <!-- Reviews: a deck you swipe through -->
+    <section class="reviews section" id="omdomen" aria-labelledby="reviews-title">
       <div class="wrap">
-        <div class="section-head">
-          <p class="label" data-reveal data-i18n="gallery.label"></p>
-          <h2 class="h2" id="gallery-title" data-reveal data-i18n="gallery.title"></h2>
-        </div>
-        <div class="gallery-grid">
-          <figure class="g g1" data-reveal-image><div class="frame"><img src="./src/images/gallery-1.jpg" width="1200" height="1715" alt="" data-i18n-attr="alt:gallery.alt1" loading="lazy" decoding="async" data-parallax></div></figure>
-          <figure class="g g2" data-reveal-image><div class="frame"><img src="./src/images/gallery-2.jpg" width="1200" height="800" alt="" data-i18n-attr="alt:gallery.alt2" loading="lazy" decoding="async" data-parallax></div></figure>
-          <figure class="g g3" data-reveal-image><div class="frame"><img src="./src/images/gallery-3.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt3" loading="lazy" decoding="async" data-parallax></div></figure>
-          <figure class="g g4" data-reveal-image><div class="frame"><img src="./src/images/gallery-4.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt4" loading="lazy" decoding="async" data-parallax></div></figure>
-          <figure class="g g5" data-reveal-image><div class="frame"><img src="./src/images/gallery-5.jpg" width="1200" height="1800" alt="" data-i18n-attr="alt:gallery.alt5" loading="lazy" decoding="async" data-parallax></div></figure>
-          <div class="gallery-quote" data-reveal>
-            <p class="gallery-quote-text" data-i18n="gallery.quote"></p>
-            <p class="body-muted" data-i18n="gallery.caption"></p>
-          </div>
-          <figure class="g g6" data-reveal-image><div class="frame"><img src="./src/images/gallery-6.jpg" width="1200" height="1639" alt="" data-i18n-attr="alt:gallery.alt6" loading="lazy" decoding="async" data-parallax></div></figure>
-        </div>
+        <p class="section-label" data-reveal data-i18n="reviews.label"></p>
+        <h2 class="section-title" id="reviews-title" data-reveal data-i18n="reviews.title"></h2>
       </div>
-    </section>
-
-    <section class="section reviews" id="omdomen" aria-labelledby="reviews-title">
-      <div class="wrap">
-        <div class="section-head section-head-center">
-          <p class="label" data-reveal data-i18n="reviews.label"></p>
-          <h2 class="h2" id="reviews-title" data-reveal data-i18n="reviews.title"></h2>
-        </div>
-        <div class="review-grid">
-          <figure class="review" data-reveal>
+      <div class="deck" data-deck>
+        <ol class="deck-cards" data-deck-cards>
+          <li class="review-card" data-deck-card>
             <blockquote data-i18n="reviews.items.0.quote"></blockquote>
-            <figcaption data-i18n="reviews.items.0.name"></figcaption>
-          </figure>
-          <figure class="review" data-reveal>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.0.name"></span></p>
+          </li>
+          <li class="review-card" data-deck-card>
             <blockquote data-i18n="reviews.items.1.quote"></blockquote>
-            <figcaption data-i18n="reviews.items.1.name"></figcaption>
-          </figure>
-          <figure class="review" data-reveal>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.1.name"></span></p>
+          </li>
+          <li class="review-card" data-deck-card>
             <blockquote data-i18n="reviews.items.2.quote"></blockquote>
-            <figcaption data-i18n="reviews.items.2.name"></figcaption>
-          </figure>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.2.name"></span></p>
+          </li>
+          <li class="review-card" data-deck-card>
+            <blockquote data-i18n="reviews.items.3.quote"></blockquote>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.3.name"></span></p>
+          </li>
+          <li class="review-card" data-deck-card>
+            <blockquote data-i18n="reviews.items.4.quote"></blockquote>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.4.name"></span></p>
+          </li>
+          <li class="review-card" data-deck-card>
+            <blockquote data-i18n="reviews.items.5.quote"></blockquote>
+            <p class="review-by"><span class="stars-small" aria-hidden="true">★★★★★</span><span data-i18n="reviews.items.5.name"></span></p>
+          </li>
+        </ol>
+        <div class="deck-foot">
+          <button type="button" class="round-btn" data-deck-prev data-i18n-attr="aria-label:ui.prev"><span aria-hidden="true">←</span></button>
+          <p class="deck-count"><span data-deck-index>01</span> / 06</p>
+          <button type="button" class="round-btn" data-deck-next data-i18n-attr="aria-label:ui.next"><span aria-hidden="true">→</span></button>
+        </div>
+        <p class="deck-hint" aria-hidden="true" data-i18n="reviews.hint"></p>
+      </div>
+      <div class="wrap reviews-foot">
+        <a class="text-link" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="reviews.readAll"></a>
+      </div>
+    </section>
+
+    <!-- Academy and Corporate Wellness -->
+    <section class="offers section" id="academy" aria-labelledby="offers-title">
+      <div class="wrap">
+        <p class="section-label" id="offers-title" data-reveal data-i18n="offers.label"></p>
+        <div class="offer-grid">
+          <article class="offer offer-academy" data-reveal>
+            <img class="offer-bg" src="./src/images/academy.jpg" width="787" height="1400" loading="lazy" alt="" data-i18n-attr="alt:offers.academyAlt">
+            <div class="offer-body">
+              <h2 class="offer-title" data-i18n="offers.academyTitle"></h2>
+              <p class="offer-lead" data-i18n="offers.academyLead"></p>
+              <ul class="courses">
+                <li><h3 data-i18n="offers.courses.0.name"></h3><p data-i18n="offers.courses.0.text"></p></li>
+                <li><h3 data-i18n="offers.courses.1.name"></h3><p data-i18n="offers.courses.1.text"></p></li>
+              </ul>
+              <p class="offer-meta" data-i18n="offers.academyMeta"></p>
+              <p class="offer-note" data-i18n="offers.academyNote"></p>
+              <a class="btn btn-cream" data-link="academy" href="#" data-i18n="offers.academyCta"></a>
+            </div>
+          </article>
+          <article class="offer offer-corporate" data-reveal>
+            <span class="offer-glow" aria-hidden="true"></span>
+            <div class="offer-body">
+              <h2 class="offer-title" data-i18n="offers.corporateTitle"></h2>
+              <p class="offer-lead" data-i18n="offers.corporateLead"></p>
+              <a class="btn btn-cream" data-link="corporate" href="#" data-i18n="offers.corporateCta"></a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section class="section contact" id="kontakt" aria-labelledby="contact-title">
-      <div class="wrap contact-grid">
-        <div class="contact-copy">
-          <p class="label" data-reveal data-i18n="contact.label"></p>
-          <h2 class="h2" id="contact-title" data-reveal data-i18n="contact.title"></h2>
-          <p class="body-muted" data-reveal data-i18n="contact.lead"></p>
-          <p data-reveal>
-            <a class="btn btn-solid btn-large" data-link="whatsapp" href="#" target="_blank" rel="noopener">
-              <span class="wa-icon"></span><span data-i18n="contact.whatsapp"></span>
-            </a>
+    <!-- Two studios -->
+    <section class="studios section" id="studior" aria-labelledby="studios-title">
+      <div class="wrap">
+        <p class="section-label" data-reveal data-i18n="studios.label"></p>
+        <h2 class="section-title" id="studios-title" data-reveal data-i18n="studios.title"></h2>
+      </div>
+      <div class="studio-map">
+        <div class="map" data-map role="img" data-i18n-attr="aria-label:studios.mapAlt"></div>
+        <div class="map-chips" role="group" data-i18n-attr="aria-label:studios.label">
+          <button type="button" class="chip" data-studio="0" aria-pressed="false" data-i18n="studios.items.0.name"></button>
+          <button type="button" class="chip" data-studio="1" aria-pressed="false" data-i18n="studios.items.1.name"></button>
+        </div>
+      </div>
+      <div class="wrap studio-info">
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.items.0.name"></h3>
+          <p data-i18n="studios.items.0.address"></p>
+          <a class="text-link" data-link="directions0" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.items.1.name"></h3>
+          <p data-i18n="studios.items.1.address"></p>
+          <a class="text-link" data-link="directions1" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.hoursLabel"></h3>
+          <p data-i18n="studios.hours"></p>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.contactLabel"></h3>
+          <p class="studio-contact">
+            <a data-link="mailto" href="#" data-contact="email"></a>
+            <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
           </p>
-          <dl class="contact-list" data-reveal>
-            <div>
-              <dt data-i18n="contact.phoneLabel"></dt>
-              <dd>
-                <a data-link="tel" href="#" data-contact="phoneDisplay"></a>
-                <span class="contact-actions"><a data-link="tel" href="#" data-i18n="contact.call"></a><a data-link="sms" href="#" data-i18n="contact.sms"></a></span>
-              </dd>
-            </div>
-            <div>
-              <dt data-i18n="contact.emailLabel"></dt>
-              <dd><a data-link="mailto" href="#" data-contact="email"></a></dd>
-            </div>
-            <div>
-              <dt data-i18n="contact.studioLabel"></dt>
-              <dd>
-                <span data-i18n="contact.address"></span>
-                <a class="link-arrow link-arrow-small" data-link="maps" href="#" target="_blank" rel="noopener"><span data-i18n="contact.mapLink"></span><span aria-hidden="true">↗</span></a>
-              </dd>
-            </div>
-            <div>
-              <dt data-i18n="contact.hoursLabel"></dt>
-              <dd data-i18n="contact.hours"></dd>
-            </div>
-          </dl>
         </div>
-        <div class="contact-map" data-reveal-image>
-          <div class="map" data-map role="img" data-i18n-attr="aria-label:contact.mapAlt"></div>
-          <span class="map-pin-fallback" aria-hidden="true"></span>
-        </div>
+        <a class="btn btn-solid studio-book" data-reveal data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.bookFull"></a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="wrap">
-      <p class="footer-mark" aria-hidden="true">Be <em>Beauty</em></p>
-      <div class="footer-row">
-        <p data-i18n="footer.tagline"></p>
-        <p>© <span data-year>2026</span> Be Beauty. <span data-i18n="footer.rights"></span></p>
-        <a class="link-arrow link-arrow-small" href="#top"><span data-i18n="footer.top"></span><span aria-hidden="true">↑</span></a>
-      </div>
+    <div class="wrap footer-inner">
+      <p class="footer-mark" aria-hidden="true">BE BEAUTY</p>
+      <p class="footer-tagline">Beauty. Balance. <em>Glow.</em></p>
+      <p class="footer-sub" data-i18n="footer.sub"></p>
+      <p class="footer-links">
+        <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
+        <a data-link="mailto" href="#" data-contact="email"></a>
+      </p>
+      <p class="footer-small">© <span data-year></span> BE BEAUTY. <span data-i18n="footer.rights"></span> <a href="#top" data-i18n="footer.top"></a></p>
     </div>
   </footer>
 
-  <a class="wa-fab" data-link="whatsapp" data-fab href="#" target="_blank" rel="noopener">
-    <span class="wa-icon"></span><span data-i18n="ui.whatsappFab"></span>
-  </a>
+  <!-- Thumb-zone booking bar on phones. -->
+  <div class="book-bar" data-book-bar>
+    <p class="book-bar-rating"><span class="star" aria-hidden="true">★</span><span data-i18n="ui.barRating"></span></p>
+    <a class="btn btn-solid btn-small" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
+  </div>
 </body>
 </html>

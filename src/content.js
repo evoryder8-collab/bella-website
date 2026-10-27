@@ -1,155 +1,317 @@
-// All site copy and contact details live here. See CONTENT.md for what is
-// still placeholder. Copy values may contain simple inline HTML (<em>, <br>).
+// All site copy and contact details live here. The facts come from Bella's own
+// site and her Bokadirekt page (see docs/current-site-audit.md); CONTENT.md lists
+// what still needs her confirmation. Copy values may contain simple inline HTML.
 
 export const DEFAULT_LANG = 'sv';
 export const LANGS = ['sv', 'en'];
 
 export const contact = {
-  // Placeholder number from PTS's range reserved for fiction (never assigned).
-  whatsapp: '46701740605',
-  phoneDisplay: '+46 70 174 06 05',
-  phoneHref: '+46701740605',
-  // Placeholder: .example is a reserved domain, so mail never reaches anyone.
-  email: 'hej@bebeauty.example',
-  street: 'Exempelgatan 12',
-  postcode: '114 35',
-  city: 'Stockholm',
-  // [longitude, latitude] for the map pin (placeholder: Östermalm).
-  coords: [18.0786, 59.3368],
+  bokadirekt: 'https://www.bokadirekt.se/places/be-beauty-face-sculpting-sthlm-130492',
+  email: 'bebeautyfacesculpting@gmail.com',
+  instagram: '@bebeauty_facesculpt',
+  instagramUrl: 'https://www.instagram.com/bebeauty_facesculpt/',
 };
 
-const priceSv = (kr) => `${new Intl.NumberFormat('sv-SE').format(kr)} kr`;
-const priceEn = (kr) => `SEK ${new Intl.NumberFormat('en-GB').format(kr)}`;
-
-const treatments = [
-  { minutes: 60, price: 1195 },
-  { minutes: 75, price: 1495 },
-  { minutes: 60, price: 995 },
-  { minutes: 45, price: 850 },
-  { minutes: 90, price: 1795 },
+// [longitude, latitude] for each studio, in the same order as copy.*.studios.items.
+export const studios = [
+  { id: 'vasastan', street: 'Västmannagatan 12', postcode: '111 24', coords: [18.052448, 59.337058] },
+  { id: 'djurgarden', street: 'Jaktgatan 29', postcode: '115 47', coords: [18.088184, 59.358079] },
 ];
 
-const address = `${contact.street}<br>${contact.postcode} ${contact.city}`;
+// Regular Bokadirekt prices (campaign prices left out). group: 0 face, 1 signature TCM, 2 body.
+const treatments = [
+  { group: 0, minutes: 60, price: 1495 },
+  { group: 0, minutes: 75, price: 2395 },
+  { group: 0, minutes: 60, price: 1895 },
+  { group: 0, minutes: 75, price: 1895 },
+  { group: 0, minutes: 45, price: 1895 },
+  { group: 1, minutes: 90, price: 3495 },
+  { group: 1, minutes: 90, price: 3495 },
+  { group: 1, minutes: 60, price: 2395 },
+  { group: 1, minutes: 75, price: 2895 },
+  { group: 2, minutes: 75, price: 1895 },
+  { group: 2, minutes: 75, price: 1895 },
+  { group: 2, minutes: 120, price: 2395 },
+];
+
+export const treatmentGroups = treatments.map((t) => t.group);
+
+const priceSv = (kr) => `${new Intl.NumberFormat('sv-SE').format(kr)} kr`;
+const priceEn = (kr) => `SEK ${new Intl.NumberFormat('en-GB').format(kr)}`;
+
+const withMeta = (items, price) =>
+  items.map((item, i) => ({
+    ...item,
+    duration: `${treatments[i].minutes} min`,
+    price: price(treatments[i].price),
+  }));
+
+const address = (i) => `${studios[i].street}<br>${studios[i].postcode} Stockholm`;
+
+// Quoted as published on bebeautyfacesculptor.com, in both languages.
+const reviews = [
+  {
+    quote:
+      'Revolutionary! Absolutely wonderful. It felt amazing, that perfect mix of soothing and deep release! I saw visible results after just one session and I could feel the difference. I’m definitely coming back!',
+    name: 'Malin G',
+  },
+  {
+    quote:
+      'Bella was magical! She explained everything and performed the treatment perfectly. I saw instant results and will definitely be coming back!',
+    name: 'Stephanie I',
+  },
+  {
+    quote:
+      'I’ve tried many different ones before, but this team is on another level, they’re the best! Don’t think twice, just book it!',
+    name: 'Jennie S',
+  },
+  {
+    quote:
+      'Truly the best massage I’ve ever experienced! My under-eye bags vanished as a bonus, and Bella is simply an amazing person: warm, skilled and full of positive energy.',
+    name: 'Angelica L',
+  },
+  {
+    quote: 'An incredibly relaxing and unique experience. So soothing, in a beautiful and calming environment.',
+    name: 'Martina L',
+  },
+  {
+    quote:
+      'An absolutely wonderful experience! It’s been a long time since I felt this relaxed, and the result… wow! I’m already looking forward to my next treatment!',
+    name: 'Linn G',
+  },
+];
 
 export const copy = {
   sv: {
     meta: {
-      title: 'Be Beauty · Skulpterande ansiktsmassage i Stockholm',
+      title: 'BE BEAUTY · Face Sculpting i Stockholm med Bella Bayar',
       description:
-        'Be Beauty är Bellas studio för skulpterande och buckal ansiktsmassage, lymfdränage och gua sha i Stockholm. Boka via WhatsApp.',
+        'BE BEAUTY är Bella Bayars Face Sculpting-studio i Stockholm: Femina Bella Est®, buckal massage, Gua Sha och lymfdränage. 4,9 av 5 på Bokadirekt. Studior i Vasastan och Norra Djurgården.',
     },
     ui: {
       skip: 'Hoppa till innehållet',
       menu: 'Meny',
       close: 'Stäng meny',
       langLabel: 'Språk',
-      book: 'Boka',
-      whatsappFab: 'Boka via WhatsApp',
-      whatsappMessage: 'Hej Bella! Jag vill gärna boka en behandling hos Be Beauty.',
+      book: 'Boka tid',
+      bookFull: 'Boka på Bokadirekt',
+      barRating: '<strong>4,9</strong> av 5 · 478 betyg',
+      allTreatments: 'Alla behandlingar och paket på Bokadirekt',
+      prev: 'Föregående',
+      next: 'Nästa',
     },
     nav: {
+      method: 'Metoden',
       treatments: 'Behandlingar',
       about: 'Om Bella',
-      gallery: 'Galleri',
       reviews: 'Omdömen',
-      contact: 'Kontakt',
+      studios: 'Studior',
     },
     hero: {
-      eyebrow: 'Ansiktsmassage · Stockholm',
-      line1: 'Skulpterat',
-      line2: 'för <em>hand</em>',
-      lead: 'Ansiktsmassage som lyfter, dränerar och återställer. En behandling i taget, i en lugn studio mitt i Stockholm.',
-      cta: 'Boka via WhatsApp',
+      eyebrow: 'Face Sculpting · Stockholm',
+      lead: 'Naturligt ansiktslyft med Gua Sha, buckal massage och lymfdränage. Utan nålar, utan kirurgi.',
+      founder: 'Grundat av Bella Bayar',
+      cta: 'Boka tid',
       secondary: 'Se behandlingar',
-      scroll: 'Scrolla',
-      imageAlt: 'Närbild av ett ansikte i mjukt ljus under en ansiktsbehandling',
+      hint: 'Svep över porträttet',
+      imageAlt: 'Bella Bayar, grundare av BE BEAUTY, i krämvit kavaj mot en rosa vägg',
     },
-    marquee: ['Skulptering', 'Buckal massage', 'Lymfdränage', 'Gua sha', 'Lyft och lyster'],
-    treatments: {
-      label: '01 — Behandlingar',
-      title: 'Behandlingar <em>och priser</em>',
-      intro:
-        'Varje behandling anpassas efter din hud och ditt ansikte. Alla behandlingar börjar med en kort konsultation och avslutas med råd du kan ta med dig hem.',
-      note: 'Osäker på vad som passar dig? Skriv till mig på WhatsApp, så hjälper jag dig att välja.',
+    approach: {
+      label: 'Vårt förhållningssätt',
       items: [
         {
-          name: 'Skulpterande ansiktsmassage',
-          description: 'Djup, formande massage som definierar käklinje och kindben och ger ett lyft som syns direkt.',
+          word: 'Beauty',
+          text: 'Behandlingar som framhäver dina naturliga drag och respekterar din huds unika karaktär.',
+          imageAlt: 'Bella i BE BEAUTYs rosa studio',
         },
         {
-          name: 'Buckal skulptering',
-          description: 'Massage både utvändigt och inifrån munnen, för att nå de djupa musklerna kring käke och kinder.',
+          word: 'Balance',
+          text: 'Med Gua Sha, buckal massage och lymfdränage återställer vi harmonin i ansikte och kropp.',
+          imageAlt: 'En Gua Sha-sten formar kindbenet under en behandling',
         },
         {
-          name: 'Lymfdränage',
-          description: 'Lätta, rytmiska grepp som minskar svullnad och ger huden ny lyster.',
+          word: 'Glow',
+          text: 'Långvarig lyster och vitalitet. Resultat som syns och känns, inifrån och ut.',
+          imageAlt: 'Bella ger en ansiktsbehandling i mjukt fönsterljus',
         },
-        {
-          name: 'Gua sha-behandling',
-          description: 'Gua sha-sten och verktyg som löser upp spänningar och sätter fart på cirkulationen.',
-        },
-        {
-          name: 'Be Beauty Signature',
-          description: 'Det bästa av allt: skulptering, buckalt arbete, lymfdränage och gua sha i en och samma behandling.',
-        },
-      ].map((item, i) => ({ ...item, duration: `${treatments[i].minutes} min`, price: priceSv(treatments[i].price) })),
-    },
-    about: {
-      label: '02 — Om Bella',
-      title: 'Händer <em>som lyssnar</em>',
-      lead: 'Jag tror att ett ansikte mår bäst av tid, tålamod och händer som lyssnar.',
-      body1:
-        'Jag heter Bella och har specialiserat mig på skulpterande och buckal ansiktsmassage, lymfdränage och gua sha. Varje behandling bygger på anatomi och teknik, men lika mycket på lugn.',
-      body2:
-        'I min studio i Stockholm tar jag emot en klient i taget. Inga stressiga flöden, bara tid för dig. Målet är enkelt: att du går härifrån lättare än du kom.',
-      signature: '— Bella',
-      stat1Value: '8+',
-      stat1Label: 'år av erfarenhet',
-      stat2Value: '2 000+',
-      stat2Label: 'behandlingar',
-      stat3Value: '1',
-      stat3Label: 'klient i taget',
-      imageAlt: 'Bella i sin studio',
-    },
-    gallery: {
-      label: '03 — Galleri',
-      title: 'Från <em>studion</em>',
-      quote: 'Lyft, lyster <em>och lugn.</em>',
-      caption: 'Varje behandling är ett eget litet rum av tystnad, där ansiktet får vila och formas.',
-      alt1: 'Händer som masserar ett ansikte under en behandling',
-      alt2: 'Ansiktsmassage med gua sha-sten',
-      alt3: 'Hand som vilar mot halsen och käklinjen',
-      alt4: 'Behandlingsrum med bädd i varmt dagsljus',
-      alt5: 'Flaska med ansiktsolja i bärnstensfärgat glas',
-      alt6: 'Närbild av ett avslappnat ansikte med slutna ögon',
-    },
-    reviews: {
-      label: '04 — Omdömen',
-      title: 'Vad mina <em>klienter säger</em>',
-      items: [
-        { quote: 'Jag har aldrig sett min käklinje så tydlig. Bella har magiska händer.', name: 'Sara L.' },
-        { quote: 'Lugnet i studion och omsorgen i varje detalj. Det här är min nya ritual.', name: 'Emma K.' },
-        { quote: 'Svullnaden efter långa flygresor försvann efter en enda lymfbehandling.', name: 'Jonna P.' },
       ],
     },
-    contact: {
-      label: '05 — Kontakt',
-      title: 'Boka <em>din tid</em>',
-      lead: 'Det enklaste sättet att boka är via WhatsApp. Berätta vilken behandling du är intresserad av, så återkommer jag samma dag.',
-      whatsapp: 'Skriv på WhatsApp',
-      phoneLabel: 'Telefon',
-      call: 'Ring',
-      sms: 'Skicka sms',
-      emailLabel: 'E-post',
-      studioLabel: 'Studio',
-      address,
-      mapLink: 'Öppna i kartor',
+    method: {
+      label: 'Bellas signaturmetod',
+      title: 'Femina <em>Bella Est</em><sup>®</sup>',
+      lead: 'En strukturerad och medveten ansiktsmassage som förenar skulpterande rörelser, meridianstimulering och lymfaktivering.',
+      body: 'Rytmisk manuell massage, lymfdränage, akupressur, Gua Sha och vakuum arbetar tillsammans längs ansiktets meridianer. Ansiktets arkitektur lyfts, spänningar släpper och den inre balansen återställs: en naturlig facelift-effekt med mer spänst och klarare hy.',
+      techniques: ['Gua Sha', 'Akupressur', 'Lymfdränage', 'Vakuum', 'Meridianer', 'Skulptering'],
+      stage: 'I juni 2026 lärde Bella ut metoden som workshop på Asia Massage Championship i Tokyo.',
+      cta: 'Boka Femina Bella Est · 1 495 kr',
+      imageAlt: 'Bella arbetar med händerna längs en klients panna',
+    },
+    treatments: {
+      label: 'Behandlingar',
+      title: 'Välj din <em>behandling</em>',
+      intro: 'Alla behandlingar är skapade av Bella och utförs av henne eller hennes certifierade team.',
+      groups: ['Ansikte', 'Signatur TCM', 'Kropp'],
+      swipe: 'Svep för fler',
+      items: withMeta(
+        [
+          {
+            name: 'Femina Bella Est<sup>®</sup> Gua Sha facelift',
+            tag: 'Mest populär',
+            description: 'Bellas egen metod: Gua Sha, akupressur, lymfdränage och vakuum för en naturlig facelift-effekt.',
+          },
+          {
+            name: 'Sculpt & Buccal Facial',
+            tag: 'Kundens favorit',
+            description: 'Djuprengöring, skulpterande massage och buckal teknik inifrån munhålan, plus hårbotten, nacke och dekolletage.',
+          },
+          {
+            name: 'Buckal massage & käkledsbehandling',
+            tag: '',
+            description: 'Mjukar upp spända käkmuskler inifrån och utifrån. För dig som pressar tänderna eller bär stress i käken.',
+          },
+          {
+            name: 'Jaw Release + Femina Bella Est',
+            tag: '',
+            description: 'Släpper djupa spänningar i käke, ansikte och nacke och avslutas med Bellas signaturlyft.',
+          },
+          {
+            name: 'Sculpt Facial med Bella',
+            tag: 'Konsultation',
+            description: 'En personlig Gua Sha-behandling där Bella läser av ansiktets struktur, spänningar och cirkulation.',
+          },
+          {
+            name: 'Buccal Release & Sculpt Facial',
+            tag: '',
+            description: 'Avancerad Face Sculpting med intraoral buckal massage, fascia release, Gua Sha och lymfdränage.',
+          },
+          {
+            name: 'Symmetry Sculpt Facial<sup>™</sup>',
+            tag: '',
+            description: 'Balanserar ansiktets muskulatur, fascia och konturer för en jämnare struktur och ett harmoniskt uttryck.',
+          },
+          {
+            name: 'Bojin Acupressure Lift<sup>™</sup>',
+            tag: '',
+            description: 'Bojin-teknik med akupressur och meridianarbete som minskar puffighet och definierar käklinje och kindben.',
+          },
+          {
+            name: 'Glow & Lymphatic Sculpt Facial',
+            tag: '',
+            description: 'Exfoliering, Gua Sha, lymfdränage och lystergivande hudvård för mindre svullnad och mer glöd.',
+          },
+          {
+            name: 'Heart Space Gua Sha Release',
+            tag: '',
+            description: 'För dekolletage, bröstkorg, hals och axlar. Friare andning och bättre förutsättningar för ett ansiktslyft.',
+          },
+          {
+            name: 'Abdominal Sculpt<sup>™</sup>',
+            tag: '',
+            description: 'Lymfdränage, Gua Sha och fascia release för magen. En lättare känsla och en mer definierad midja.',
+          },
+          {
+            name: 'Gua Sha kropp & ansikte',
+            tag: '2 timmar',
+            description: 'Lymfatisk Gua Sha och koppning för kroppen, följt av en Gua Sha-facelift för ansiktet.',
+          },
+        ],
+        priceSv,
+      ),
+    },
+    proof: {
+      label: 'I siffror',
+      rating: '4,9',
+      ratingLabel: 'av 5 i snittbetyg från <strong>478 betyg</strong> på Bokadirekt',
+      stats: [
+        { value: '10+', label: 'års erfarenhet' },
+        { value: '3', label: 'salonger byggda' },
+        { value: '3', label: 'juryuppdrag 2026' },
+        { value: 'Silver', label: 'Europamästerskapen 2025' },
+      ],
+      press: 'På omslaget till tidningen <em>Hudterapeuten</em>',
+      pressAlt: 'Omslaget till Hudterapeuten med Bella Bayar under en tävling',
+      parisAlt: 'Bella med diplom och medalj på European Massage Championship i Paris',
+    },
+    about: {
+      label: 'Om Bella',
+      title: 'Bella <em>Bayar</em>',
+      roles: 'Grundare · Face Sculptor · Utbildare · Hud- och spaterapeut',
+      lead: 'Ursprungligen från Mongoliet, i dag i Stockholm. Internationellt erkänd ansiktsmassageterapeut, expert på buckal massage och grundare av BE BEAUTY Salon & Academy.',
+      body1:
+        'Resan började den dag Bella upptäckte Gua Sha och dess kraft för både inre och yttre hälsa. Då visste hon att det var hennes kall. Över tio år senare har hon byggt tre salonger och ett team av likasinnade terapeuter, tävlat i Europa- och världsmästerskap och utbildar i dag andra i holistisk ansiktsvård.',
+      body2:
+        'Hennes metod förenar österländsk energilära och meridianbalans med västerländsk kunskap om anatomi och hud. Huvud och ansikte är centrum för tankar, känslor och sinnen. Därför lyfter varje behandling inte bara ansiktet, utan också sinnet.',
+      quote:
+        'För mig handlar skönhet om mer än det vi ser. Det handlar om hur vi känner oss. Varje behandling är en chans att återställa balansen och återknyta till oss själva.',
+      quoteBy: 'Bella Bayar',
+      educationTitle: 'Utbildning',
+      education: [
+        'Hud- och spaterapeut, International Beauty School, Sverige',
+        'CIDESCO, praktisk examination',
+        'Buccal Massage & Gua Sha Facelift, Holistic Beauty School, Mongoliet',
+        'Medlem i SHR, Sveriges Hudterapeuters Riksorganisation',
+      ],
+      awardsTitle: 'Utmärkelser och uppdrag',
+      awards: [
+        'Jurymedlem och workshopledare, Asia Massage Championship, Tokyo',
+        'Jurymedlem, European Championship, Paris',
+        'Jurymedlem, Asian Championship, Phuket',
+        'Silver, Best Spa & Esthetics Massage, Europamästerskapen',
+        'Topp 10, ansiktsmassage, Europamästerskapen',
+        'Topp 10, världsmästerskapen i Köpenhamn',
+        'Topp 10, ansiktsmassage, världsmästerskapen',
+      ],
+      team: 'I teamet: <strong>Nesii</strong>, <strong>Nomin</strong> och <strong>Iinga</strong>, certifierade Gua Sha Facelift-terapeuter som arbetar efter Bellas metoder.',
+      imageAlt: 'Bella sitter i BE BEAUTYs studio i Stockholm',
+      juryAlt: 'Bella som jurymedlem under Asia Massage Championship 2026',
+    },
+    reviews: {
+      label: 'Omdömen',
+      title: 'Vad våra <em>kunder</em> säger',
+      hint: 'Svep kortet',
+      readAll: 'Läs alla omdömen på Bokadirekt',
+      items: reviews,
+    },
+    offers: {
+      label: 'Academy & företag',
+      academyTitle: 'BE BEAUTY <em>Academy</em>',
+      academyLead: 'Tvådagarskurser med Bella i små grupper, för dig som vill arbeta med Face Sculpting.',
+      courses: [
+        {
+          name: 'Lymphatic Gua Sha Face Lift',
+          text: 'Lymfatiska tekniker, Gua Sha och manuell Face Sculpting för flöde, mindre svullnad och ett naturligt lyft.',
+        },
+        {
+          name: 'Jaw Release',
+          text: 'Käkens och nackens anatomi, massetern och tekniker för spänning, rörlighet och balans.',
+        },
+      ],
+      academyMeta: '18 500 kr per kurs · 2 dagar · Små grupper',
+      academyNote: 'Nya kursdatum släpps snart.',
+      academyCta: 'Anmäl intresse',
+      academySubject: 'Intresseanmälan: BE BEAUTY Academy',
+      academyAlt: 'Bella undervisar i ansiktets anatomi framför en klass',
+      corporateTitle: 'Corporate <em>Wellness</em><sup>™</sup>',
+      corporateLead:
+        'Ta hand om de som tar hand om ditt företag. Premiumupplevelser för återhämtning på arbetsplatsen, anpassade efter ditt team.',
+      corporateCta: 'Kontakta oss',
+      corporateSubject: 'Corporate Wellness',
+    },
+    studios: {
+      label: 'Studior',
+      title: 'Två studior <em>i Stockholm</em>',
+      items: [
+        { name: 'Vasastan', address: address(0) },
+        { name: 'Norra Djurgården', address: address(1) },
+      ],
+      directions: 'Vägbeskrivning',
       hoursLabel: 'Öppettider',
-      hours: 'Tis–fre 10–19<br>Lör 10–15<br>Sön–mån stängt',
-      mapAlt: 'Karta som visar var Be Beauty-studion ligger i Stockholm',
+      hours: 'Mån–fre 09–19<br>Lör–sön 10–19',
+      contactLabel: 'Kontakt',
+      mapAlt: 'Karta över BE BEAUTYs två studior i Stockholm',
     },
     footer: {
-      tagline: 'Skulpterande ansiktsmassage i Stockholm',
+      sub: 'Face Sculpting Salon & Academy i Stockholm',
       top: 'Till toppen',
       rights: 'Alla rättigheter förbehållna.',
     },
@@ -157,122 +319,234 @@ export const copy = {
 
   en: {
     meta: {
-      title: 'Be Beauty · Sculpting face massage in Stockholm',
+      title: 'BE BEAUTY · Face sculpting in Stockholm with Bella Bayar',
       description:
-        "Be Beauty is Bella's studio for sculpting and buccal face massage, lymphatic drainage and gua sha in Stockholm. Book on WhatsApp.",
+        'BE BEAUTY is Bella Bayar’s face sculpting studio in Stockholm: Femina Bella Est®, buccal massage, gua sha and lymphatic drainage. Rated 4.9 out of 5 on Bokadirekt. Studios in Vasastan and Norra Djurgården.',
     },
     ui: {
       skip: 'Skip to content',
       menu: 'Menu',
       close: 'Close menu',
       langLabel: 'Language',
-      book: 'Book',
-      whatsappFab: 'Book on WhatsApp',
-      whatsappMessage: "Hi Bella! I'd like to book a treatment at Be Beauty.",
+      book: 'Book now',
+      bookFull: 'Book on Bokadirekt',
+      barRating: '<strong>4.9</strong> of 5 · 478 ratings',
+      allTreatments: 'All treatments and packages on Bokadirekt',
+      prev: 'Previous',
+      next: 'Next',
     },
     nav: {
+      method: 'The method',
       treatments: 'Treatments',
       about: 'About Bella',
-      gallery: 'Gallery',
       reviews: 'Reviews',
-      contact: 'Contact',
+      studios: 'Studios',
     },
     hero: {
-      eyebrow: 'Face massage · Stockholm',
-      line1: 'Sculpted',
-      line2: 'by <em>hand</em>',
-      lead: 'Face massage that lifts, drains and restores. One client at a time, in a quiet studio in the heart of Stockholm.',
-      cta: 'Book on WhatsApp',
-      secondary: 'View treatments',
-      scroll: 'Scroll',
-      imageAlt: 'Close-up of a face in soft light during a facial treatment',
+      eyebrow: 'Face sculpting · Stockholm',
+      lead: 'A natural facelift with gua sha, buccal massage and lymphatic drainage. No needles, no surgery.',
+      founder: 'Founded by Bella Bayar',
+      cta: 'Book now',
+      secondary: 'See treatments',
+      hint: 'Sweep across the portrait',
+      imageAlt: 'Bella Bayar, founder of BE BEAUTY, in a cream blazer against a pink wall',
     },
-    marquee: ['Sculpting', 'Buccal massage', 'Lymphatic drainage', 'Gua sha', 'Lift and glow'],
-    treatments: {
-      label: '01 — Treatments',
-      title: 'Treatments <em>and prices</em>',
-      intro:
-        'Every treatment is tailored to your skin and face. Each one starts with a short consultation and ends with advice you can take home.',
-      note: "Not sure what suits you? Message me on WhatsApp and I'll help you choose.",
+    approach: {
+      label: 'Our approach',
       items: [
         {
-          name: 'Sculpting face massage',
-          description: 'Deep, contouring massage that defines the jawline and cheekbones for a lift you can see straight away.',
+          word: 'Beauty',
+          text: 'Treatments that bring out your natural features while respecting what makes your skin unique.',
+          imageAlt: 'Bella in the pink BE BEAUTY studio',
         },
         {
-          name: 'Buccal sculpting',
-          description: 'Massage outside and inside the mouth to reach the deep muscles around the jaw and cheeks.',
+          word: 'Balance',
+          text: 'Through gua sha, buccal massage and lymphatic drainage we restore harmony to face and body.',
+          imageAlt: 'A gua sha stone sculpting the cheekbone during a treatment',
         },
         {
-          name: 'Lymphatic drainage',
-          description: "Light, rhythmic strokes that reduce puffiness and bring back the skin's glow.",
+          word: 'Glow',
+          text: 'Lasting radiance and vitality. Results you can see and feel, from the inside out.',
+          imageAlt: 'Bella giving a facial in soft window light',
         },
-        {
-          name: 'Gua sha treatment',
-          description: 'Gua sha stones and tools that release tension and boost circulation.',
-        },
-        {
-          name: 'Be Beauty Signature',
-          description: 'The best of everything: sculpting, buccal work, lymphatic drainage and gua sha in one treatment.',
-        },
-      ].map((item, i) => ({ ...item, duration: `${treatments[i].minutes} min`, price: priceEn(treatments[i].price) })),
-    },
-    about: {
-      label: '02 — About Bella',
-      title: 'Hands <em>that listen</em>',
-      lead: 'I believe a face does best with time, patience and hands that listen.',
-      body1:
-        "I'm Bella, and I specialise in sculpting and buccal face massage, lymphatic drainage and gua sha. Every treatment is grounded in anatomy and technique, and just as much in calm.",
-      body2:
-        "In my Stockholm studio I see one client at a time. No rushing, just time for you. The goal is simple: you leave feeling lighter than when you arrived.",
-      signature: '— Bella',
-      stat1Value: '8+',
-      stat1Label: 'years of experience',
-      stat2Value: '2,000+',
-      stat2Label: 'treatments',
-      stat3Value: '1',
-      stat3Label: 'client at a time',
-      imageAlt: 'Bella in her studio',
-    },
-    gallery: {
-      label: '03 — Gallery',
-      title: 'From <em>the studio</em>',
-      quote: 'Lift, glow <em>and calm.</em>',
-      caption: 'Every treatment is a small room of quiet, where the face can rest and be reshaped.',
-      alt1: 'Hands massaging a face during a treatment',
-      alt2: 'Face massage with a gua sha stone',
-      alt3: 'A hand resting against the neck and jawline',
-      alt4: 'Treatment room with a massage bed in warm daylight',
-      alt5: 'A bottle of face oil in amber glass',
-      alt6: 'Close-up of a relaxed face with closed eyes',
-    },
-    reviews: {
-      label: '04 — Reviews',
-      title: 'What <em>clients say</em>',
-      items: [
-        { quote: "I've never seen my jawline so defined. Bella has magic hands.", name: 'Sara L.' },
-        { quote: 'The calm in the studio and the care in every detail. This is my new ritual.', name: 'Emma K.' },
-        { quote: 'The puffiness from long flights was gone after a single drainage session.', name: 'Jonna P.' },
       ],
     },
-    contact: {
-      label: '05 — Contact',
-      title: 'Book <em>your time</em>',
-      lead: "The easiest way to book is on WhatsApp. Tell me which treatment you're interested in and I'll reply the same day.",
-      whatsapp: 'Message on WhatsApp',
-      phoneLabel: 'Phone',
-      call: 'Call',
-      sms: 'Send a text',
-      emailLabel: 'Email',
-      studioLabel: 'Studio',
-      address,
-      mapLink: 'Open in maps',
+    method: {
+      label: 'Bella’s signature method',
+      title: 'Femina <em>Bella Est</em><sup>®</sup>',
+      lead: 'A structured, mindful facial massage that brings together sculpting movements, meridian stimulation and lymphatic activation.',
+      body: 'Rhythmic manual massage, lymphatic drainage, acupressure, gua sha and vacuum work together along the meridians of the face. It lifts the facial architecture, releases tension and restores inner balance: a natural facelift effect with firmer, clearer skin.',
+      techniques: ['Gua sha', 'Acupressure', 'Lymphatic drainage', 'Vacuum', 'Meridians', 'Sculpting'],
+      stage: 'In June 2026 Bella taught the method as a workshop at the Asia Massage Championship in Tokyo.',
+      cta: 'Book Femina Bella Est · SEK 1,495',
+      imageAlt: 'Bella working her hands along a client’s forehead',
+    },
+    treatments: {
+      label: 'Treatments',
+      title: 'Choose your <em>treatment</em>',
+      intro: 'Every treatment was created by Bella and is performed by her or her certified team.',
+      groups: ['Face', 'Signature TCM', 'Body'],
+      swipe: 'Swipe for more',
+      items: withMeta(
+        [
+          {
+            name: 'Femina Bella Est<sup>®</sup> gua sha facelift',
+            tag: 'Most popular',
+            description: 'Bella’s own method: gua sha, acupressure, lymphatic drainage and vacuum for a natural facelift effect.',
+          },
+          {
+            name: 'Sculpt & Buccal Facial',
+            tag: 'Client favourite',
+            description: 'Deep cleansing, sculpting massage and intraoral buccal technique, plus scalp, neck and décolleté.',
+          },
+          {
+            name: 'Buccal massage & jaw treatment',
+            tag: '',
+            description: 'Softens tight jaw muscles from inside and out. For anyone who clenches or carries stress in the jaw.',
+          },
+          {
+            name: 'Jaw Release + Femina Bella Est',
+            tag: '',
+            description: 'Releases deep tension in the jaw, face and neck, and finishes with Bella’s signature lift.',
+          },
+          {
+            name: 'Sculpt Facial with Bella',
+            tag: 'Consultation',
+            description: 'A personal gua sha treatment in which Bella reads your facial structure, tension and circulation.',
+          },
+          {
+            name: 'Buccal Release & Sculpt Facial',
+            tag: '',
+            description: 'Advanced face sculpting with intraoral buccal massage, fascia release, gua sha and lymphatic drainage.',
+          },
+          {
+            name: 'Symmetry Sculpt Facial<sup>™</sup>',
+            tag: '',
+            description: 'Balances the muscles, fascia and contours of the face for a more even structure and harmonious expression.',
+          },
+          {
+            name: 'Bojin Acupressure Lift<sup>™</sup>',
+            tag: '',
+            description: 'Bojin technique with acupressure and meridian work to reduce puffiness and define jawline and cheekbones.',
+          },
+          {
+            name: 'Glow & Lymphatic Sculpt Facial',
+            tag: '',
+            description: 'Exfoliation, gua sha, lymphatic drainage and radiance-boosting skincare for less puffiness and more glow.',
+          },
+          {
+            name: 'Heart Space Gua Sha Release',
+            tag: '',
+            description: 'For décolleté, chest, neck and shoulders. Freer breathing and a better foundation for a facial lift.',
+          },
+          {
+            name: 'Abdominal Sculpt<sup>™</sup>',
+            tag: '',
+            description: 'Lymphatic drainage, gua sha and fascia release for the abdomen. A lighter feeling and a more defined waist.',
+          },
+          {
+            name: 'Gua sha body & face',
+            tag: '2 hours',
+            description: 'Lymphatic gua sha and cupping for the body, followed by a gua sha facelift for the face.',
+          },
+        ],
+        priceEn,
+      ),
+    },
+    proof: {
+      label: 'In numbers',
+      rating: '4.9',
+      ratingLabel: 'out of 5 on average from <strong>478 ratings</strong> on Bokadirekt',
+      stats: [
+        { value: '10+', label: 'years of experience' },
+        { value: '3', label: 'salons built' },
+        { value: '3', label: 'jury roles in 2026' },
+        { value: 'Silver', label: 'European Championships 2025' },
+      ],
+      press: 'On the cover of <em>Hudterapeuten</em> magazine',
+      pressAlt: 'Hudterapeuten magazine cover showing Bella Bayar at a competition',
+      parisAlt: 'Bella with a certificate and medal at the European Massage Championship in Paris',
+    },
+    about: {
+      label: 'About Bella',
+      title: 'Bella <em>Bayar</em>',
+      roles: 'Founder · Face sculptor · Educator · Licensed esthetician',
+      lead: 'Originally from Mongolia, now based in Stockholm. An internationally recognised facial massage therapist, buccal massage expert and founder of BE BEAUTY Salon & Academy.',
+      body1:
+        'Her journey began the day she discovered gua sha and its power for both inner and outer health, and knew it was her calling. More than ten years later she has built three salons and a team of like-minded therapists, competed at European and World Championships, and now teaches others holistic facial care.',
+      body2:
+        'Her approach blends Eastern philosophies of energy flow and meridian balance with Western knowledge of anatomy and skin. The head and face hold our thoughts, emotions and senses, so every treatment lifts not just the face but the spirit.',
+      quote:
+        'For me, beauty is more than what we see. It’s how we feel. Every treatment is a chance to restore balance, release emotion and reconnect with ourselves.',
+      quoteBy: 'Bella Bayar',
+      educationTitle: 'Education',
+      education: [
+        'Licensed Skin & Spa Therapist, International Beauty School, Sweden',
+        'CIDESCO practical examination',
+        'Buccal Massage & Gua Sha Facelift, Holistic Beauty School, Mongolia',
+        'Member of SHR, the Swedish association of skin therapists',
+      ],
+      awardsTitle: 'Awards and roles',
+      awards: [
+        'Jury member and workshop presenter, Asia Massage Championship, Tokyo',
+        'Jury member, European Championship, Paris',
+        'Jury member, Asian Championship, Phuket',
+        'Silver, Best Spa & Esthetics Massage, European Championships',
+        'Top 10, Facial Massage, European Championships',
+        'Top 10, World Championship, Copenhagen',
+        'Top 10, Facial Massage, World Championships',
+      ],
+      team: 'The team: <strong>Nesii</strong>, <strong>Nomin</strong> and <strong>Iinga</strong>, certified gua sha facelift therapists trained in Bella’s methods.',
+      imageAlt: 'Bella seated in the BE BEAUTY studio in Stockholm',
+      juryAlt: 'Bella as a jury member at the Asia Massage Championship 2026',
+    },
+    reviews: {
+      label: 'Reviews',
+      title: 'What our <em>clients</em> say',
+      hint: 'Swipe the card',
+      readAll: 'Read every review on Bokadirekt',
+      items: reviews,
+    },
+    offers: {
+      label: 'Academy & business',
+      academyTitle: 'BE BEAUTY <em>Academy</em>',
+      academyLead: 'Two-day courses with Bella in small groups, for anyone who wants to work with face sculpting.',
+      courses: [
+        {
+          name: 'Lymphatic Gua Sha Face Lift',
+          text: 'Lymphatic techniques, gua sha and manual face sculpting for flow, less puffiness and a natural lift.',
+        },
+        {
+          name: 'Jaw Release',
+          text: 'Jaw and neck anatomy, the masseter, and techniques for tension, mobility and balance.',
+        },
+      ],
+      academyMeta: 'SEK 18,500 per course · 2 days · Small groups',
+      academyNote: 'New course dates are coming soon.',
+      academyCta: 'Register interest',
+      academySubject: 'Interest: BE BEAUTY Academy',
+      academyAlt: 'Bella teaching facial anatomy to a class',
+      corporateTitle: 'Corporate <em>Wellness</em><sup>™</sup>',
+      corporateLead:
+        'Take care of the people who take care of your business. Premium workplace recovery experiences, tailored to your team.',
+      corporateCta: 'Contact us',
+      corporateSubject: 'Corporate Wellness',
+    },
+    studios: {
+      label: 'Studios',
+      title: 'Two studios <em>in Stockholm</em>',
+      items: [
+        { name: 'Vasastan', address: address(0) },
+        { name: 'Norra Djurgården', address: address(1) },
+      ],
+      directions: 'Directions',
       hoursLabel: 'Opening hours',
-      hours: 'Tue–Fri 10–19<br>Sat 10–15<br>Sun–Mon closed',
-      mapAlt: 'Map showing where the Be Beauty studio is in Stockholm',
+      hours: 'Mon–Fri 9am–7pm<br>Sat–Sun 10am–7pm',
+      contactLabel: 'Contact',
+      mapAlt: 'Map of the two BE BEAUTY studios in Stockholm',
     },
     footer: {
-      tagline: 'Sculpting face massage in Stockholm',
+      sub: 'Face sculpting salon & academy in Stockholm',
       top: 'Back to top',
       rights: 'All rights reserved.',
     },

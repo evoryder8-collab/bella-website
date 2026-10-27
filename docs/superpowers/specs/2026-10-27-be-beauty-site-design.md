@@ -1,82 +1,82 @@
-# Be Beauty website: design
+# BE BEAUTY website: design
 
-Approved in chat on 2026-10-27.
+First approved in chat on 2026-10-27 ("Quiet luxe", placeholder content). Revised and approved the same
+day as **version 2**: real content from Bella's own site, mobile-first, "Rose luxe".
 
 ## Client
 
-Bella, a face massage therapist with her own studio in Stockholm. Business name: **Be Beauty**.
-Treatments: sculpting / buccal (intraoral) face massage, lymphatic drainage, gua sha and tool-based work.
+Bella Bayar, face sculptor, educator and licensed esthetician, originally from Mongolia and based in
+Stockholm. Business: **BE BEAUTY Salon & Academy**, tagline "Beauty. Balance. Glow." Two studios
+(Västmannagatan 12 in Vasastan, Jaktgatan 29 in Norra Djurgården) and a team of three therapists. Her own
+method is **Femina Bella Est®**. Everything her current site and Bokadirekt page say is in
+[`docs/current-site-audit.md`](../../current-site-audit.md).
 
 ## Goal
 
-Present the brand. There is no online booking or shop. Visitors get in touch by **WhatsApp** (primary), phone / SMS or email.
+Present the brand and send visitors to book. Booking happens on **Bokadirekt** (her existing booking page,
+4.9/5 from 478 ratings). Other contact: email and Instagram. No WhatsApp or phone number is published, so
+the site shows none.
+
+## Design principles
+
+- **Phone first.** The 375px layout is the base design; larger screens are an extension. The phone is where
+  the motion should impress: scroll and touch moments, not hover effects.
+- **Fast on mobile data.** The hero photo is preloaded; three.js loads after the page is up; MapLibre loads
+  only near the studios section.
+- **Reduced motion respected.** With `prefers-reduced-motion`, no Lenis, pins, counters, shader or map fly-in.
 
 ## Tech
 
-Changed on 2026-10-27 at the user's request from plain HTML to a Vite project, as a foundation for richer motion and effects later.
+- Vite, with GSAP (ScrollTrigger) and Lenis for motion, **three.js** for the hero shader, MapLibre GL with
+  free OpenFreeMap tiles for the map.
+- A build-time plugin (`vite.config.js`) fills `data-i18n` / `data-i18n-attr` / `data-contact` /
+  `data-link` hooks with the Swedish copy; `src/i18n.js` swaps them at runtime.
+- GitHub Actions publishes to GitHub Pages at `https://evoryder8-collab.github.io/bella-website/`.
+  `base: './'` keeps paths relative. `noindex` stays until the user says the site is launching.
 
-- One scrolling page built with **Vite**. **GSAP** (with ScrollTrigger) and **Lenis** handle motion and smooth scrolling. **MapLibre GL** draws the studio map with free OpenFreeMap tiles (no API key). **three.js** is deferred until a specific effect calls for it.
-- Built by GitHub Actions (`.github/workflows/deploy.yml`) and published to GitHub Pages at `https://evoryder8-collab.github.io/bella-website/`. Vite's `base: './'` keeps every asset path relative.
-- `<meta name="robots" content="noindex">` stays until the user says the site is launching.
-- Fonts from Google Fonts: Bodoni Moda (display) and Jost (body).
-
-## Files
-
-- `index.html`: markup for every section. Elements carry `data-i18n="key"` (text), `data-i18n-attr="attr:key"` (attributes), `data-contact="key"` (contact details) or `data-link="name"` (hrefs).
-- `vite.config.js`: a small plugin fills those hooks with the Swedish copy at build time, so the page has real text before JavaScript runs.
-- `src/content.js`: every piece of copy in Swedish (`sv`) and English (`en`), plus the contact details. This is the single place to swap placeholder copy for real copy.
-- `src/i18n.js`: language switching at runtime. `src/links.js`: WhatsApp, phone, SMS, email and map links.
-- `src/main.js`: mobile menu, header, floating WhatsApp button, anchor links. `src/motion.js`: GSAP and Lenis. `src/map.js`: MapLibre, loaded only near the contact section.
-- `src/styles.css`: design tokens on `:root`, layout and components.
-- `src/images/`: stock photos copied into the repo (no hotlinking).
-- `CONTENT.md`: checklist of every placeholder to replace, plus photo credits.
-
-## Visual style: "Quiet luxe"
+## Visual style: "Rose luxe"
 
 | Token | Value | Use |
 | --- | --- | --- |
-| ivory | `#FAF8F4` | page background |
-| stone | `#D9D2C5` | panels, image backgrounds |
-| gold | `#A88B5A` | hairline rules, small accents, labels |
-| ink | `#141414` | text, primary buttons |
+| blush | `#F6E9E4` | page background |
+| blush-deep | `#EFD6CF` | panels |
+| rose | `#E7A3A0` | Bella's brand rose: accents, tags |
+| rose-deep | `#8E4651` | accent text on blush |
+| wine | `#3A1F26` | text, buttons |
+| night | `#24141A` | dark sections |
+| cream | `#FFF4EE` | light text, cards |
 
-- Editorial layout with generous whitespace, numbered section labels (`01 — Behandlingar`) and thin gold dividers.
-- Headings in Bodoni Moda, with italic accents. Body text in Jost.
-- Motion: masked headline reveal and image wipe in the hero, fade-up text and clip-path image reveals on scroll, slow image parallax, a scrolling marquee of treatments, and a camera fly-in on the map. All of it is off under `prefers-reduced-motion`.
-- Light theme only: the brand palette is the design, so there is no dark variant.
+Bodoni Moda (display, italic accents) and Jost (body). Arch-topped photo frames echo a gua sha stone.
 
-## Sections
+## Page, top to bottom
 
-1. **Header**: "Be Beauty" wordmark, section links, SV / EN switch, WhatsApp button. On phones the links collapse into a menu.
-2. **Hero**: large serif headline, one line on sculpting face massage in Stockholm, "Boka via WhatsApp" button, hero photo.
-3. **Treatments and prices** (`#behandlingar`): an editorial list of five placeholder treatments with duration, price in kr and a one-line description:
-   Sculpting facial, Buccal sculpting, Lymphatic drainage, Gua sha facial, Signature (a combination).
-4. **About Bella** (`#om`): portrait, short bio (training, approach, studio).
-5. **Gallery** (`#galleri`): asymmetric grid of six photos.
-6. **Reviews** (`#omdomen`): three client quotes in large italic serif.
-7. **Contact** (`#kontakt`): primary WhatsApp button with a prefilled message in the current language, then phone, SMS, email, studio address with a Google Maps link, opening hours, and a MapLibre map of the studio.
-8. **Footer**: wordmark, small print, year. A floating WhatsApp button shows on phones.
-
-## Language
-
-- Swedish by default, English via the SV / EN switch.
-- The choice is remembered in `localStorage` (wrapped in try/catch) and sets `<html lang>`. `?lang=en` in the URL opens the English version directly.
-- The WhatsApp prefilled message follows the current language.
-
-## Placeholder content
-
-- No visible "placeholder" labels on the page, so it reads as a real site for client feedback.
-- Contact details are safe fakes: a phone number from PTS's range reserved for fiction (`+46 70 174 06 05`), an email on the reserved `.example` domain and a fictional street.
-- `CONTENT.md` lists every placeholder to replace.
-
-## Images
-
-Free-licence stock photos (Unsplash / Pexels), listed to the user with source and size for approval before download, then copied into `images/` and resized for the web. Credits go in `CONTENT.md`.
+1. **Hero.** Full-screen portrait on phones (an arch on desktop) under a huge "BE / BEAUTY". The portrait
+   is a WebGL surface (`src/hero-sculpt.js`): a finger or mouse pushes the image along the stroke with a
+   faint colour split and rose glow; one demo stroke plays on load; the `<img>` stays as fallback.
+2. **Beauty. Balance. Glow.** One pinned screen; three photo panels wipe up in turn as you scroll, each with
+   its word and line. Without motion, three stacked full-height panels.
+3. **Femina Bella Est®.** The method story, gua sha "lift lines" drawn over the photo on scroll, Tokyo 2026
+   note, booking button, and a band of techniques.
+4. **Treatments.** Twelve cards in three groups (Face, Signature TCM, Body) on a native scroll-snap track;
+   chips jump between groups; upcoming cards fan slightly; every card links to Bokadirekt.
+5. **Proof.** 4.9 counts up and the stars fill; 10+ years, 3 salons, 3 jury roles in 2026, silver at the
+   2025 European Championships; championship photo and the Hudterapeuten cover tilting in.
+6. **About Bella.** Story, her quote lighting up word by word, awards timeline that draws as you scroll,
+   education, the team.
+7. **Reviews.** Six reviews from her site as a card deck: drag the top card away to see the next.
+8. **Academy and Corporate Wellness.** Two cards; both enquire by email with a prefilled subject.
+9. **Studios.** Rose-tinted map with both studios; chips fly the camera to one; addresses, directions,
+   hours, email, Instagram.
+10. **Footer** with the wordmark. On phones a booking bar sits in the thumb zone after the hero.
 
 ## Out of scope
 
-Online booking, shop, CMS, analytics, contact form, separate URLs per language, dark mode, three.js (for now).
+Online booking on the site itself (Bokadirekt handles it), shop, CMS, analytics, contact form, separate
+URLs per language, dark mode, the Bella video in `~/Downloads` (kept for later video editing).
 
 ## Testing
 
-Preview locally in the browser at desktop and phone widths, in both languages. Check every link (WhatsApp, tel, sms, mailto, map, anchors), the language switch, the mobile menu and that there is no horizontal scroll at phone width. Then push to `main` and check the live GitHub Pages URL.
+Preview at 375px first, then desktop, in both languages: the hero shader responds to drags, the pinned scene,
+carousel chips, deck throws, map chips, all links (Bokadirekt, mailto, Instagram, directions, anchors), no
+horizontal scroll on phones, no console errors in the production build. Then push to `main` and check the
+live URL.

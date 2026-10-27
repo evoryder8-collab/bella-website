@@ -1,6 +1,8 @@
 import { copy } from './content.js';
 import { currentLang, initI18n } from './i18n.js';
 import { initMotion, lockScroll, scrollToTarget } from './motion.js';
+import { initCarousel } from './carousel.js';
+import { initDeck } from './deck.js';
 import { initMap } from './map.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -8,12 +10,17 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 initI18n();
 initMenu();
 initHeader();
-initFab();
+initBookBar();
 initAnchors();
-initMap(document.querySelector('[data-map]'));
+initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'));
+initDeck(document.querySelector('[data-deck]'));
+initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'));
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 
-if (!reducedMotion) initMotion();
+if (!reducedMotion) {
+  initMotion();
+  initSculpt();
+}
 
 function initMenu() {
   const toggle = document.querySelector('[data-menu-toggle]');
@@ -46,7 +53,7 @@ function initMenu() {
       toggle.focus();
     }
   });
-  matchMedia('(min-width: 1081px)').addEventListener('change', (event) => event.matches && setOpen(false));
+  matchMedia('(min-width: 1080px)').addEventListener('change', (event) => event.matches && setOpen(false));
 }
 
 function initHeader() {
@@ -66,21 +73,12 @@ function initHeader() {
   update();
 }
 
-function initFab() {
-  const fab = document.querySelector('[data-fab]');
-  const hero = document.querySelector('.hero');
-  const contact = document.querySelector('#kontakt');
-  const state = { pastHero: false, atContact: false };
-
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.target === hero) state.pastHero = !entry.isIntersecting;
-      if (entry.target === contact) state.atContact = entry.isIntersecting;
-    }
-    fab.classList.toggle('is-visible', state.pastHero && !state.atContact);
-  });
-  observer.observe(hero);
-  observer.observe(contact);
+// The phone booking bar slides up once the hero (which has its own button) is mostly gone.
+function initBookBar() {
+  const bar = document.querySelector('[data-book-bar]');
+  const update = () => bar.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
 }
 
 function initAnchors() {
@@ -93,4 +91,17 @@ function initAnchors() {
       history.replaceState(null, '', id === '#top' ? location.pathname + location.search : id);
     });
   }
+}
+
+// three.js and the shader load after the page is up, so they never delay the first paint.
+function initSculpt() {
+  if (navigator.connection?.saveData) return;
+  const hero = document.querySelector('[data-hero]');
+  const start = () =>
+    import('./hero-sculpt.js')
+      .then(({ initHeroSculpt }) => initHeroSculpt(hero))
+      .catch((error) => console.warn('Hero effect unavailable:', error));
+  const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2500 }) : setTimeout(start, 600));
+  if (document.readyState === 'complete') whenIdle();
+  else window.addEventListener('load', whenIdle, { once: true });
 }

@@ -60,8 +60,8 @@ export function setLang(lang, { persist = true } = {}) {
     }
   }
 
-  // Only the WhatsApp message depends on language; the other links don't.
-  for (const el of document.querySelectorAll('[data-link="whatsapp"]')) el.href = hrefs.whatsapp;
+  // Email subjects depend on language.
+  for (const el of document.querySelectorAll('[data-link]')) el.href = hrefs[el.dataset.link];
 
   for (const btn of document.querySelectorAll('[data-lang]')) {
     btn.setAttribute('aria-pressed', String(btn.dataset.lang === lang));

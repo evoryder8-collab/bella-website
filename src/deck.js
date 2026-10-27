@@ -25,6 +25,7 @@ export function initDeck(root) {
       card.style.transition = reducedMotion ? 'none' : `transform 0.7s ${ease}, opacity 0.5s ${ease}`;
       card.style.transform = `translate3d(0, ${d * 16}px, 0) scale(${1 - d * 0.05}) rotate(${tilt}deg)`;
       card.style.opacity = depth > 3 ? '0' : '1';
+      card.style.removeProperty('--peek');
       card.setAttribute('aria-hidden', String(depth !== 0));
     });
     index.textContent = String(order[0] + 1).padStart(2, '0');
@@ -57,6 +58,8 @@ export function initDeck(root) {
     if (!drag || event.pointerId !== drag.id) return;
     drag.dx = event.clientX - drag.x;
     drag.card.style.transform = `translate3d(${drag.dx}px, 0, 0) rotate(${drag.dx * 0.06}deg)`;
+    // The next card's words surface as the top card moves out of the way.
+    cards[order[1]].style.setProperty('--peek', Math.min(1, Math.abs(drag.dx) / (THROW * 1.6)).toFixed(2));
   });
   const release = (event) => {
     if (!drag || event.pointerId !== drag.id) return;

@@ -1799,6 +1799,23 @@ main,
   box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
 }
 
+/* Only the top card is frosted glass (on phones too: one blurred card is cheap).
+   The cards under it are blank glass sheets, so their words never show through
+   the top card; the next card's words fade in as the top one is dragged away. */
+.deck.is-ready .review-card[aria-hidden='false'] {
+  backdrop-filter: blur(26px) saturate(1.3);
+  -webkit-backdrop-filter: blur(26px) saturate(1.3);
+}
+
+.deck.is-ready .review-card > * {
+  transition: opacity 0.45s var(--ease);
+}
+
+.deck.is-ready .review-card[aria-hidden='true'] > * {
+  opacity: var(--peek, 0);
+  transition-duration: 0.15s;
+}
+
 .deck.is-ready .review-card:active {
   cursor: grabbing;
 }

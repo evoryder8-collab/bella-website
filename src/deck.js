@@ -72,4 +72,41 @@ export function initDeck(root) {
   root.querySelector('[data-deck-next]').addEventListener('click', () => toss(cards[order[0]], 1));
   root.querySelector('[data-deck-prev]').addEventListener('click', () => advance(-1));
   layout();
+  if (!reducedMotion) nudge(root, () => cards[order[0]]);
+}
+
+// The first time the deck comes into view, the top card swings out to the
+// right, back past centre and home, as if someone tried a swipe, so it reads as
+// a deck you can throw. A gentler second swing follows if nobody has touched it.
+function nudge(root, topCard) {
+  let touched = false;
+  root.addEventListener('pointerdown', () => (touched = true), { passive: true, once: true });
+
+  const swing = (amount) => {
+    const card = topCard();
+    whoosh(0.35 * amount);
+    card.animate(
+      [
+        { transform: 'translate3d(0, 0, 0) rotate(0deg)', easing: 'cubic-bezier(0.45, 0, 0.2, 1)' },
+        { transform: `translate3d(${34 * amount}%, -2%, 0) rotate(${8 * amount}deg)`, offset: 0.36, easing: 'cubic-bezier(0.3, 0, 0.2, 1)' },
+        { transform: `translate3d(${-12 * amount}%, 0, 0) rotate(${-3.5 * amount}deg)`, offset: 0.7, easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)' },
+        { transform: 'translate3d(0, 0, 0) rotate(0deg)' },
+      ],
+      { duration: 1800 },
+    );
+  };
+
+  const seen = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      seen.disconnect();
+      setTimeout(() => {
+        if (touched) return;
+        swing(1);
+        setTimeout(() => !touched && swing(0.5), 3800);
+      }, 500);
+    },
+    { threshold: 0.6 },
+  );
+  seen.observe(root.querySelector('[data-deck-cards]'));
 }

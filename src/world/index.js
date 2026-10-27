@@ -274,7 +274,7 @@ export function initWorld() {
     pointer.dx = 0;
     pointer.dy = 0;
 
-    media.update({ vw, vh, k, dt, bend });
+    media.update({ vw, vh, k, dt, bend, time: elapsed, pointer, pointerActive: pointer.x >= 0 && !idle });
     media.light(stone.x, stone.y, stoneVisible ? Math.min(1, 0.6 + stone.glow) : 0);
 
     renderer.render(scene, camera);

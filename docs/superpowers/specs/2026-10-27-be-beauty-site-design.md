@@ -100,7 +100,12 @@ decorative lines that looked like placeholders.
   between chapters. It parts around a finger.
 - **Photos are liquid.** Every photo is redrawn in WebGL over its DOM box: an organic dissolve instead of a
   wipe, a flow under the finger, a slight bend with scroll speed and the stone's light pooled on it.
+- **Living frames** (`data-gl-alive`: the method, championship, Bella and jury photos): the edge breathes instead of
+  being a fixed rectangle, a pearl rim of light travels round it, a rose aura glows outside it, a glint sweeps
+  across as it scrolls, and the frame tilts in 3D towards the finger.
 - **Glass surfaces** for cards, reviews, offers and the booking bar; the map melts into the page.
+- **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
+  the first time each comes into view (once more, gentler, if nobody has touched them).
 - **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the
   language, detected from the device and picked after a five-second countdown that can be paused. A
   `?lang=` link skips the language step; `?intro` shows the portal again. The portal sits over the dark 3D

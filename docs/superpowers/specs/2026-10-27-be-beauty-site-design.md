@@ -151,7 +151,7 @@ decorative lines that looked like placeholders.
   is ("Face sculpting · Stockholm", "A natural facelift, by hand.", the methods, her Best Beauty Salon 2026
   award) round the rose-quartz stone. Touching the stone closes a ring of light round it, sends ripples out
   and enters with sound; "Enter in silence" and Svenska · English (set from the device or a `?lang=` link,
-  no countdown) sit at the foot. `?intro` shows it again. An earlier couture-invitation version is kept
+  no countdown) sit at the foot. The header's wordmark, clicked on the home page, shows it again (as does `?intro`), in the language chosen before. An earlier couture-invitation version is kept
   on the `portal-invitation` branch; the user found it unclear for newcomers.
 - **Premiere** (`src/premiere.js`): after the portal the screen goes dark with dust drifting in a beam of
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"

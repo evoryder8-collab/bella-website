@@ -22,6 +22,12 @@ function store(lang) {
   }
 }
 
+// The language the visitor chose on an earlier visit, if any.
+export function savedLang() {
+  const saved = stored();
+  return LANGS.includes(saved) ? saved : null;
+}
+
 // ?lang=en in the URL wins, so an English link can be shared directly.
 export function initialLang() {
   const fromUrl = new URLSearchParams(location.search).get('lang');

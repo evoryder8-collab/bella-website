@@ -1,5 +1,5 @@
 import { copy, LANGS } from './content.js';
-import { setLang } from './i18n.js';
+import { savedLang, setLang } from './i18n.js';
 import { laurel } from './laurel.js';
 import { declineSound, prepareGreeting, startSound, whoosh } from './sound.js';
 
@@ -10,7 +10,7 @@ import { declineSound, prepareGreeting, startSound, whoosh } from './sound.js';
 // starts as the device's (or a ?lang= link's) and the words change in place
 // when the other is chosen. The head script decides whether it opens (first
 // visit or ?intro); entering stores the visit, so returning visitors go
-// straight in.
+// straight in. On the home page the header's wordmark opens it again.
 
 const ENTERED_KEY = 'bebeauty-entered';
 const RING_MS = 700; // the ring of light takes this long to close round the stone
@@ -32,9 +32,24 @@ function detectLang() {
 
 const pulse = () => window.dispatchEvent(new CustomEvent('bb:pulse'));
 
+// The wordmark, clicked on the home page, reloads it as a first visit sees it
+// (elsewhere it simply leads home).
+function replayFromWordmark() {
+  document.querySelector('.wordmark')?.addEventListener('click', (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (document.querySelector('main')?.dataset.page !== 'home') return;
+    event.preventDefault();
+    const url = new URL(location.href);
+    url.hash = '';
+    url.searchParams.set('intro', '');
+    location.assign(url);
+  });
+}
+
 export function initPortal({ onEnter }) {
   const html = document.documentElement;
   const portal = document.querySelector('[data-portal]');
+  replayFromWordmark();
   if (!html.classList.contains('portal-open')) {
     portal.remove();
     onEnter({ fromPortal: false });
@@ -42,8 +57,16 @@ export function initPortal({ onEnter }) {
   }
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const fromUrl = new URLSearchParams(location.search).get('lang');
-  let lang = LANGS.includes(fromUrl) ? fromUrl : detectLang();
+  const params = new URLSearchParams(location.search);
+  const fromUrl = params.get('lang');
+  // A returning visitor sees it in the language they chose before.
+  let lang = LANGS.includes(fromUrl) ? fromUrl : savedLang() ?? detectLang();
+  // ?intro has done its work; the address goes back to the page's own.
+  if (params.has('intro')) {
+    params.delete('intro');
+    const query = params.toString();
+    history.replaceState(history.state, '', location.pathname + (query ? `?${query}` : '') + location.hash);
+  }
 
   const letter = () => {
     const text = { ...copy[lang].portal, award: copy[lang].premiere.award, awardKicker: copy[lang].premiere.awardKicker };

@@ -1,16 +1,18 @@
 // The soundscape: Bella's own signature song, "Late Night Polish" (src/music),
-// streamed and looping at 40% volume, with a breath of "air" composed live that
-// rises with scrolling like moving through silk. The whooshes are recorded (src/sfx, about 130 KB in all, with a
-// button click, the magazine's riffle and a sparkle for the 3D figures) and load
-// once sound starts. Everything is silent until startSound() runs from a click
+// streamed and looping at 40% volume (20% on phones), with a breath of "air"
+// composed live that rises with scrolling like moving through silk. The
+// whooshes are recorded (src/sfx, about 130 KB in all, with a button click, the
+// magazine's riffle and a sparkle for the 3D figures) and load once sound
+// starts. Everything is silent until startSound() runs from a click
 // (browsers only allow audio after a gesture), and every call before that is a
 // no-op.
 
 const STORAGE_KEY = 'bebeauty-sound';
 const MASTER = 0.85; // everything together, when sound is on
-// The song plays at 40% of full volume (through the master, hence the division).
+// The song plays at 40% of full volume, and at half that on phones, where it
+// still sounded too loud (through the master, hence the division).
 const SONG = new URL('./music/late-night-polish.mp3', import.meta.url).href;
-const SONG_LEVEL = 0.4 / MASTER;
+const SONG_LEVEL = (matchMedia('(pointer: coarse)').matches ? 0.2 : 0.4) / MASTER;
 
 // Recorded sounds: two long whooshes and three short ones, each kind played in
 // turn, and one take each of the rest.

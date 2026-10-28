@@ -170,7 +170,7 @@ decorative lines that looked like placeholders.
   Each leaf is simulated paper (flicked, rising against gravity, falling over the spine, a small bounce, an edge
   that drags and flaps), with glossy light, a curved gutter and shadows from the leaf above. The inside pages are
   editorial layouts painted from Bella's photos with text greyed into bars, made to be glimpsed, not read.
-- **Sound** (`src/sound.js`, Web Audio): Bella's signature song "Late Night Polish" looping at 40%, an air
+- **Sound** (`src/sound.js`, Web Audio): Bella's signature song "Late Night Polish" looping at 40% (20% on phones), an air
   layer that follows scroll speed, and recorded effects only (whooshes, a button click, the magazine's riffle,
   a once-per-visit sparkle for the 3D figures). The early generated crystal chimes were removed at the user's
   request. A header toggle mutes it; returning visitors who chose sound hear it from their first tap.

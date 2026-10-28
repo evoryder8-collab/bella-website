@@ -4617,15 +4617,26 @@ html:not(.motion) .figure-stage {
    which keep their place for taps and focus but drop their gems. */
 .socials-stage {
   position: absolute;
-  left: -26px;
-  top: -26px;
-  width: calc(100% + 52px);
-  height: calc(100% + 52px);
+  left: -34px;
+  top: -34px;
+  width: calc(100% + 68px);
+  height: calc(100% + 68px);
   pointer-events: none;
 }
 
 .socials.is-3d {
-  gap: 26px;
+  gap: 44px;
+}
+
+@media (min-width: 900px) {
+  .socials.is-3d {
+    right: 34px;
+    gap: 76px;
+  }
+
+  .socials.is-3d .social {
+    --gem: 60px;
+  }
 }
 
 .socials.is-3d .social,

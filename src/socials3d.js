@@ -19,15 +19,18 @@ import { STONE_SEGMENTS, stoneShape } from './world/quartz.js';
 
 // The floating social links as small rose-quartz gua sha stones, each with its
 // network's mark inlaid in deep rose gold on both faces. They stand where the
-// links are, turning slowly and bobbing as if held in water, turn to face a
-// mouse or finger that comes near, and follow the links' own arrival
+// links are, arrive face-on with the marks to the visitor and hold there a
+// moment, then turn slowly and bob as if held in water, turning face-on again
+// when a mouse or finger comes near. They follow the links' own arrival
 // (src/styles.css) once the page is first scrolled. The links stay underneath
 // for clicks, focus and screen readers, and keep their gems without WebGL.
 
 const FOV = 30;
-const PAD = 26; // px of canvas round the dock: room to turn and float
-const LENGTH = 1.3; // a stone's length, in link widths
+const PAD = 34; // px of canvas round the dock: room to turn and float (and src/styles.css)
 const SPIN = 0.42; // radians a second
+const HOLD = 2.4; // seconds face-on once they have arrived, before they start to turn
+// A stone's length, in link widths: larger on wide screens.
+const length = () => (matchMedia('(min-width: 900px)').matches ? 1.6 : 1.3);
 
 // The mark (a 24-unit simple-icons path) in white, to tint as rose gold.
 function mark(path) {
@@ -113,12 +116,12 @@ export function initSocialStones(dock) {
         const inlay = new Mesh(plane, gold);
         inlay.position.z = side * face;
         inlay.rotation.y = side > 0 ? 0 : Math.PI;
-        inlay.scale.setScalar(wide * 0.8);
+        inlay.scale.setScalar(wide * 0.62);
         group.add(inlay);
       }
     }
     scene.add(group);
-    const state = { link, group, quartz, gold, phase: i * 2.1, spin: i * 1.3, near: false, lift: 0 };
+    const state = { link, group, quartz, gold, phase: i * 2.1, spin: 0, near: false, lift: 0, shown: 0 };
     const near = (value) => () => (state.near = value);
     link.addEventListener('pointerenter', near(true));
     link.addEventListener('pointerleave', near(false));
@@ -160,12 +163,14 @@ export function initSocialStones(dock) {
       const arrive = r.width / size;
       const opacity = Number(getComputedStyle(link).opacity);
       stone.lift = ease(stone.lift, stone.near ? 1 : 0, 6, dt);
+      if (opacity > 0.95) stone.shown += dt;
       const bob = reduced ? 0 : Math.sin(time * 0.9 + stone.phase) * 3.5;
       group.position.set(r.left + r.width / 2 - box.left + PAD - width / 2, height / 2 - (r.top + r.height / 2 - box.top + PAD) + bob, 0);
-      group.scale.setScalar(((size * LENGTH) / tall) * arrive * (1 + stone.lift * 0.12));
+      group.scale.setScalar(((size * length()) / tall) * arrive * (1 + stone.lift * 0.12));
       // A slow turn; near a finger or mouse it settles face-on, mark forward.
       if (stone.near || reduced) stone.spin = ease(stone.spin, Math.round(stone.spin / Math.PI) * Math.PI, 7, dt);
-      else stone.spin += SPIN * dt;
+      // Starting gently, a moment apart, after they have shown their marks.
+      else stone.spin += SPIN * dt * Math.min(1, Math.max(0, (stone.shown - HOLD - stone.phase * 0.4) / 1.5));
       group.rotation.set(reduced ? 0 : Math.sin(time * 0.7 + stone.phase) * 0.14, stone.spin, reduced ? 0 : Math.sin(time * 0.5 + stone.phase) * 0.09);
       stone.quartz.opacity = opacity;
       if (stone.gold) stone.gold.opacity = opacity;

@@ -1533,13 +1533,14 @@ main,
 /* ---------- The award film (src/award.js) ----------
    A tall section whose sticky stage plays the scroll choreography, as on the
    Zoltan site: award.js drives --w --h --x --y --rx --ry --r --pad on the frame
-   and --k (0 floating, 1 full screen) on the section. It follows the three
-   pillars after a breath of night. */
+   and --k (0 floating, 1 full screen) and --away (0 held, 1 let go) on the
+   section. It follows the three pillars after a breath of night. */
 
 .film {
   --k: 0;
+  --away: 0;
   position: relative;
-  height: 330svh;
+  height: 200svh;
   margin-top: clamp(56px, 10svh, 120px);
 }
 
@@ -1554,7 +1555,7 @@ main,
   position: absolute;
   inset: 0;
   background: radial-gradient(70% 60% at 50% 50%, rgb(42 18 26 / 0.92), #0b0507 75%);
-  opacity: var(--k);
+  opacity: calc(var(--k) * (1 - var(--away) * 0.55));
   pointer-events: none;
 }
 
@@ -1637,7 +1638,7 @@ main,
   top: 50%;
   width: var(--w, 300px);
   height: var(--h, 533px);
-  transform: translate(-50%, -50%) translate3d(var(--x, 0), var(--y, 0), 0) perspective(1600px) rotateY(var(--ry, -16deg)) rotateX(var(--rx, 6deg));
+  transform: translate(-50%, -50%) translate3d(var(--x, 0), var(--y, 0), 0) perspective(1600px) rotateY(var(--ry, -16deg)) rotateX(var(--rx, 6deg)) scale(calc(1 - var(--away) * 0.12));
   cursor: pointer;
   will-change: transform, width, height;
 }
@@ -1930,7 +1931,7 @@ main,
 }
 
 .film.is-hinting .film-scroll {
-  opacity: 1;
+  opacity: calc(1 - var(--away) * 5);
   translate: -50% 0;
   animation: film-glow 2.6s ease-in-out 0.9s infinite;
 }
@@ -2007,7 +2008,7 @@ html.film-on .book-bar {
 /* Phones: the words above the frame. */
 @media (max-width: 759px) {
   .film {
-    height: 300svh;
+    height: 180svh;
   }
 
   .film-copy {
@@ -3063,6 +3064,16 @@ html.film-on .book-bar {
   color: var(--rose);
 }
 
+/* Above the title, in the card's glow: the Signature TCM head (src/sculpture). */
+.offer-corporate .offer-figure {
+  height: 240px;
+  margin: 0 0 6px;
+}
+
+.offer-corporate .offer-body {
+  width: 100%;
+}
+
 .offer-corporate .offer-lead {
   margin-bottom: 26px;
   font-family: var(--font-display);
@@ -3074,6 +3085,10 @@ html.film-on .book-bar {
 @media (min-width: 900px) {
   .offer-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .offer-corporate .offer-figure {
+    height: 300px;
   }
 
   .offer {

@@ -9,7 +9,8 @@ import { tilt } from './tilt.js';
 // its title. As the visitor scrolls the section pins, and the frame straightens
 // and grows until it fills the screen (the theatre dark round it, the header
 // stepping aside), and the film plays; outside that stretch of scroll it rests
-// under its cover. It plays out loud when the site's sound is on, the song
+// under its cover. Leaving it takes little scrolling, and the frame answers the
+// first of it. It plays out loud when the site's sound is on, the song
 // dipping under it. A second after it starts, a glowing hint at its foot says
 // that scrolling on leaves it. Browsers only grant real fullscreen to a tap, so
 // a button offers that, and a tap on the frame from further away brings the
@@ -20,9 +21,12 @@ const SOURCES = {
   light: new URL('./media/award-720.mp4', import.meta.url).href,
 };
 // Progress through the pinned section.
-const GROW = [0.16, 0.42]; // floating frame → full screen
-const PLAY = [0.34, 0.97]; // the film plays inside this stretch
-const WATCH = 0.46; // where a tap on the frame takes the visitor
+const GROW = [0.1, 0.4]; // floating frame → full screen
+const PLAY = [0.3, 0.99]; // the film plays inside this stretch
+const WATCH = 0.45; // where a tap on the frame takes the visitor
+// Scrolling on from there, the frame lets go at once (a little smaller, its
+// corners rounding, the dark lifting), so the scroll is felt straight away.
+const LEAVE = [0.47, 1];
 const HINT_AFTER = 1; // seconds of playing before the scroll hint glows in
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -211,6 +215,7 @@ export function initAwardFilm(section, { signal, reduced }) {
   const update = (p) => {
     last = p;
     const k = ease(clamp((p - GROW[0]) / (GROW[1] - GROW[0])));
+    const away = clamp((p - LEAVE[0]) / (LEAVE[1] - LEAVE[0]));
     const float = 1 - k;
     const motion = tilt();
     const lx = motion.active ? motion.x : pointer.x;
@@ -222,11 +227,12 @@ export function initAwardFilm(section, { signal, reduced }) {
     s.setProperty('--y', `${lerp(rect.y0, 0, k).toFixed(1)}px`);
     s.setProperty('--ry', `${(float * (-16 + lx * 14)).toFixed(2)}deg`);
     s.setProperty('--rx', `${(float * (6 - ly * 8)).toFixed(2)}deg`);
-    s.setProperty('--r', `${lerp(30, rect.edge ? 0 : 18, k).toFixed(1)}px`);
+    s.setProperty('--r', `${(lerp(30, rect.edge ? 0 : 18, k) + away * (rect.edge ? 26 : 8)).toFixed(1)}px`);
     s.setProperty('--pad', `${lerp(10, 0, k).toFixed(1)}px`);
     section.style.setProperty('--k', k.toFixed(3));
-    // Only while pinned: once the section scrolls away the header comes back.
-    const full = k > 0.98 && p < 0.99;
+    section.style.setProperty('--away', away.toFixed(3));
+    // Only while it holds the screen: halfway through letting go the header comes back.
+    const full = k > 0.98 && away < 0.5;
     root.classList.toggle('film-full', full);
     section.classList.toggle('is-full', full);
 

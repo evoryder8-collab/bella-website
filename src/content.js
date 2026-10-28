@@ -159,7 +159,7 @@ export const copy = {
         {
           word: 'Beauty',
           text: 'Behandlingar som framhäver dina naturliga drag och respekterar din huds unika karaktär.',
-          imageAlt: 'Bella i BE BEAUTYs rosa studio',
+          imageAlt: 'Bella visar en skulpterande ansiktsbehandling inför publik',
         },
         {
           word: 'Balance',
@@ -347,6 +347,7 @@ export const copy = {
       hours: 'Mån–fre 09–19<br>Lör–sön 10–19',
       contactLabel: 'Kontakt',
       mapAlt: 'Karta över BE BEAUTYs två studior i Stockholm',
+      photoAlt: 'Bella i BE BEAUTYs rosa studio',
     },
     // The pages beyond the home page (om/, behandlingar/, akademi/, kontakt/).
     pages: {
@@ -525,7 +526,7 @@ export const copy = {
         {
           word: 'Beauty',
           text: 'Treatments that bring out your natural features while respecting what makes your skin unique.',
-          imageAlt: 'Bella in the pink BE BEAUTY studio',
+          imageAlt: 'Bella demonstrates a sculpting face treatment in front of an audience',
         },
         {
           word: 'Balance',
@@ -713,6 +714,7 @@ export const copy = {
       hours: 'Mon–Fri 9am–7pm<br>Sat–Sun 10am–7pm',
       contactLabel: 'Contact',
       mapAlt: 'Map of the two BE BEAUTY studios in Stockholm',
+      photoAlt: 'Bella in the pink BE BEAUTY studio',
     },
     pages: {
       common: {

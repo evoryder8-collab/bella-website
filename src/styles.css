@@ -1360,9 +1360,16 @@ main,
   mask-image: linear-gradient(to top, transparent, #000 20%);
 }
 
-/* Keep Bella, the stone and the face in frame on tall phone screens. */
+/* Keep Bella, her hands, the stone and the face in frame on tall phone screens. */
 .approach-panel:nth-child(1) img {
-  object-position: 28% 50%;
+  object-position: 72% 50%;
+}
+
+/* On wide screens only a band of the tall photo shows: her face and the arms she works with. */
+@media (min-aspect-ratio: 1/1) {
+  .approach-panel:nth-child(1) img {
+    object-position: 50% 24%;
+  }
 }
 
 .approach-panel:nth-child(2) img {

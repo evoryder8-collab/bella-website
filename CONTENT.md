@@ -61,7 +61,8 @@ originals are available without watermarks or in higher resolution, swap them in
 | File | Use |
 |---|---|
 | `src/images/hero-bella.jpg` | Hero portrait (also the WebGL texture) |
-| `src/images/studio.jpg` | Approach: Beauty |
+| `src/images/treatment-tokyo.jpg` | Approach: Beauty (Bella demonstrating a face treatment at a championship workshop; framed to leave out a small gold photographer's logo in the corner, so Bella should confirm the credit) |
+| `src/images/studio.jpg` | About and Contact pages, link in bio |
 | `src/images/guasha.jpg` | Approach: Balance |
 | `src/images/treatment-light.jpg` | Approach: Glow |
 | `src/images/treatment-hands.jpg` | Femina Bella Est |

@@ -1,7 +1,7 @@
 import { copy, LANGS } from './content.js';
 import { setLang } from './i18n.js';
 import { laurel } from './laurel.js';
-import { declineSound, startSound, whoosh } from './sound.js';
+import { declineSound, prepareGreeting, startSound, whoosh } from './sound.js';
 
 // The first-visit ritual: what BE BEAUTY is, said plainly, round the rose-quartz
 // stone of the 3D world. Touching the stone starts the sound (that touch is the
@@ -130,6 +130,7 @@ export function initPortal({ onEnter }) {
     if (entered) return;
     entered = true;
     startSound();
+    prepareGreeting(lang);
     press();
     const held = performance.now() - pressed;
     setTimeout(enter, reduced ? 0 : Math.max(0, RING_MS - held));

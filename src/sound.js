@@ -3,8 +3,10 @@
 // composed live that rises with scrolling like moving through silk. The
 // whooshes are recorded (src/sfx, about 130 KB in all, with a button click, the
 // magazine's riffle and a sparkle for the 3D figures) and load once sound
-// starts, as does Bella's spoken greeting (src/voice), played once as the site
-// opens after the first-visit ritual with the song dipping under her voice. Everything is silent until startSound() runs from a click
+// starts. Bella's spoken greeting (src/voice, in English and Swedish) loads in
+// the visitor's language as the ritual's stone is touched, and plays once as
+// the site opens with the song dipping under her voice. Everything is silent
+// until startSound() runs from a click
 // (browsers only allow audio after a gesture), and every call before that is a
 // no-op.
 
@@ -29,14 +31,18 @@ const TAKES = {
   ],
 };
 
-// Bella's greeting, by language (the Swedish take is still to come).
-const VOICES = { en: new URL('./voice/bella-intro-en.mp3', import.meta.url).href };
+// Bella's greeting, by language: AAC (smaller and clearer for a voice), and the
+// MP3 for a browser that can't decode it.
+const VOICES = {
+  en: [new URL('./voice/bella-intro-en.m4a', import.meta.url).href, new URL('./voice/bella-intro-en.mp3', import.meta.url).href],
+  sv: [new URL('./voice/bella-intro-sv.m4a', import.meta.url).href, new URL('./voice/bella-intro-sv.mp3', import.meta.url).href],
+};
 const DUCK = 0.3; // the song's own level while she speaks
 
 let ctx = null;
 let master = null;
 let songLevel = null;
-let voices = null;
+const voices = {};
 let greeted = false;
 let bus = null;
 let song = null;
@@ -150,7 +156,6 @@ export function startSound() {
   send.gain.value = 0.18;
   sfx.connect(send).connect(reverb);
   loadTakes();
-  loadVoices();
 
   buildSong();
   buildAir();
@@ -203,27 +208,33 @@ function loadTakes() {
   }
 }
 
-function loadVoices() {
-  voices = Object.fromEntries(
-    Object.entries(VOICES).map(([lang, url]) => [
-      lang,
-      fetch(url)
-        .then((response) => response.arrayBuffer())
-        .then((data) => new Promise((resolve, reject) => ctx.decodeAudioData(data, resolve, reject)))
-        .catch(() => null),
-    ]),
-  );
+// (Newer browsers also return a promise, rejected alongside the callback.)
+const decode = (url) =>
+  fetch(url)
+    .then((response) => response.arrayBuffer())
+    .then((data) => new Promise((resolve, reject) => ctx.decodeAudioData(data, resolve, reject)?.catch(() => {})));
+
+// Her greeting in the visitor's language only, fetched as soon as they touch
+// the stone so it is ready by the time the site opens.
+export function prepareGreeting(lang) {
+  if (!ctx || !VOICES[lang] || voices[lang]) return;
+  const [aac, mp3] = VOICES[lang];
+  voices[lang] = decode(aac)
+    .catch(() => decode(mp3))
+    .catch(() => null);
 }
 
-// Bella says hello, once, `delay` seconds from now: the song dips under her
-// voice and rises again as she finishes. Only with sound on, and only in a
-// language she has recorded.
+// Bella says hello, once, `delay` seconds from now (or as soon as her voice
+// has loaded): the song dips under her voice and rises again as she finishes.
+// Only with sound on, and only in a language she has recorded.
 export function greet(lang, { delay = 0 } = {}) {
-  if (greeted || !isPlaying() || !voices?.[lang]) return;
+  if (greeted || !isPlaying() || !VOICES[lang]) return;
   greeted = true;
+  prepareGreeting(lang);
+  const due = ctx.currentTime + delay;
   voices[lang].then((buffer) => {
     if (!buffer || !isPlaying()) return;
-    const at = ctx.currentTime + delay;
+    const at = Math.max(ctx.currentTime, due);
     songLevel.gain.setTargetAtTime(SONG_LEVEL * DUCK, Math.max(ctx.currentTime, at - 0.6), 0.35);
     const source = ctx.createBufferSource();
     source.buffer = buffer;

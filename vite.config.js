@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
-import { siInstagram } from 'simple-icons';
+import { siFacebook, siInstagram } from 'simple-icons';
 import { contact, copy, DEFAULT_LANG } from './src/content.js';
 import { lookup } from './src/i18n-lookup.js';
 import { links } from './src/links.js';
@@ -48,12 +48,12 @@ function required(value, what) {
 }
 
 // Fills the page with the default language, contact details, link targets and
-// the Instagram icon at build time, so it has real content before any
+// the Instagram and Facebook icons at build time, so it has real content before any
 // JavaScript runs. The same data-* hooks are reused by src/i18n.js at runtime.
 function prerenderCopy() {
   const strings = copy[DEFAULT_LANG];
   const hrefs = links(DEFAULT_LANG);
-  const icon = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${siInstagram.path}"/></svg>`;
+  const svg = ({ path }) => `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="${path}"/></svg>`;
 
   return {
     name: 'prerender-copy',
@@ -79,7 +79,8 @@ function prerenderCopy() {
           if (link) out = setAttr(out, 'href', required(hrefs[link[1]], `link "${link[1]}"`));
           return out;
         })
-        .replace(/<span class="ig-icon"><\/span>/g, `<span class="ig-icon">${icon}</span>`)
+        .replace(/<span class="ig-icon"><\/span>/g, `<span class="ig-icon">${svg(siInstagram)}</span>`)
+        .replace(/<span class="fb-icon"><\/span>/g, `<span class="fb-icon">${svg(siFacebook)}</span>`)
         .replace(/<html lang="[^"]*"/, `<html lang="${DEFAULT_LANG}"`);
     },
   };

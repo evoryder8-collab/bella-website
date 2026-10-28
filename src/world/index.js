@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { DirectionalLight, Group, MathUtils, NeutralToneMapping, PerspectiveCamera, PMREMGenerator, Scene, WebGLRenderer } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAtmosphere } from './atmosphere.js';
+import { createFigures } from './figures.js';
 import { createMedia } from './media.js';
 import { createPearls } from './pearls.js';
 import { createQuartz } from './quartz.js';
@@ -85,6 +86,7 @@ export function initWorld() {
 
   const atmosphere = createAtmosphere();
   const media = createMedia(scene);
+  const figures = createFigures(scene);
   const ribbon = createRibbon();
   const pearls = createPearls();
   const quartz = createQuartz({ transmission: q.transmission > 0 });
@@ -140,6 +142,7 @@ export function initWorld() {
   window.addEventListener('bb:page', () => {
     findPage();
     media.refresh();
+    figures.refresh();
     layout();
   });
   // Late fonts, images or copy changes move the sections; re-measure when the page grows or shrinks.
@@ -306,6 +309,7 @@ export function initWorld() {
 
     media.update({ vw, vh, k, dt, bend, time: elapsed, pointer, pointerActive: pointer.x >= 0 && !idle });
     media.light(stone.x, stone.y, stoneVisible ? Math.min(1, 0.6 + stone.glow) : 0);
+    figures.update({ vw, vh, k, dt, time: elapsed, pointer, pointerActive: pointer.x >= 0 && !idle, cameraZ: CAMERA_Z });
 
     renderer.render(scene, camera);
 

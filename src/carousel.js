@@ -40,7 +40,7 @@ export function initCarousel(root, chipsRoot, { signal } = {}) {
 
     progress.style.transform = `scaleX(${Math.min(1, (scrollLeft + clientWidth) / scrollWidth)})`;
     const group = pinned ?? cards[active].dataset.cardGroup;
-    // The floating figure (src/figures.js) follows the group in view.
+    // The 3D figure (src/world/figures.js) follows the group in view.
     if (group !== lastGroup) {
       lastGroup = group;
       document.dispatchEvent(new CustomEvent('treatmentgroup', { detail: Number(group) }));

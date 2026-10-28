@@ -7,7 +7,7 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 // (the portrait, the photos, the atmosphere); on weak GPUs it falls back to a
 // polished translucent finish.
 
-function stoneShape() {
+export function stoneShape() {
   const s = new Shape();
   s.moveTo(-1.0, 0.16);
   s.bezierCurveTo(-0.55, 0.64, 0.25, 0.6, 0.72, 0.3);

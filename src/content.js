@@ -10,6 +10,8 @@ export const contact = {
   email: 'bebeautyfacesculpting@gmail.com',
   instagram: '@bebeauty_facesculpt',
   instagramUrl: 'https://www.instagram.com/bebeauty_facesculpt/',
+  facebook: 'Facebook',
+  facebookUrl: 'https://www.facebook.com/share/192DeLQmXT/',
 };
 
 // [longitude, latitude] for each studio, in the same order as copy.*.studios.items.
@@ -100,6 +102,9 @@ export const copy = {
       prev: 'Föregående',
       next: 'Nästa',
       sound: 'Ljud',
+      socials: 'Följ BE BEAUTY',
+      instagram: 'BE BEAUTY på Instagram',
+      facebook: 'BE BEAUTY på Facebook',
     },
     // The first-visit portal (src/portal.js), shown in the device's language.
     // Stockholm Beauty Week, October 2026; the jury's words are translated from English.
@@ -425,6 +430,9 @@ export const copy = {
       prev: 'Previous',
       next: 'Next',
       sound: 'Sound',
+      socials: 'Follow BE BEAUTY',
+      instagram: 'BE BEAUTY on Instagram',
+      facebook: 'BE BEAUTY on Facebook',
     },
     premiere: {
       presents: 'presents',

@@ -3,7 +3,6 @@ import { currentLang, initI18n } from './i18n.js';
 import { initMotion, lockScroll, mountMotion, playIntro } from './motion.js';
 import { initCarousel } from './carousel.js';
 import { initDeck } from './deck.js';
-import { initFigures } from './figures.js';
 import { drawLaurels } from './laurel.js';
 import { initMagazine } from './magazine.js';
 import { initMap } from './map.js';
@@ -23,6 +22,7 @@ initMenu();
 initHeader();
 initBookBar();
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
+initSocials();
 
 if (!reducedMotion) {
   initMotion();
@@ -37,7 +37,6 @@ else initRouter({ mount: mountPage });
 function mountPage({ entering = false } = {}) {
   const controller = new AbortController();
   const { signal } = controller;
-  document.querySelectorAll('[data-figure-stage]').forEach((stage) => initFigures(stage, { signal }));
   initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'), { signal });
   initDeck(document.querySelector('[data-deck]'), { signal });
   initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'), { signal });
@@ -99,6 +98,20 @@ function initSoundToggle(portalOpen) {
   };
   window.addEventListener('pointerdown', arm);
   window.addEventListener('keydown', arm);
+}
+
+// The floating social gems arrive only once the visitor starts scrolling (a
+// swipe of a finger is enough), so the first screen stays uncluttered.
+function initSocials() {
+  const dock = document.querySelector('[data-socials]');
+  if (!dock) return;
+  const start = window.scrollY;
+  const summon = () => {
+    if (Math.abs(window.scrollY - start) < 24) return;
+    dock.classList.add('is-summoned');
+    window.removeEventListener('scroll', summon);
+  };
+  window.addEventListener('scroll', summon, { passive: true });
 }
 
 function initMenu() {

@@ -233,7 +233,8 @@ main,
   position: fixed;
   inset: 0;
   z-index: 0;
-  width: 100vw;
+  /* Not 100vw: that includes a desktop scrollbar and would shift the world off the page. */
+  width: 100%;
   height: 100lvh;
   opacity: 0;
   pointer-events: none;
@@ -453,7 +454,8 @@ main,
   color: var(--cream);
 }
 
-.ig-icon svg {
+.ig-icon svg,
+.fb-icon svg {
   width: 1em;
   height: 1em;
   fill: currentColor;
@@ -2790,164 +2792,19 @@ main,
   margin-left: 3px;
 }
 
-/* ---------- Treatment figure (src/figures.js) ---------- */
+/* ---------- Treatment figures ----------
+   Sculpted in 3D by the world (src/world/figures.js) and drawn over this box.
+   With reduced motion there is no world, so the box closes up. */
 
 .figure-stage {
   position: relative;
-  display: grid;
-  place-items: center;
-  height: 250px;
+  height: 290px;
   margin-top: 26px;
   pointer-events: none;
 }
 
-.figure-stage:empty {
+html:not(.motion) .figure-stage {
   display: none;
-}
-
-/* A soft rose aura breathing behind the figure. */
-.figure-stage::before {
-  content: '';
-  position: absolute;
-  width: 230px;
-  height: 230px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(231 163 160 / 0.5), rgb(231 163 160 / 0.12) 45%, transparent 70%);
-  filter: blur(8px);
-  animation: figure-aura 6s ease-in-out infinite alternate;
-}
-
-.figure-stage svg {
-  position: relative;
-  width: auto;
-  height: 250px;
-  overflow: visible;
-  filter: drop-shadow(0 0 6px rgb(231 163 160 / 0.55));
-  animation: figure-float 7s ease-in-out infinite;
-}
-
-.figure {
-  opacity: 0;
-  transition: opacity 0.8s var(--ease);
-}
-
-.figure.is-active {
-  opacity: 1;
-}
-
-.figure .ln {
-  fill: none;
-  stroke: url(#fg-line);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-.motion .figure .ln {
-  stroke-dashoffset: 1;
-}
-
-.motion .figure.is-drawing .ln {
-  animation: figure-draw 1.9s var(--ease) forwards;
-  animation-delay: calc(var(--d, 0) * 90ms);
-}
-
-.figure .qi {
-  fill: none;
-  stroke: var(--rose-deep);
-  stroke-width: 1.1;
-  stroke-linecap: round;
-  stroke-dasharray: 0.012 0.026;
-  opacity: 0.7;
-  animation: figure-qi 6s linear infinite;
-}
-
-.figure .pt {
-  fill: var(--cream);
-  stroke: var(--rose-deep);
-  stroke-width: 1;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: figure-point 2.6s ease-in-out infinite;
-  animation-delay: calc(var(--d, 0) * 0.22s);
-}
-
-.figure .bronze {
-  fill: url(#fg-bronze);
-  opacity: 0.38;
-}
-
-.figure .ground {
-  fill: rgb(142 70 81 / 0.16);
-}
-
-.figure .stone {
-  fill: url(#fg-quartz);
-  stroke: #c98a8e;
-  stroke-width: 0.6;
-}
-
-.figure .spark {
-  fill: var(--rose);
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: figure-spark 3.4s ease-in-out infinite;
-  animation-delay: calc(var(--d, 0) * 0.5s);
-}
-
-@keyframes figure-draw {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes figure-qi {
-  to {
-    stroke-dashoffset: -1;
-  }
-}
-
-@keyframes figure-point {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.65;
-  }
-  50% {
-    transform: scale(1.55);
-    opacity: 1;
-  }
-}
-
-@keyframes figure-spark {
-  0%,
-  100% {
-    transform: scale(0.3) rotate(0deg);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1) rotate(45deg);
-    opacity: 1;
-  }
-}
-
-@keyframes figure-float {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-0.6deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(0.6deg);
-  }
-}
-
-@keyframes figure-aura {
-  to {
-    transform: scale(1.12);
-    opacity: 0.75;
-  }
 }
 
 @media (min-width: 900px) {
@@ -2955,16 +2812,13 @@ main,
     position: relative;
   }
 
-  .figure-stage {
+  .treatments .figure-stage {
     position: absolute;
     top: 0;
     right: var(--gutter);
-    height: 330px;
+    width: 340px;
+    height: 380px;
     margin: 0;
-  }
-
-  .figure-stage svg {
-    height: 330px;
   }
 }
 
@@ -3581,12 +3435,8 @@ main,
 }
 
 .menu-head .menu-figure {
-  height: 210px;
+  height: 260px;
   margin: 0 0 6px;
-}
-
-.menu-head .menu-figure svg {
-  height: 210px;
 }
 
 .menu-list {
@@ -3779,14 +3629,7 @@ main,
   }
 
   .menu-head .menu-figure {
-    position: relative;
-    top: auto;
-    right: auto;
-    height: 260px;
-  }
-
-  .menu-head .menu-figure svg {
-    height: 260px;
+    height: 320px;
   }
 
   .menu-list {
@@ -3846,4 +3689,130 @@ main,
 
 .curtain-title em {
   color: var(--rose);
+}
+
+/* ---------- Floating social gems (src/main.js) ----------
+   Rose-quartz cabochons that stay on screen. They arrive one by one once the
+   visitor starts scrolling, then float and turn gently, a glint crossing them. */
+
+.socials {
+  position: fixed;
+  right: calc(12px + env(safe-area-inset-right, 0px));
+  top: 58%;
+  z-index: 44;
+  display: grid;
+  gap: 12px;
+  perspective: 600px;
+  pointer-events: none;
+}
+
+.social {
+  --gem: 46px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--gem);
+  height: var(--gem);
+  border-radius: 50%;
+  color: #fff8f4;
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 34% 26%, rgb(255 255 255 / 0.95) 0 6%, rgb(255 238 234 / 0.75) 14%, transparent 38%),
+    radial-gradient(circle at 70% 82%, rgb(255 205 196 / 0.55), transparent 42%),
+    radial-gradient(circle at 50% 55%, #f0b2ad 0%, #c97a84 52%, #8e4651 100%);
+  box-shadow:
+    inset 0 -7px 12px rgb(80 24 40 / 0.5),
+    inset 0 5px 9px rgb(255 255 255 / 0.55),
+    inset 0 0 0 1px rgb(255 255 255 / 0.3),
+    0 14px 26px -12px rgb(58 31 38 / 0.7),
+    0 0 22px -6px rgb(231 163 160 / 0.7);
+  opacity: 0;
+  transform: translateX(80px) scale(0.4) rotateY(-70deg);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+
+.social svg {
+  position: relative;
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+  filter: drop-shadow(0 1px 1.5px rgb(80 24 40 / 0.55));
+}
+
+/* A glint of light sweeps across each gem now and then. */
+.social::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 38%, rgb(255 255 255 / 0.7) 50%, transparent 62%) 160% 0 / 260% 100% no-repeat;
+  mix-blend-mode: screen;
+  animation: gem-glint 5.5s ease-in-out infinite;
+  animation-delay: var(--glint, 0s);
+}
+
+.socials.is-summoned .social {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  animation: gem-float 6s ease-in-out infinite;
+  animation-delay: var(--float, 0s);
+}
+
+.social:nth-child(2) {
+  --glint: 1.4s;
+  --float: -2.4s;
+  transition-delay: 0.14s;
+}
+
+.socials.is-summoned .social:hover {
+  animation: none;
+  transform: scale(1.12) rotateY(12deg);
+}
+
+.social:active {
+  transform: scale(0.94);
+}
+
+/* Not while the portal, the premiere or the phone menu is up. */
+.portal-open .socials,
+.is-premiere .socials,
+.menu-open .socials {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@keyframes gem-float {
+  0%,
+  100% {
+    transform: translateY(0) rotateY(-10deg) rotateX(4deg);
+  }
+  50% {
+    transform: translateY(-7px) rotateY(12deg) rotateX(-4deg);
+  }
+}
+
+@keyframes gem-glint {
+  0%,
+  62% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: -60% 0;
+  }
+}
+
+@media (min-width: 900px) {
+  .socials {
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .social {
+    --gem: 52px;
+  }
 }

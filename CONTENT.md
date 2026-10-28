@@ -10,6 +10,7 @@ All copy and contact details live in [`src/content.js`](src/content.js), in Swed
 - [ ] Swedish copy. Her own site is in English, so the Swedish text is our translation. The Bokadirekt descriptions were the source for the treatments.
 - [ ] Reviews. The six quotes are from her site and are shown in English in both languages, as published there.
 - [ ] Academy: no new dates are listed yet ("Nya kursdatum släpps snart"). Interest goes to her email with a prefilled subject.
+- [ ] Facebook links to the share link the user sent (`facebookUrl` in `src/content.js`, `https://www.facebook.com/share/192DeLQmXT/`); swap in her page's own address if she prefers.
 - [ ] Whether to show a WhatsApp or phone number. None is published, so booking goes to Bokadirekt and contact goes to email and Instagram.
 - [ ] The first-visit portal copy ("Ljud på?" / "Välj språk", `portal` in `src/content.js`) and the soundscape, which is composed in the browser and can be changed in `src/sound.js`.
 

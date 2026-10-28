@@ -13,6 +13,7 @@ export function links(lang) {
     academy: mail(offers.academySubject),
     corporate: mail(offers.corporateSubject),
     instagram: contact.instagramUrl,
+    facebook: contact.facebookUrl,
     directions0: directions(studios[0]),
     directions1: directions(studios[1]),
   };

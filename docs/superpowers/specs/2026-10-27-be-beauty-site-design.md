@@ -109,9 +109,17 @@ decorative lines that looked like placeholders.
   view, hands over to the rose street map with 3D buildings, then orbits slowly.
 - **Scrolling on phones** is driven by Lenis (`syncTouch`) so the WebGL layer and the text move in the same frame,
   and phones use near-opaque glass instead of a per-frame blur.
-- **Treatment figures** (`src/figures.js`): a floating line-art figure that follows the group in view: a serene
-  face, the face mapped with acupoints and a gliding gua sha stone (signature TCM), and a traditional acupuncture
-  figure with flowing meridians (body).
+- **Treatment figures** (`src/world/figures.js`, 2026-10-28, replacing line drawings the user rejected): real 3D
+  sculptures from Blender's CC0 Human Base Meshes (the realistic female body, baked in Blender 5.2 into a bust
+  and a full figure, `src/models/`). Face: a polished rose-gold bust that turns under a travelling light and
+  fades out at the chest in a fine halftone. Signature TCM: the same bust deepening to satin rose bronze, with
+  pearl acupoints on the real face, gold light flowing along the gua sha lift lines and a rose-quartz stone
+  gliding up the cheek. Body: the full figure in rose bronze after the Chinese acupuncture statues, with gold
+  meridians (front, arms and down the spine) on a slow turn, dressed over the chest and round the hips in
+  sculpted blush-silk blooms with gilded hearts and leaves (`src/world/flowers.js`) that open as it forms.
+  Figures dissolve into each other through rose dust. With reduced motion there is no world and the space closes.
+- **Floating social gems**: rose-quartz Instagram and Facebook buttons fixed at the right edge, arriving one by
+  one once the visitor starts scrolling, then floating and catching a glint.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
 - **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the

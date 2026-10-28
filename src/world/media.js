@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { Color, LinearFilter, Mesh, PlaneGeometry, ShaderMaterial, SRGBColorSpace, TextureLoader, Vector2, Vector3, Vector4 } from 'three';
+import { tilt } from '../tilt.js';
 
 // Every photo marked data-gl-media is redrawn in WebGL exactly where the page
 // lays it out. The DOM image stays for layout, alt text and the fallback, and
@@ -7,7 +8,8 @@ import { Color, LinearFilter, Mesh, PlaneGeometry, ShaderMaterial, SRGBColorSpac
 // - dissolves in organically from the bottom with a glowing rim (driven by the
 //   same --reveal value GSAP animates for the CSS clip fallback),
 // - flows like liquid under a finger or the quartz stone,
-// - bends slightly with scroll speed.
+// - bends slightly with scroll speed,
+// - and the hero portrait drifts with a phone's tilt (src/tilt.js).
 //
 // Photos marked data-gl-fade (the full-screen approach scene) fade out at their
 // bottom edge, so they melt into the colour of the section below.
@@ -46,6 +48,8 @@ const fragmentShader = /* glsl */ `
   uniform float uZoom;
   uniform float uShift;
   uniform vec2 uTilt;
+  uniform vec2 uDrift;
+  uniform float uRoom;
   uniform float uReveal;
   uniform float uSeed;
   uniform float uTime;
@@ -70,9 +74,9 @@ const fragmentShader = /* glsl */ `
   }
 
   vec3 photo(vec2 uv) {
-    uv = (uv - 0.5) / uZoom + 0.5;
+    uv = (uv - 0.5) / (uZoom * (1.0 + uRoom)) + 0.5;
     uv.y += uShift;
-    uv += uTilt * 0.02;
+    uv += uTilt * 0.02 + uDrift;
     return texture2D(uImage, uv * uCover.xy + uCover.zw).rgb;
   }
 
@@ -158,6 +162,26 @@ const fragmentShader = /* glsl */ `
   }
 `;
 
+// A phone's tilt moves the hero portrait inside its frame (zoomed in a little
+// for the room), as if it lay a little behind the screen, while the title block
+// drifts the other way, as if in front of it.
+const DRIFT = 0.022; // of the image, at full tilt
+const ROOM = 0.05;
+
+function parallax(item, dt) {
+  const t = tilt();
+  if (!t.active) return;
+  const ease = Math.min(1, dt * 5);
+  item.drift.x += (t.x - item.drift.x) * ease;
+  item.drift.y += (t.y - item.drift.y) * ease;
+  const { uniforms } = item;
+  uniforms.uRoom.value += (ROOM - uniforms.uRoom.value) * Math.min(1, dt * 2);
+  const room = uniforms.uRoom.value / ROOM;
+  uniforms.uDrift.value.set(-item.drift.x * DRIFT * room, item.drift.y * DRIFT * room);
+  item.heroEl.style.setProperty('--tilt-x', (item.drift.x * room).toFixed(3));
+  item.heroEl.style.setProperty('--tilt-y', (item.drift.y * room).toFixed(3));
+}
+
 export function createMedia(scene) {
   const loader = new TextureLoader();
   const geometry = new PlaneGeometry(1, 1, 24, 24);
@@ -180,6 +204,8 @@ export function createMedia(scene) {
       uZoom: { value: 1 },
       uShift: { value: 0 },
       uTilt: { value: new Vector2() },
+      uDrift: { value: new Vector2() },
+      uRoom: { value: 0 },
       uReveal: { value: 1 },
       uSeed: { value: order * 7.3 },
       uTime: { value: 0 },
@@ -208,6 +234,9 @@ export function createMedia(scene) {
       uniforms,
       z: order * 0.002 + (alive ? 0.05 : 0),
       tilt: new Vector2(),
+      // The hero portrait drifts with the phone's tilt, its words the other way.
+      heroEl: container.hasAttribute('data-hero-media') ? container.closest('.hero') : null,
+      drift: new Vector2(),
       state: 'idle',
       head: 0,
       last: null,
@@ -289,6 +318,7 @@ export function createMedia(scene) {
         const life = uniforms.uLife.value;
         for (let i = 0; i < POINTS; i++) if (life[i] > 0) life[i] = Math.max(0, life[i] - dt * 1.1);
 
+        if (item.heroEl) parallax(item, dt);
         if (!item.alive) continue;
         // The glint crosses as the frame travels from the bottom of the screen to the top.
         uniforms.uGlint.value = 1 - (rect.top + rect.height / 2) / vh;

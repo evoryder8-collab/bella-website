@@ -8,6 +8,7 @@ import { initMagazine } from './magazine.js';
 import { initMap } from './map.js';
 import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
+import { initTilt } from './tilt.js';
 import { initRouter } from './router.js';
 import { isPlaying, onSoundChange, setMuted, soundPreference, startSound, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
@@ -29,6 +30,7 @@ document.addEventListener('click', (event) => event.target.closest?.('button, .b
 if (!reducedMotion) {
   initMotion();
   loadWorld();
+  initTilt();
 }
 
 // Each page's own pieces start here, and stop when the router swaps the page

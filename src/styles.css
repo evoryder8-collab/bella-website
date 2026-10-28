@@ -1015,6 +1015,13 @@ main,
   padding: calc(var(--header-h) + 24px) var(--gutter) calc(28px + var(--safe-bottom));
 }
 
+/* With a phone's tilt (src/world/media.js) the words drift against the portrait. */
+@media (max-width: 899px) {
+  .hero-copy {
+    translate: calc(var(--tilt-x, 0) * -9px) calc(var(--tilt-y, 0) * -7px);
+  }
+}
+
 .hero-title {
   margin-top: 10px;
   font-family: var(--font-display);

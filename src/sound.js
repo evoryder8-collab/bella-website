@@ -234,7 +234,8 @@ export function tap() {
 // magazine's leaves are flicked in time with its pages. False when it can't
 // play (sound off, or not loaded yet), so the leaves make their own sound.
 export function riffle(startIn = 0) {
-  return isPlaying() && playTake('riffle', 0.9, { startIn, vary: 0 });
+  // Kept low, 40% under its first level of 0.9, so it stays behind the pages.
+  return isPlaying() && playTake('riffle', 0.54, { startIn, vary: 0 });
 }
 
 // A sparkle as a new 3D figure forms, heard once per visit (until the page is

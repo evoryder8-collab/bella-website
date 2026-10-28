@@ -478,8 +478,8 @@ main,
 
 .site-header.is-scrolled {
   background: rgb(246 233 228 / 0.82);
-  backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(14px) saturate(1.2);
   box-shadow: 0 1px 0 var(--line);
 }
 
@@ -747,8 +747,8 @@ main,
   padding: 9px 16px 9px 12px;
   border-radius: 999px;
   background: rgb(255 244 238 / 0.55);
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   color: var(--wine);
   font-size: 0.75rem;
   letter-spacing: 0.06em;
@@ -1133,8 +1133,8 @@ main,
   padding-block: 10px;
   overflow: hidden;
   color: var(--rose-deep);
-  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
 }
 
 .technique-track {
@@ -1230,8 +1230,8 @@ main,
   border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   background: var(--glass);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   box-shadow:
     0 30px 60px -40px rgb(58 31 38 / 0.55),
     inset 0 1px 0 rgb(255 255 255 / 0.7);
@@ -1741,8 +1741,8 @@ main,
   border-radius: var(--radius);
   border: 1px solid var(--glass-line);
   background: var(--glass);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   font-size: 0.9375rem;
 }
 
@@ -1798,8 +1798,8 @@ main,
     linear-gradient(140deg, rgb(255 244 238 / 0.14), rgb(255 244 238 / 0) 46%),
     rgb(58 31 38 / 0.4);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.18);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   color: var(--cream);
   scroll-snap-align: center;
 }
@@ -1874,13 +1874,13 @@ main,
    into soft colour, so even a half-swiped card never shows a mush of text. The
    top card is frosted the most. */
 .deck.is-ready .review-card {
-  backdrop-filter: blur(18px) saturate(1.4);
   -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
 }
 
 .deck.is-ready .review-card[aria-hidden='false'] {
-  backdrop-filter: blur(24px) saturate(1.45);
   -webkit-backdrop-filter: blur(24px) saturate(1.45);
+  backdrop-filter: blur(24px) saturate(1.45);
 }
 
 .deck.is-ready .review-card:active {
@@ -1948,8 +1948,8 @@ main,
   border: 1px solid var(--glass-line-dark);
   border-radius: var(--radius);
   background: var(--glass-dark);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   color: var(--cream);
   isolation: isolate;
 }
@@ -2340,8 +2340,8 @@ main,
   border: 1px solid var(--glass-line-dark);
   border-radius: 999px;
   background: rgb(36 20 26 / 0.58);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   color: var(--cream);
   box-shadow: 0 18px 40px -22px rgb(36 20 26 / 0.7);
   transform: translateY(calc(100% + 24px));
@@ -2718,8 +2718,8 @@ main,
   border: 1px solid var(--line-light);
   border-radius: 24px;
   background: rgb(255 244 238 / 0.06);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
   text-align: left;
   transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.4s var(--ease);
 }
@@ -2845,8 +2845,8 @@ html:not(.motion) .figure-stage {
   .review-card,
   .offer,
   .portal-lang {
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 
   .t-card {
@@ -3464,8 +3464,8 @@ html:not(.motion) .figure-stage {
   border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   background: var(--glass);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 .menu-item-head {
@@ -3549,8 +3549,8 @@ html:not(.motion) .figure-stage {
   border: 1px solid var(--glass-line);
   border-radius: var(--radius);
   background: var(--glass);
-  backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
 }
 
 .course-num {
@@ -3658,8 +3658,8 @@ html:not(.motion) .figure-stage {
 @media (hover: none) and (pointer: coarse) {
   .menu-item,
   .course-card {
-    backdrop-filter: none;
     -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     background: rgb(255 248 245 / 0.88);
   }
 }

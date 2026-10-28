@@ -126,8 +126,10 @@ decorative lines that looked like placeholders.
   while still two screens away, so tapping a group starts the new figure at once (crossfading with the last).
   The models are ~100k triangles, meshopt-compressed (about 300 KB each).
   With reduced motion there are no figures and the space closes.
-- **Floating social gems**: rose-quartz Instagram and Facebook buttons fixed at the right edge, arriving one by
-  one once the visitor starts scrolling, then floating and catching a glint. A tap never leaves the site on its
+- **Floating social gems**: Instagram and Facebook fixed at the right edge as two small 3D rose-quartz gua sha
+  stones (`src/socials3d.js`), each with its mark inlaid in rose gold on both faces, arriving one by one once the
+  visitor starts scrolling, then turning slowly and bobbing in place, and turning face-on when a finger or mouse
+  comes near (round CSS gems without WebGL). A tap never leaves the site on its
   own: a small card rises from the gem ("You're about to visit BE BEAUTY on Facebook") with Continue and Cancel.
 - **Couture masthead**: the BE BEAUTY wordmark centred in rose-gold foil with "Salon & Academy" beneath, the menu
   and a sound gem on its left, the language pill (and on wider screens Book now) on its right, and on desktop the

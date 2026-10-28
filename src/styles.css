@@ -4503,6 +4503,43 @@ html:not(.motion) .figure-stage {
   transform: scale(0.94);
 }
 
+/* As 3D gua sha stones (src/socials3d.js): the stones are drawn over the links,
+   which keep their place for taps and focus but drop their gems. */
+.socials-stage {
+  position: absolute;
+  left: -26px;
+  top: -26px;
+  width: calc(100% + 52px);
+  height: calc(100% + 52px);
+  pointer-events: none;
+}
+
+.socials.is-3d {
+  gap: 26px;
+}
+
+.socials.is-3d .social,
+.socials.is-3d .social:hover {
+  background: none;
+  box-shadow: none;
+  animation: none;
+}
+
+.socials.is-3d.is-summoned .social:hover {
+  transform: none;
+}
+
+.socials.is-3d .social::after,
+.socials.is-3d .social svg {
+  opacity: 0;
+}
+
+.socials.is-3d .social:focus-visible {
+  outline: 1px solid rgb(231 163 160 / 0.8);
+  outline-offset: 8px;
+  border-radius: 40%;
+}
+
 /* Not while the portal, the premiere or the phone menu is up. */
 .portal-open .socials,
 .is-premiere .socials,

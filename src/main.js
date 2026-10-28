@@ -124,6 +124,10 @@ function initSocials() {
     if (Math.abs(window.scrollY - start) < 24) return;
     dock.classList.add('is-summoned');
     window.removeEventListener('scroll', summon);
+    // As they arrive, the gems become 3D gua sha stones (three.js loads only now).
+    import('./socials3d.js')
+      .then(({ initSocialStones }) => initSocialStones(dock))
+      .catch(() => {});
   };
   window.addEventListener('scroll', summon, { passive: true });
   initLeave(dock);

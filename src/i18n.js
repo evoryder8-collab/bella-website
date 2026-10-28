@@ -34,8 +34,10 @@ export function currentLang() {
   return current;
 }
 
+// Returns a function that stops listening.
 export function onLangChange(fn) {
   listeners.add(fn);
+  return () => listeners.delete(fn);
 }
 
 export function setLang(lang, { persist = true } = {}) {
@@ -44,8 +46,8 @@ export function setLang(lang, { persist = true } = {}) {
   const strings = copy[lang];
   const hrefs = links(lang);
 
+  // The page's <title> carries its own data-i18n key, so it is translated below.
   document.documentElement.lang = lang;
-  document.title = strings.meta.title;
 
   for (const el of document.querySelectorAll('[data-i18n]')) {
     const value = lookup(strings, el.dataset.i18n);

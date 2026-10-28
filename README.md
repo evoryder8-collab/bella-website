@@ -15,7 +15,9 @@ npm run dev
 Then open http://localhost:5173. `npm run build` writes the static site to `dist/`.
 
 - Copy, contact details, studios and prices: [`src/content.js`](src/content.js). What Bella still needs to confirm: [`CONTENT.md`](CONTENT.md).
-- Markup: [`index.html`](index.html). Elements with `data-i18n`, `data-contact` and `data-link` are filled from `src/content.js`, both at build time (`vite.config.js`) and when the language changes (`src/i18n.js`).
+- Pages: the home page [`index.html`](index.html), plus [`om/`](om/index.html) (About Bella), [`behandlingar/`](behandlingar/index.html) (treatments and prices), [`akademi/`](akademi/index.html) (Academy and Corporate Wellness) and [`kontakt/`](kontakt/index.html) (studios, map, contact). The header, menu, portal, footer and booking bar are shared from [`src/partials/`](src/partials), pulled in at build time by `vite.config.js`.
+- Moving between pages: [`src/router.js`](src/router.js) fetches the next page and swaps its `<main>` under a satin curtain, so the 3D world and the music carry on; each page's scenes start and stop with it (`mountPage` in `src/main.js`, `mountMotion` in `src/motion.js`). Every page is also a real file that works on its own.
+- Markup: [`index.html`](index.html) and the page folders. Elements with `data-i18n`, `data-contact` and `data-link` are filled from `src/content.js`, both at build time (`vite.config.js`) and when the language changes (`src/i18n.js`).
 - Styles: [`src/styles.css`](src/styles.css), written phone first (base rules are the 375px layout).
 - Motion (GSAP ScrollTrigger, Lenis): [`src/motion.js`](src/motion.js). Section colours that blend instead of cutting: [`src/tones.js`](src/tones.js).
 - The 3D world (three.js, lazy-loaded) in [`src/world/`](src/world): one fixed WebGL scene behind the page with the rose-quartz stone (`quartz.js`), the satin ribbon (`ribbon.js`), pearl light (`pearls.js`), the scroll-graded backdrop (`atmosphere.js`) and every photo redrawn as liquid (`media.js`). `index.js` runs the scene and keeps the stone with the hero.

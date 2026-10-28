@@ -1,40 +1,17 @@
 <!doctype html>
-<!-- Text marked data-i18n / data-contact and hrefs marked data-link are filled
-     from src/content.js at build time (vite.config.js) and on language change. -->
+<!-- The home page. Text marked data-i18n / data-contact and hrefs marked data-link
+     are filled from src/content.js at build time (vite.config.js) and on language
+     change. Each include marker pulls in a file from src/partials/. -->
 <html lang="sv">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex">
+<!-- @include head -->
   <title data-i18n="meta.title"></title>
   <meta name="description" content="" data-i18n-attr="content:meta.description">
-  <meta name="theme-color" content="#F6E9E4">
-  <link rel="icon" href="./src/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
   <link rel="preload" as="image" href="./src/images/hero-bella.jpg" fetchpriority="high">
-  <script>
-    // Hide reveal targets until the motion script runs; show them anyway if it never does.
-    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.documentElement.classList.add('motion');
-      setTimeout(() => document.documentElement.classList.contains('motion-ready') || document.documentElement.classList.remove('motion'), 3000);
-    }
-    // First visit (or ?intro): open the sound and language portal before anything else paints.
-    try {
-      if (!localStorage.getItem('bebeauty-entered') || /[?&]intro\b/.test(location.search)) document.documentElement.classList.add('portal-open');
-    } catch {
-      document.documentElement.classList.add('portal-open');
-    }
-  </script>
-  <link rel="stylesheet" href="./src/styles.css">
-  <script type="module" src="./src/main.js"></script>
 </head>
 <body>
-  <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
+<!-- @include top -->
 
-  <!-- First visit: sound, then language (src/portal.js). It only shows while the
-       head script's .portal-open is set, so without JavaScript the site opens directly. -->
   <!-- Between the portal and the page: "Bella Bayar presents", then the dark opens on her portrait. -->
   <div class="premiere" data-premiere aria-hidden="true">
     <canvas class="premiere-dust" data-premiere-dust></canvas>
@@ -43,89 +20,18 @@
       <span class="premiere-line" data-premiere-line></span>
       <p class="premiere-presents" data-premiere-presents data-i18n="premiere.presents"></p>
     </div>
-  </div>
-
-  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
-    <p class="portal-mark" aria-hidden="true">BE <em>BEAUTY</em></p>
-    <div class="portal-step" data-step="sound">
-      <span class="portal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <h2 class="portal-title" id="portal-title" data-portal-text="soundTitle"></h2>
-      <p class="portal-lead" data-portal-text="soundLead"></p>
-      <div class="portal-actions">
-        <button type="button" class="portal-yes" data-sound-choice="on">
-          <span class="portal-yes-label"><span data-portal-text="yes"></span><span class="portal-yes-tag" data-portal-text="recommended"></span></span>
-          <span class="portal-yes-arrow" aria-hidden="true">→</span>
-        </button>
-        <button type="button" class="portal-no" data-sound-choice="off" data-portal-text="no"></button>
+    <div class="premiere-award" data-premiere-award>
+      <div class="premiere-seal">
+        <svg class="premiere-laurel" data-premiere-laurel viewBox="0 0 320 200" focusable="false"></svg>
+        <span class="premiere-seal-year">2026</span>
       </div>
-    </div>
-    <div class="portal-step" data-step="lang" hidden>
-      <h2 class="portal-title" data-portal-text="langTitle"></h2>
-      <p class="portal-lead" data-portal-text="langLead"></p>
-      <div class="portal-langs" role="group">
-        <button type="button" class="portal-lang" data-pick="sv" lang="sv">
-          <span class="portal-lang-name">Svenska</span><span class="portal-lang-code">SV</span>
-          <span class="portal-progress" aria-hidden="true"></span>
-        </button>
-        <button type="button" class="portal-lang" data-pick="en" lang="en">
-          <span class="portal-lang-name">English</span><span class="portal-lang-code">EN</span>
-          <span class="portal-progress" aria-hidden="true"></span>
-        </button>
-      </div>
-      <div class="portal-auto">
-        <p aria-live="polite"><span data-portal-detected></span> · <span data-portal-count></span></p>
-        <button type="button" class="portal-pause" data-portal-pause aria-pressed="false"><span class="portal-pause-icon" aria-hidden="true"></span><span class="visually-hidden" data-portal-pause-label></span></button>
-      </div>
+      <p class="premiere-award-kicker" data-i18n="premiere.awardKicker"></p>
+      <p class="premiere-award-title" data-i18n="premiere.award"></p>
+      <p class="premiere-award-quote" data-i18n="premiere.awardQuote"></p>
     </div>
   </div>
 
-  <header class="site-header" data-header>
-    <div class="header-inner">
-      <a class="wordmark" href="#top">BE <em>BEAUTY</em></a>
-      <nav class="nav" data-i18n-attr="aria-label:ui.menu">
-        <ul>
-          <li><a href="#metoden" data-i18n="nav.method"></a></li>
-          <li><a href="#behandlingar" data-i18n="nav.treatments"></a></li>
-          <li><a href="#om" data-i18n="nav.about"></a></li>
-          <li><a href="#omdomen" data-i18n="nav.reviews"></a></li>
-          <li><a href="#studior" data-i18n="nav.studios"></a></li>
-        </ul>
-      </nav>
-      <div class="header-actions">
-        <button type="button" class="sound-toggle" data-sound-toggle aria-pressed="false" data-i18n-attr="aria-label:ui.sound"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
-        <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
-          <button type="button" data-lang="sv" aria-pressed="true">SV</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
-        </div>
-        <a class="btn btn-solid btn-small header-book" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
-          <span class="visually-hidden" data-i18n="ui.menu"></span>
-          <span class="menu-toggle-lines" aria-hidden="true"></span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
-    <nav class="mobile-nav" data-i18n-attr="aria-label:ui.menu">
-      <ol>
-        <li><a href="#metoden"><span class="mobile-nav-num">01</span><span data-i18n="nav.method"></span></a></li>
-        <li><a href="#behandlingar"><span class="mobile-nav-num">02</span><span data-i18n="nav.treatments"></span></a></li>
-        <li><a href="#om"><span class="mobile-nav-num">03</span><span data-i18n="nav.about"></span></a></li>
-        <li><a href="#omdomen"><span class="mobile-nav-num">04</span><span data-i18n="nav.reviews"></span></a></li>
-        <li><a href="#studior"><span class="mobile-nav-num">05</span><span data-i18n="nav.studios"></span></a></li>
-      </ol>
-    </nav>
-    <div class="mobile-menu-foot">
-      <a class="btn btn-solid" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.bookFull"></a>
-      <p class="mobile-menu-contact">
-        <a data-link="mailto" href="#" data-contact="email"></a>
-        <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
-      </p>
-    </div>
-  </div>
-
-  <main id="main">
+  <main id="main" data-page="home">
     <!-- Hero: the portrait becomes a touch-reactive WebGL surface (src/hero-sculpt.js). -->
     <section class="hero" id="top" data-hero data-tone="light">
       <div class="hero-media" data-hero-media data-gl-media>
@@ -525,23 +431,6 @@
     </section>
   </main>
 
-  <footer class="site-footer" data-tone="dark">
-    <div class="wrap footer-inner">
-      <p class="footer-mark" aria-hidden="true">BE BEAUTY</p>
-      <p class="footer-tagline">Beauty. Balance. <em>Glow.</em></p>
-      <p class="footer-sub" data-i18n="footer.sub"></p>
-      <p class="footer-links">
-        <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
-        <a data-link="mailto" href="#" data-contact="email"></a>
-      </p>
-      <p class="footer-small">© <span data-year></span> BE BEAUTY. <span data-i18n="footer.rights"></span> <a href="#top" data-i18n="footer.top"></a></p>
-    </div>
-  </footer>
-
-  <!-- Thumb-zone booking bar on phones. -->
-  <div class="book-bar" data-book-bar>
-    <p class="book-bar-rating"><span class="star" aria-hidden="true">★</span><span data-i18n="ui.barRating"></span></p>
-    <a class="btn btn-solid btn-small" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
-  </div>
+<!-- @include bottom -->
 </body>
 </html>

@@ -94,9 +94,17 @@ export function initWorld() {
 
   const html = document.documentElement;
   atmosphere.uniforms.uDim.value = html.classList.contains('portal-open') ? 1 : 0;
-  const hero = document.querySelector('[data-hero]');
-  const hint = hero.querySelector('[data-hero-hint]');
-  const portraitEl = document.querySelector('.hero-media');
+  // What the stone belongs to on this page: the home page's portrait, or the
+  // resting place beside another page's title. Found again on every page change.
+  let hint = null;
+  let portraitEl = null;
+  let restEl = null;
+  const findPage = () => {
+    hint = document.querySelector('[data-hero-hint]');
+    portraitEl = document.querySelector('.hero-media');
+    restEl = document.querySelector('[data-stone-rest]');
+  };
+  findPage();
   const boxOf = (el) => (el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el).getBoundingClientRect();
 
   // ---- Layout: sizes, and everything built from the page height ----
@@ -117,7 +125,7 @@ export function initWorld() {
     atmosphere.repaint();
     sections = [...document.querySelectorAll('[data-tone]')].map((el) => ({ el, dark: el.dataset.tone === 'dark' }));
     const boundaries = sections.slice(1).map(({ el }) => boxOf(el).top + window.scrollY);
-    ribbon.build({ total, vh, k, step: q.step, boundaries, halfWidthAt });
+    ribbon.build({ total, vh, k, step: q.step, boundaries, halfWidthAt, sweep: Boolean(portraitEl?.isConnected) });
     pearls.build({ total, k, count: q.pearls, halfWidthAt });
     pearls.uniforms.uPixelRatio.value = renderer.getPixelRatio();
   };
@@ -128,6 +136,12 @@ export function initWorld() {
   };
   window.addEventListener('resize', relayout);
   ScrollTrigger.addEventListener('refresh', relayout);
+  // A new page swapped in (src/router.js): its photos, sections and stone rest.
+  window.addEventListener('bb:page', () => {
+    findPage();
+    media.refresh();
+    layout();
+  });
   // Late fonts, images or copy changes move the sections; re-measure when the page grows or shrinks.
   new ResizeObserver(relayout).observe(document.body);
   watchPointer();
@@ -147,11 +161,24 @@ export function initWorld() {
 
   // The stone belongs to the hero: presented alone in the portal, then resting
   // by Bella's cheek and following a finger over her portrait. It leaves with
-  // the hero as you scroll rather than following you down the page.
+  // the hero as you scroll rather than following you down the page. On the
+  // other pages it floats, turning slowly, beside the page's title.
   const target = (now, t) => {
     if (html.classList.contains('portal-open')) {
       const lang = html.classList.contains('portal-picking');
       return { x: vw / 2, y: vh * (lang ? 0.15 : 0.25), scale: (q.coarse ? 0.62 : 0.72) * (lang ? 0.8 : 1), glow: 0.45, follow: false, portrait: false };
+    }
+    if (!portraitEl?.isConnected) {
+      const rest = restEl?.isConnected ? restEl.getBoundingClientRect() : null;
+      if (!rest) return { x: vw + 220, y: vh * 0.3, scale: 0.4, glow: 0.05, follow: false, portrait: false };
+      return {
+        x: rest.left + rest.width / 2 + Math.sin(t * 0.6) * 6,
+        y: rest.top + rest.height / 2 + Math.sin(t * 0.9) * 8,
+        scale: q.coarse ? 0.42 : 0.52,
+        glow: 0.12,
+        follow: false,
+        portrait: false,
+      };
     }
     const rect = portraitEl.getBoundingClientRect();
     const scale = q.coarse ? 0.55 : 0.7;

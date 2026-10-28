@@ -4,6 +4,8 @@
 // TCM), and a traditional acupuncture figure with meridians and points, after
 // the classic bronze statues (body). Line art draws itself in each time the
 // group changes; points pulse and qi flows continuously. Purely decorative.
+// A stage with data-figure="n" always shows that one figure (the treatments
+// page has one per group); otherwise it follows the group in view.
 
 const MIRROR = 'matrix(-1 0 0 1 240 0)';
 
@@ -121,13 +123,14 @@ const SVG = `
   </g>
 </svg>`;
 
-export function initFigures(stage) {
+export function initFigures(stage, { signal } = {}) {
   if (!stage) return;
   stage.innerHTML = SVG;
   const figures = [...stage.querySelectorAll('.figure')];
+  const fixed = stage.dataset.figure;
   let current = -1;
   let seen = false;
-  let wanted = 0;
+  let wanted = fixed ? Number(fixed) : 0;
 
   const show = (index) => {
     wanted = index;
@@ -148,6 +151,7 @@ export function initFigures(stage) {
     show(wanted);
   }, { threshold: 0.4 });
   visible.observe(stage);
+  signal?.addEventListener('abort', () => visible.disconnect());
 
-  document.addEventListener('treatmentgroup', (event) => show(event.detail));
+  if (!fixed) document.addEventListener('treatmentgroup', (event) => show(event.detail), { signal });
 }

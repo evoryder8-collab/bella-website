@@ -25,6 +25,17 @@ export function lockScroll(locked) {
   if (lenis) locked ? lenis.stop() : lenis.start();
 }
 
+// Jumps straight to the top, or to an element (behind the page curtain).
+export function jumpToTop() {
+  if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
+  else window.scrollTo(0, 0);
+}
+
+export function jumpTo(target) {
+  if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+  else target.scrollIntoView();
+}
+
 export function initMotion() {
   // Lenis drives touch scrolling too (syncTouch). Native touch scrolling runs on
   // its own thread, a frame ahead of the WebGL world, which made the backdrop
@@ -35,16 +46,7 @@ export function initMotion() {
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 
-  heroSink();
-  approachScene();
-  textReveals();
-  imageReveals();
-  parallax();
-  counters();
-  stars();
-  pressTilt();
-  quoteWords();
-  timeline();
+  // The footer is shared by every page, so its motion is set up once.
   footerMark();
 
   document.documentElement.classList.add('motion-ready');
@@ -56,6 +58,29 @@ export function initMotion() {
   document.fonts?.ready.then(() => ScrollTrigger.refresh());
 }
 
+// The scroll scenes of the page in <main>. Each one skips itself when its
+// elements aren't on this page. Returns a function that undoes them all, for
+// when the page is swapped for another (src/router.js).
+export function mountMotion() {
+  const cleanups = [];
+  const context = gsap.context(() => {
+    heroSink();
+    approachScene();
+    textReveals();
+    imageReveals();
+    parallax();
+    counters();
+    stars();
+    pressTilt();
+    cleanups.push(quoteWords());
+    timeline();
+  });
+  return () => {
+    cleanups.forEach((cleanup) => cleanup?.());
+    context.revert();
+  };
+}
+
 // Reveals animate --reveal from 0 to 1. CSS turns it into a clip for plain
 // images; src/world/media.js turns the same value into a liquid dissolve.
 const reveal = (target, vars) => gsap.fromTo(target, { '--reveal': 0 }, { '--reveal': 1, ...vars });
@@ -64,6 +89,7 @@ const reveal = (target, vars) => gsap.fromTo(target, { '--reveal': 0 }, { '--rev
 // ("Bella Bayar presents") it is slower: the portrait comes out of the dark
 // first and the title follows.
 export function playIntro({ fromDark = false } = {}) {
+  if (!document.querySelector('.hero-media')) return;
   const pace = fromDark ? 1.45 : 1;
   const tl = gsap.timeline({ delay: 0.1, defaults: { ease: 'expo.out' } });
   tl.add(reveal('.hero-media', { duration: 1.8 * pace, ease: 'power2.inOut' }))
@@ -74,6 +100,7 @@ export function playIntro({ fromDark = false } = {}) {
 }
 
 function heroSink() {
+  if (!document.querySelector('.hero-media')) return;
   // Hidden until the intro plays. Set inline, because the WebGL portrait reads
   // --reveal from the element's own style.
   gsap.set('.hero-media', { '--reveal': 0 });
@@ -88,6 +115,7 @@ function heroSink() {
 // Beauty. Balance. Glow. One pinned screen: each panel wipes up over the last.
 function approachScene() {
   const stage = document.querySelector('[data-approach-stage]');
+  if (!stage) return;
   const panels = gsap.utils.toArray('[data-approach-panel]', stage);
   const part = (panel, selector) => panel.querySelector(selector);
 
@@ -131,6 +159,7 @@ function approachScene() {
 }
 
 function textReveals() {
+  if (!document.querySelector('[data-reveal]')) return;
   gsap.set('[data-reveal]', { opacity: 0, y: 32 });
   ScrollTrigger.batch('[data-reveal]', {
     start: 'top 90%',
@@ -197,6 +226,7 @@ function counters() {
 }
 
 function stars() {
+  if (!document.querySelector('[data-stars]')) return;
   gsap.fromTo(
     '[data-stars]',
     { width: '0%' },
@@ -205,6 +235,7 @@ function stars() {
 }
 
 function pressTilt() {
+  if (!document.querySelector('[data-tilt]')) return;
   gsap.fromTo(
     '[data-tilt]',
     { rotate: 16, yPercent: 30 },
@@ -243,10 +274,16 @@ function quoteWords() {
   };
 
   build();
-  onLangChange(build);
+  const stop = onLangChange(build);
+  return () => {
+    stop();
+    tween?.scrollTrigger?.kill();
+    tween?.kill();
+  };
 }
 
 function timeline() {
+  if (!document.querySelector('[data-timeline]')) return;
   gsap.fromTo(
     '[data-timeline]',
     { '--progress': 0 },
@@ -258,6 +295,7 @@ function footerMark() {
   gsap.fromTo(
     '.footer-mark',
     { xPercent: 8 },
-    { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: true } },
+    // Measured after the page's own scenes (which can add pinned scroll length above it).
+    { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '.site-footer', start: 'top bottom', end: 'bottom bottom', scrub: true, refreshPriority: -1 } },
   );
 }

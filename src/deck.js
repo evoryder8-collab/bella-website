@@ -7,7 +7,7 @@ import { whoosh } from './sound.js';
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const THROW = 90; // px of drag before a release counts as a throw
 
-export function initDeck(root) {
+export function initDeck(root, { signal } = {}) {
   if (!root) return;
   const cards = [...root.querySelectorAll('[data-deck-card]')];
   const index = root.querySelector('[data-deck-index]');
@@ -72,13 +72,13 @@ export function initDeck(root) {
   root.querySelector('[data-deck-next]').addEventListener('click', () => toss(cards[order[0]], 1));
   root.querySelector('[data-deck-prev]').addEventListener('click', () => advance(-1));
   layout();
-  if (!reducedMotion) nudge(root, () => cards[order[0]]);
+  if (!reducedMotion) nudge(root, () => cards[order[0]], signal);
 }
 
 // The first time the deck comes into view, the top card swings out to the
 // right, back past centre and home, as if someone tried a swipe, so it reads as
 // a deck you can throw. A gentler second swing follows if nobody has touched it.
-function nudge(root, topCard) {
+function nudge(root, topCard, signal) {
   let touched = false;
   root.addEventListener('pointerdown', () => (touched = true), { passive: true, once: true });
 
@@ -109,4 +109,5 @@ function nudge(root, topCard) {
     { threshold: 0.6 },
   );
   seen.observe(root.querySelector('[data-deck-cards]'));
+  signal?.addEventListener('abort', () => seen.disconnect());
 }

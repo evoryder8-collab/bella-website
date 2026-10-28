@@ -6,7 +6,7 @@ import { chime } from './sound.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-export function initCarousel(root, chipsRoot) {
+export function initCarousel(root, chipsRoot, { signal } = {}) {
   if (!root) return;
   const track = root.querySelector('[data-track]');
   const cards = [...track.querySelectorAll('[data-card]')];
@@ -60,7 +60,7 @@ export function initCarousel(root, chipsRoot) {
   const schedule = () => (frame ||= requestAnimationFrame(update));
 
   track.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule);
+  window.addEventListener('resize', schedule, { signal });
   for (const chip of chips) {
     chip.addEventListener('click', () => {
       pinned = chip.dataset.group;
@@ -76,14 +76,14 @@ export function initCarousel(root, chipsRoot) {
   prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: reducedMotion ? 'auto' : 'smooth' }));
   next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: reducedMotion ? 'auto' : 'smooth' }));
   update();
-  if (!reducedMotion) nudge(track);
+  if (!reducedMotion) nudge(track, signal);
 }
 
 // The first time the cards come into view they lean to the left and spring
 // back, saying "there is more this way"; a smaller second nudge follows if
 // nobody has swiped yet. The track itself moves (not its scroll position), so
 // scroll snapping never fights it.
-function nudge(track) {
+function nudge(track, signal) {
   let touched = false;
   for (const type of ['pointerdown', 'touchstart', 'wheel']) {
     track.addEventListener(type, () => (touched = true), { passive: true, once: true });
@@ -114,4 +114,5 @@ function nudge(track) {
     { threshold: 0.6 },
   );
   seen.observe(track);
+  signal?.addEventListener('abort', () => seen.disconnect());
 }

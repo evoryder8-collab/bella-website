@@ -1,0 +1,88 @@
+<!doctype html>
+<!-- Contact and the two studios. Text is filled from src/content.js like the home page (see index.html). -->
+<html lang="sv">
+<head>
+<!-- @include head -->
+  <title data-i18n="pages.contact.title"></title>
+  <meta name="description" content="" data-i18n-attr="content:pages.contact.description">
+</head>
+<body>
+<!-- @include top -->
+
+  <main id="main" data-page="contact">
+    <section class="page-hero" id="top" data-tone="light" aria-labelledby="page-title">
+      <div class="wrap page-hero-grid">
+        <div class="page-hero-copy">
+          <p class="section-label" data-reveal data-i18n="pages.contact.label"></p>
+          <h1 class="page-title" id="page-title" data-reveal data-i18n="pages.contact.heading"></h1>
+          <p class="page-lead" data-reveal data-i18n="pages.contact.lead"></p>
+          <div class="page-hero-actions" data-reveal>
+            <a class="btn btn-solid" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.bookFull"></a>
+            <a class="btn btn-ghost btn-ghost-dark" data-link="mailto" href="#" data-i18n="pages.contact.email"></a>
+          </div>
+        </div>
+        <div class="page-hero-side">
+          <figure class="page-hero-media" data-reveal-image data-gl-media data-gl-alive>
+            <img data-parallax src="../src/images/studio.jpg" width="1179" height="1150" alt="" data-i18n-attr="alt:approach.items.0.imageAlt">
+          </figure>
+          <span class="stone-rest" data-stone-rest aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- The two studios, on the globe-to-street map -->
+    <section class="studios section" id="studior" data-tone="light" aria-labelledby="studios-title">
+      <div class="wrap">
+        <p class="section-label" data-reveal data-i18n="studios.label"></p>
+        <h2 class="section-title" id="studios-title" data-reveal data-i18n="studios.title"></h2>
+      </div>
+      <div class="studio-map">
+        <canvas class="space" data-space aria-hidden="true"></canvas>
+        <div class="map" data-map role="img" data-i18n-attr="aria-label:studios.mapAlt"></div>
+        <div class="map-chips" role="group" data-i18n-attr="aria-label:studios.label">
+          <button type="button" class="chip" data-studio="0" aria-pressed="false" data-i18n="studios.items.0.name"></button>
+          <button type="button" class="chip" data-studio="1" aria-pressed="false" data-i18n="studios.items.1.name"></button>
+        </div>
+      </div>
+      <div class="wrap studio-info">
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.items.0.name"></h3>
+          <p data-i18n="studios.items.0.address"></p>
+          <a class="text-link" data-link="directions0" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.items.1.name"></h3>
+          <p data-i18n="studios.items.1.address"></p>
+          <a class="text-link" data-link="directions1" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.hoursLabel"></h3>
+          <p data-i18n="studios.hours"></p>
+        </div>
+        <div class="studio-card" data-reveal>
+          <h3 data-i18n="studios.contactLabel"></h3>
+          <p class="studio-contact">
+            <a data-link="mailto" href="#" data-contact="email"></a>
+            <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Write to us -->
+    <section class="page-cta section" data-tone="dark" aria-labelledby="write-title">
+      <div class="wrap page-cta-inner">
+        <p class="section-label" data-reveal data-i18n="pages.contact.writeLabel"></p>
+        <h2 class="page-cta-title" id="write-title" data-reveal data-i18n="pages.contact.writeTitle"></h2>
+        <p class="page-cta-text" data-reveal data-i18n="pages.contact.writeText"></p>
+        <p class="write-links" data-reveal>
+          <a data-link="mailto" href="#" data-contact="email"></a>
+          <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+<!-- @include bottom -->
+</body>
+</html>

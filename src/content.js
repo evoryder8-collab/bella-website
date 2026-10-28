@@ -102,7 +102,13 @@ export const copy = {
       sound: 'Ljud',
     },
     // The first-visit portal (src/portal.js), shown in the device's language.
-    premiere: { presents: 'presenterar' },
+    // Stockholm Beauty Week, October 2026; the jury's words are translated from English.
+    premiere: {
+      presents: 'presenterar',
+      awardKicker: 'Stockholm Beauty Week',
+      award: 'Bästa skönhetssalong',
+      awardQuote: '”En sinnlig upplevelse bortom det vanliga, där öst möter väst. Inga nålar behövs.”',
+    },
     portal: {
       soundTitle: 'Ljud på?',
       soundLead: 'BE BEAUTY är skapat för att upplevas med ljud. Mjukt, stilla och nära.',
@@ -123,6 +129,9 @@ export const copy = {
       about: 'Om Bella',
       reviews: 'Omdömen',
       studios: 'Studior',
+      home: 'Hem',
+      academy: 'Akademi',
+      contact: 'Kontakt',
     },
     hero: {
       eyebrow: 'Face Sculpting · Stockholm',
@@ -327,6 +336,70 @@ export const copy = {
       contactLabel: 'Kontakt',
       mapAlt: 'Karta över BE BEAUTYs två studior i Stockholm',
     },
+    // The pages beyond the home page (om/, behandlingar/, akademi/, kontakt/).
+    pages: {
+      common: {
+        seeTreatments: 'Se alla behandlingar',
+        aboutBella: 'Läs om Bella',
+      },
+      about: {
+        title: 'Om Bella Bayar · BE BEAUTY',
+        description:
+          'Bella Bayar, grundare av BE BEAUTY: Face Sculptor, utbildare och internationell jurymedlem. BE BEAUTY utsågs till Bästa skönhetssalong 2026 på Stockholm Beauty Week.',
+        label: 'Om Bella',
+        awardLabel: 'Utmärkelse',
+        awardText: 'BE BEAUTY Face Sculpting utsågs till Bästa skönhetssalong 2026 på Stockholm Beauty Week.',
+        awardBy: 'Juryns motivering',
+        awardLine: 'Bästa skönhetssalong, Stockholm Beauty Week',
+        storyLabel: 'Resan',
+        storyTitle: 'Från Mongoliet till <em>Stockholm</em>',
+        galleryLabel: 'Bella i bild',
+        galleryTitle: 'Tävlingar, <em>scener</em> och studion',
+        ctaTitle: 'Möt Bella <em>i studion</em>',
+        ctaText: 'Boka en behandling i Vasastan eller på Norra Djurgården.',
+      },
+      treatments: {
+        title: 'Behandlingar och priser · BE BEAUTY',
+        description:
+          'Alla BE BEAUTYs behandlingar med priser: Femina Bella Est®, buckal massage, Gua Sha, Signatur TCM och kroppsbehandlingar i Stockholm.',
+        label: 'Behandlingar',
+        heading: 'Alla <em>behandlingar</em>',
+        note: 'Ordinarie priser från Bokadirekt. Paket och kampanjer hittar du där.',
+        groupTitles: ['Skulptera <em>ansiktet</em>', 'Österländsk <em>visdom</em>', 'Hela <em>kroppen</em>'],
+        groupLeads: [
+          'Skulpterande ansiktsbehandlingar med Gua Sha, buckal massage och lymfdränage för ett naturligt lyft.',
+          'Bellas signaturbehandlingar, där traditionell kinesisk medicin, meridianer och akupressur möter modern Face Sculpting.',
+          'Gua Sha, lymfdränage och fascia release för kroppen, från bröstkorg och mage till kropp och ansikte i ett.',
+        ],
+        ctaTitle: 'Vet du inte <em>var du ska börja?</em>',
+        ctaText: 'Boka Sculpt Facial med Bella, en personlig behandling där hon läser av ansiktets struktur, spänningar och cirkulation.',
+      },
+      academy: {
+        title: 'BE BEAUTY Academy · Kurser i Face Sculpting',
+        description:
+          'Tvådagarskurser i Lymphatic Gua Sha Face Lift och Jaw Release med Bella Bayar i små grupper i Stockholm. Plus Corporate Wellness för företag.',
+        label: 'Academy',
+        teachLabel: 'Lär av Bella',
+        teachTitle: 'Från tävlingsscenen <em>till din praktik</em>',
+        teachText:
+          'Bella sitter i juryn vid internationella mästerskap och lärde i juni 2026 ut sin metod som workshop på Asia Massage Championship i Tokyo. På kurserna delar hon samma tekniker, steg för steg.',
+        coursesLabel: 'Kurser',
+        coursesTitle: 'Två kurser, <em>två dagar</em>',
+        corporateLabel: 'För företag',
+      },
+      contact: {
+        title: 'Kontakt och studior · BE BEAUTY',
+        description:
+          'Hitta till BE BEAUTYs studior på Västmannagatan 12 i Vasastan och Jaktgatan 29 på Norra Djurgården. Boka på Bokadirekt eller mejla oss.',
+        label: 'Kontakt',
+        heading: 'Välkommen <em>in</em>',
+        lead: 'Två studior i Stockholm, i Vasastan och på Norra Djurgården. Boka på Bokadirekt, eller skriv till oss om du har frågor.',
+        writeLabel: 'Skriv till oss',
+        writeTitle: 'Frågor är <em>alltid välkomna</em>',
+        writeText: 'Om behandlingar, Academy eller Corporate Wellness: mejla oss eller skicka ett meddelande på Instagram.',
+        email: 'Mejla oss',
+      },
+    },
     footer: {
       sub: 'Face Sculpting Salon & Academy i Stockholm',
       top: 'Till toppen',
@@ -353,7 +426,12 @@ export const copy = {
       next: 'Next',
       sound: 'Sound',
     },
-    premiere: { presents: 'presents' },
+    premiere: {
+      presents: 'presents',
+      awardKicker: 'Stockholm Beauty Week',
+      award: 'Best Beauty Salon',
+      awardQuote: '“A sensory experience beyond the ordinary, where East meets West. No needles needed.”',
+    },
     portal: {
       soundTitle: 'Sound on?',
       soundLead: 'BE BEAUTY is made to be felt with sound. Soft, calm and close.',
@@ -374,6 +452,9 @@ export const copy = {
       about: 'About Bella',
       reviews: 'Reviews',
       studios: 'Studios',
+      home: 'Home',
+      academy: 'Academy',
+      contact: 'Contact',
     },
     hero: {
       eyebrow: 'Face sculpting · Stockholm',
@@ -577,6 +658,69 @@ export const copy = {
       hours: 'Mon–Fri 9am–7pm<br>Sat–Sun 10am–7pm',
       contactLabel: 'Contact',
       mapAlt: 'Map of the two BE BEAUTY studios in Stockholm',
+    },
+    pages: {
+      common: {
+        seeTreatments: 'See all treatments',
+        aboutBella: 'About Bella',
+      },
+      about: {
+        title: 'About Bella Bayar · BE BEAUTY',
+        description:
+          'Bella Bayar, founder of BE BEAUTY: face sculptor, educator and international jury member. BE BEAUTY was named Best Beauty Salon 2026 at Stockholm Beauty Week.',
+        label: 'About Bella',
+        awardLabel: 'Award',
+        awardText: 'BE BEAUTY Face Sculpting was named Best Beauty Salon 2026 at Stockholm Beauty Week.',
+        awardBy: 'The jury',
+        awardLine: 'Best Beauty Salon, Stockholm Beauty Week',
+        storyLabel: 'The journey',
+        storyTitle: 'From Mongolia to <em>Stockholm</em>',
+        galleryLabel: 'Bella in pictures',
+        galleryTitle: 'Championships, <em>stages</em> and the studio',
+        ctaTitle: 'Meet Bella <em>in the studio</em>',
+        ctaText: 'Book a treatment in Vasastan or Norra Djurgården.',
+      },
+      treatments: {
+        title: 'Treatments and prices · BE BEAUTY',
+        description:
+          'Every BE BEAUTY treatment with prices: Femina Bella Est®, buccal massage, gua sha, Signature TCM and body treatments in Stockholm.',
+        label: 'Treatments',
+        heading: 'All <em>treatments</em>',
+        note: 'Regular prices from Bokadirekt, where you will also find packages and offers.',
+        groupTitles: ['Sculpt <em>the face</em>', 'Eastern <em>wisdom</em>', 'The whole <em>body</em>'],
+        groupLeads: [
+          'Sculpting facials with gua sha, buccal massage and lymphatic drainage for a natural lift.',
+          'Bella’s signature treatments, where traditional Chinese medicine, meridians and acupressure meet modern face sculpting.',
+          'Gua sha, lymphatic drainage and fascia release for the body, from chest and stomach to body and face in one.',
+        ],
+        ctaTitle: 'Not sure <em>where to start?</em>',
+        ctaText: 'Book a Sculpt Facial with Bella, a personal treatment where she reads your face’s structure, tension and circulation.',
+      },
+      academy: {
+        title: 'BE BEAUTY Academy · Face sculpting courses',
+        description:
+          'Two-day courses in Lymphatic Gua Sha Face Lift and Jaw Release with Bella Bayar, in small groups in Stockholm. Plus Corporate Wellness for companies.',
+        label: 'Academy',
+        teachLabel: 'Learn from Bella',
+        teachTitle: 'From the championship stage <em>to your practice</em>',
+        teachText:
+          'Bella sits on the jury at international championships, and in June 2026 she taught her method as a workshop at the Asia Massage Championship in Tokyo. On her courses she shares the same techniques, step by step.',
+        coursesLabel: 'Courses',
+        coursesTitle: 'Two courses, <em>two days each</em>',
+        corporateLabel: 'For companies',
+      },
+      contact: {
+        title: 'Contact and studios · BE BEAUTY',
+        description:
+          'Find BE BEAUTY’s studios at Västmannagatan 12 in Vasastan and Jaktgatan 29 in Norra Djurgården. Book on Bokadirekt or email us.',
+        label: 'Contact',
+        heading: 'Welcome <em>in</em>',
+        lead: 'Two studios in Stockholm, in Vasastan and Norra Djurgården. Book on Bokadirekt, or write to us with any questions.',
+        writeLabel: 'Write to us',
+        writeTitle: 'Questions are <em>always welcome</em>',
+        writeText: 'About treatments, the Academy or Corporate Wellness: email us or send a message on Instagram.',
+        email: 'Email us',
+      },
     },
     footer: {
       sub: 'Face sculpting salon & academy in Stockholm',

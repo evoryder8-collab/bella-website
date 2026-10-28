@@ -1,12 +1,14 @@
 import gsap from 'gsap';
+import { laurel } from './laurel.js';
 import { chime, whoosh } from './sound.js';
 
 // Between the first-visit portal and the page. The screen goes dark, with dust
 // drifting in a beam of light; "Bella Bayar" writes itself letter by letter in
-// champagne light, a glint runs across it and "presents" follows. Then the name
-// lifts away and the dark opens like an iris from her face: the portrait comes
-// first, then the BE BEAUTY title (onReveal starts the hero's own entrance).
-// A tap or key fast-forwards it.
+// champagne light, a glint runs across it and "presents" follows. The name
+// gives way to a laurel wreath that grows around 2026, over "Best Beauty
+// Salon", Stockholm Beauty Week, with the jury's words. Then the dark opens like
+// an iris from her face: the portrait comes first, then the BE BEAUTY title
+// (onReveal starts the hero's own entrance). A tap or key fast-forwards it.
 
 export function playPremiere({ onReveal }) {
   const html = document.documentElement;
@@ -23,6 +25,10 @@ export function playPremiere({ onReveal }) {
     return span;
   });
   name.replaceChildren(...letters);
+  const wreath = stage.querySelector('[data-premiere-laurel]');
+  wreath.innerHTML = laurel('premiere-gold');
+  const award = stage.querySelector('[data-premiere-award]');
+  const awardText = award.querySelectorAll('p, .premiere-seal-year');
   html.classList.add('is-premiere');
   const stopDust = dust(stage.querySelector('[data-premiere-dust]'));
 
@@ -57,14 +63,28 @@ export function playPremiere({ onReveal }) {
       { opacity: 1, letterSpacing: '0.62em', y: 0, duration: 1.4, ease: 'expo.out' },
       1.8,
     )
-    .call(() => chime(0.45, 1174.66), null, 2)
-    // The name lifts away, and the dark opens on her portrait.
-    .to(letters, { opacity: 0, yPercent: -35, filter: 'blur(12px)', duration: 0.9, ease: 'power2.in', stagger: { each: 0.035, from: 'center' } }, 3.5)
-    .to(['[data-premiere-line]', '[data-premiere-presents]'], { opacity: 0, y: -10, duration: 0.7, ease: 'power2.in' }, 3.55)
-    .call(() => whoosh(0.7), null, 3.9)
-    .call(onReveal, null, 3.9)
-    .to(stage, { '--glow': 1, duration: 0.6, ease: 'power1.out' }, 3.9)
-    .to(stage, { '--iris': reach, duration: 2.4, ease: 'power2.inOut' }, 3.95);
+    .call(() => chime(0.45, 1174.66), null, 1.95)
+    // The name lifts away; the laurel grows around the award.
+    .to(letters, { opacity: 0, yPercent: -35, filter: 'blur(12px)', duration: 0.9, ease: 'power2.in', stagger: { each: 0.035, from: 'center' } }, 3.1)
+    .to(['[data-premiere-line]', '[data-premiere-presents]'], { opacity: 0, y: -10, duration: 0.7, ease: 'power2.in' }, 3.15)
+    .set(award, { opacity: 1 }, 3.7)
+    .fromTo(wreath.querySelectorAll('.laurel-stem'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' }, 3.7)
+    .fromTo(
+      wreath.querySelectorAll('.laurel-leaf'),
+      { scale: 0, opacity: 0, transformOrigin: '0% 50%' },
+      // Both branches grow from the stem's foot up at the same time (19 leaves each).
+      { scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(2)', stagger: (i) => (i % 19) * 0.05 },
+      3.85,
+    )
+    .call(() => chime(0.55, 739.99), null, 3.9)
+    .fromTo(awardText, { opacity: 0, y: 14, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.3, ease: 'expo.out', stagger: 0.22 }, 4.15)
+    .call(() => chime(0.5, 987.77), null, 4.4)
+    .to(award, { opacity: 0, y: -14, filter: 'blur(10px)', duration: 0.8, ease: 'power2.in' }, 6.3)
+    // The dark opens on her portrait.
+    .call(() => whoosh(0.7), null, 6.75)
+    .call(onReveal, null, 6.75)
+    .to(stage, { '--glow': 1, duration: 0.6, ease: 'power1.out' }, 6.75)
+    .to(stage, { '--iris': reach, duration: 2.4, ease: 'power2.inOut' }, 6.8);
 
   // Development only: pause and seek it, to inspect a moment.
   if (import.meta.env.DEV) window.__premiere = tl;

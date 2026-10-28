@@ -122,6 +122,14 @@ decorative lines that looked like placeholders.
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
   follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and
   the BE BEAUTY title after it. A tap or key fast-forwards it. Returning visitors get the shorter hero entrance.
+- **The award**: after "presents", a laurel wreath grows round 2026 over "Best Beauty Salon", Stockholm Beauty
+  Week (October 2026), with the jury's motivation, before the dark opens on the hero.
+- **Pages** (2026-10-28, approved by the user on the condition that the home page stays exactly as it is):
+  About Bella (`om/`: the award, her story, awards and education, a gallery), Treatments (`behandlingar/`: the
+  full menu per group with its figure and prices), Academy (`akademi/`: courses and Corporate Wellness) and
+  Contact (`kontakt/`: the studios map, hours, email and Instagram). Page changes happen under a satin curtain
+  without reloading, so the 3D world, stone and sound continue; on other pages the stone floats beside the
+  title and the ribbon rides the edge from the start. With reduced motion, links load pages normally.
 - **The Hudterapeuten magazine** (`src/magazine/`): the first time the cover is fully in view it lifts off the
   page, bursts open with its pages fanning, riffles back and shuts, landing exactly as the photo it started as.
   Each leaf is simulated paper (flicked, rising against gravity, falling over the spine, a small bounce, an edge

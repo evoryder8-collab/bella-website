@@ -1,8 +1,38 @@
+import { readFileSync } from 'node:fs';
+import { dirname, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { siInstagram } from 'simple-icons';
 import { contact, copy, DEFAULT_LANG } from './src/content.js';
 import { lookup } from './src/i18n-lookup.js';
 import { links } from './src/links.js';
+
+const ROOT = dirname(fileURLToPath(import.meta.url));
+// Every page of the site; the home page is index.html, the others live in folders.
+const PAGES = ['index.html', 'om/index.html', 'behandlingar/index.html', 'akademi/index.html', 'kontakt/index.html'];
+
+// Pulls the shared parts (src/partials/*.html) into each page where it says
+// <!-- @include name -->, with {{root}} as the relative path back to the site root.
+function includePartials() {
+  return {
+    name: 'include-partials',
+    transformIndexHtml: {
+      order: 'pre',
+      handler(html, { filename }) {
+        const back = relative(dirname(filename), ROOT).replace(/\\/g, '/');
+        const root = back ? `${back}/` : './';
+        return html
+          .replace(/<!-- @include ([a-z-]+) -->/g, (_, name) => readFileSync(resolve(ROOT, 'src/partials', `${name}.html`), 'utf8'))
+          .replaceAll('{{root}}', root);
+      },
+    },
+    // Editing a partial reloads the page in development.
+    configureServer(server) {
+      server.watcher.add(resolve(ROOT, 'src/partials'));
+      server.watcher.on('change', (file) => file.includes('/src/partials/') && server.ws.send({ type: 'full-reload' }));
+    },
+  };
+}
 
 const escapeAttr = (value) => String(value).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 
@@ -59,8 +89,11 @@ export default defineConfig({
   // Relative asset paths, so the build works under /bella-website/ on GitHub
   // Pages and on a custom domain later.
   base: './',
-  plugins: [prerenderCopy()],
+  plugins: [includePartials(), prerenderCopy()],
   worker: { format: 'es' },
-  // MapLibre is a ~1.1 MB chunk, but it is lazy-loaded near the contact section.
-  build: { chunkSizeWarningLimit: 1200 },
+  build: {
+    // MapLibre is a ~1.1 MB chunk, but it is lazy-loaded near the map.
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: { input: Object.fromEntries(PAGES.map((page) => [dirname(page) === '.' ? 'home' : dirname(page), resolve(ROOT, page)])) },
+  },
 });

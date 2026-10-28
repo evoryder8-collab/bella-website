@@ -3,7 +3,7 @@
 // The three.js code and the painted pages load only once the cover is near,
 // and the photo stays as it is if WebGL is missing.
 
-export function initMagazine(figure) {
+export function initMagazine(figure, { signal } = {}) {
   if (!figure || navigator.connection?.saveData) return;
   const img = figure.querySelector('img');
   let book = null;
@@ -29,9 +29,16 @@ export function initMagazine(figure) {
     (entries) => {
       if (!entries.some((entry) => entry.intersectionRatio >= 0.75)) return;
       seen.disconnect();
-      load().then((ready) => ready && setTimeout(() => ready.play(), 180));
+      load().then((ready) => ready && !signal?.aborted && setTimeout(() => !signal?.aborted && ready.play(), 180));
     },
     { threshold: 0.75 },
   );
   seen.observe(img);
+
+  // Leaving the page: stop watching and free the WebGL canvas, playing or not.
+  signal?.addEventListener('abort', () => {
+    near.disconnect();
+    seen.disconnect();
+    book?.then((ready) => ready?.dispose());
+  });
 }

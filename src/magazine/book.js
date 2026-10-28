@@ -188,7 +188,10 @@ export async function createBook(figure, img) {
   shadow.frustumCulled = false;
   scene.add(shadow);
 
+  let disposed = false;
   const dispose = () => {
+    if (disposed) return;
+    disposed = true;
     for (const { geometry, mesh } of leaves) {
       geometry.dispose();
       mesh.material.dispose();
@@ -368,7 +371,7 @@ export async function createBook(figure, img) {
         };
       }
       const frame = (now) => {
-        if (frozen) return;
+        if (frozen || disposed) return resolve();
         acc += Math.min((now - last) / 1000, 1 / 20);
         last = now;
         while (acc >= STEP) {

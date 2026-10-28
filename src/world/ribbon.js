@@ -51,14 +51,15 @@ export function createRibbon() {
 
     // total: page height (px), vh: viewport height (px), k: world units per px
     // at z = 0, boundaries: where each section after the first starts (px),
-    // halfWidthAt(z): half the visible width at depth z.
-    build({ total, vh, k, step, boundaries, halfWidthAt }) {
+    // halfWidthAt(z): half the visible width at depth z. sweep: the home page's
+    // hero, where the ribbon crosses in front of the portrait first.
+    build({ total, vh, k, step, boundaries, halfWidthAt, sweep = true }) {
       // Through each chapter the ribbon rides one edge of the screen, clear of the
       // copy; it sweeps across only in the gap between chapters.
       const sideAt = (y) => {
         let side = 1;
         boundaries.forEach((b, i) => {
-          if (i === 0) return; // hero to the pinned scene: stays on the right
+          if (i === 0 && sweep) return; // hero to the pinned scene: stays on the right
           side += (i % 2 ? -2 : 2) * smooth(b - vh * 0.1, b + vh * 0.16, y);
         });
         return side;
@@ -68,7 +69,7 @@ export function createRibbon() {
         let z = -1.6 + Math.sin(y / (vh * 0.95) + 1.2) * 0.95;
         let nx = sideAt(y) * (1.0 + 0.05 * Math.sin(y / (vh * 0.37)));
         // Hero: one diagonal sweep in front of the portrait, then back behind the photos.
-        const hero = 1 - smooth(vh * 0.55, vh * 0.95, y);
+        const hero = sweep ? 1 - smooth(vh * 0.55, vh * 0.95, y) : 0;
         nx = nx * (1 - hero) + (-1.25 + 2.45 * smooth(vh * 0.12, vh * 0.8, y)) * hero;
         z = z * (1 - hero) + 0.7 * hero;
         // Placed so the point crosses the centre of the screen exactly when page

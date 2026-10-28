@@ -1,0 +1,91 @@
+<!doctype html>
+<!-- BE BEAUTY Academy and Corporate Wellness. Text is filled from src/content.js like the home page (see index.html). -->
+<html lang="sv">
+<head>
+<!-- @include head -->
+  <title data-i18n="pages.academy.title"></title>
+  <meta name="description" content="" data-i18n-attr="content:pages.academy.description">
+</head>
+<body>
+<!-- @include top -->
+
+  <main id="main" data-page="academy">
+    <section class="page-hero" id="top" data-tone="light" aria-labelledby="page-title">
+      <div class="wrap page-hero-grid">
+        <div class="page-hero-copy">
+          <p class="section-label" data-reveal data-i18n="pages.academy.label"></p>
+          <h1 class="page-title" id="page-title" data-reveal data-i18n="offers.academyTitle"></h1>
+          <p class="page-lead" data-reveal data-i18n="offers.academyLead"></p>
+          <p class="page-note" data-reveal data-i18n="offers.academyMeta"></p>
+          <div class="page-hero-actions" data-reveal>
+            <a class="btn btn-solid" data-link="academy" href="#" data-i18n="offers.academyCta"></a>
+          </div>
+        </div>
+        <div class="page-hero-side">
+          <figure class="page-hero-media" data-reveal-image data-gl-media data-gl-alive>
+            <img data-parallax src="../src/images/academy.jpg" width="787" height="1400" alt="" data-i18n-attr="alt:offers.academyAlt">
+          </figure>
+          <span class="stone-rest" data-stone-rest aria-hidden="true"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bella as a teacher, in numbers -->
+    <section class="teach section" data-tone="rose" aria-labelledby="teach-title">
+      <div class="wrap teach-grid">
+        <div>
+          <p class="section-label" data-reveal data-i18n="pages.academy.teachLabel"></p>
+          <h2 class="section-title" id="teach-title" data-reveal data-i18n="pages.academy.teachTitle"></h2>
+          <p class="section-intro" data-reveal data-i18n="pages.academy.teachText"></p>
+        </div>
+        <ul class="stats">
+          <li data-reveal><span class="stat-value" data-count="10" data-i18n="proof.stats.0.value"></span><span class="stat-label" data-i18n="proof.stats.0.label"></span></li>
+          <li data-reveal><span class="stat-value" data-count="3" data-i18n="proof.stats.1.value"></span><span class="stat-label" data-i18n="proof.stats.1.label"></span></li>
+          <li data-reveal><span class="stat-value" data-count="3" data-i18n="proof.stats.2.value"></span><span class="stat-label" data-i18n="proof.stats.2.label"></span></li>
+          <li data-reveal><span class="stat-value stat-word" data-i18n="proof.stats.3.value"></span><span class="stat-label" data-i18n="proof.stats.3.label"></span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- The two courses -->
+    <section class="courses-page section" data-tone="light" aria-labelledby="courses-title">
+      <div class="wrap">
+        <p class="section-label" data-reveal data-i18n="pages.academy.coursesLabel"></p>
+        <h2 class="section-title" id="courses-title" data-reveal data-i18n="pages.academy.coursesTitle"></h2>
+        <ol class="course-cards">
+          <li class="course-card" data-reveal>
+            <span class="course-num" aria-hidden="true">01</span>
+            <h3 class="course-name" data-i18n="offers.courses.0.name"></h3>
+            <p data-i18n="offers.courses.0.text"></p>
+            <p class="course-meta" data-i18n="offers.academyMeta"></p>
+          </li>
+          <li class="course-card" data-reveal>
+            <span class="course-num" aria-hidden="true">02</span>
+            <h3 class="course-name" data-i18n="offers.courses.1.name"></h3>
+            <p data-i18n="offers.courses.1.text"></p>
+            <p class="course-meta" data-i18n="offers.academyMeta"></p>
+          </li>
+        </ol>
+        <div class="courses-foot" data-reveal>
+          <p class="offer-note" data-i18n="offers.academyNote"></p>
+          <a class="btn btn-solid" data-link="academy" href="#" data-i18n="offers.academyCta"></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Corporate Wellness -->
+    <section class="page-cta section" data-tone="dark" aria-labelledby="corporate-title">
+      <div class="wrap page-cta-inner">
+        <p class="section-label" data-reveal data-i18n="pages.academy.corporateLabel"></p>
+        <h2 class="page-cta-title" id="corporate-title" data-reveal data-i18n="offers.corporateTitle"></h2>
+        <p class="page-cta-text" data-reveal data-i18n="offers.corporateLead"></p>
+        <div class="page-cta-actions" data-reveal>
+          <a class="btn btn-cream" data-link="corporate" href="#" data-i18n="offers.corporateCta"></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<!-- @include bottom -->
+</body>
+</html>

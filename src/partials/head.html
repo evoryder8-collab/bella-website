@@ -1,0 +1,24 @@
+<!-- Shared <head> for every page; {{root}} is the path back to the site root. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#F6E9E4">
+  <link rel="icon" href="{{root}}src/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Jost:wght@300;400;500&display=swap">
+  <script>
+    // Hide reveal targets until the motion script runs; show them anyway if it never does.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion');
+      setTimeout(() => document.documentElement.classList.contains('motion-ready') || document.documentElement.classList.remove('motion'), 3000);
+    }
+    // First visit (or ?intro): open the sound and language portal before anything else paints.
+    try {
+      if (!localStorage.getItem('bebeauty-entered') || /[?&]intro\b/.test(location.search)) document.documentElement.classList.add('portal-open');
+    } catch {
+      document.documentElement.classList.add('portal-open');
+    }
+  </script>
+  <link rel="stylesheet" href="{{root}}src/styles.css">
+  <script type="module" src="{{root}}src/main.js"></script>

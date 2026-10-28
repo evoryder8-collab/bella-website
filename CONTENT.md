@@ -13,7 +13,8 @@ All copy and contact details live in [`src/content.js`](src/content.js), in Swed
 - [ ] Whether to show a WhatsApp or phone number. None is published, so booking goes to Bokadirekt and contact goes to email and Instagram.
 - [ ] The first-visit portal copy ("Ljud på?" / "Välj språk", `portal` in `src/content.js`) and the soundscape, which is composed in the browser and can be changed in `src/sound.js`.
 
-- [ ] The "Bella Bayar presenterar" title card after the portal (`premiere` in `src/content.js`).
+- [ ] The "Bella Bayar presenterar" title card after the portal (`premiere` in `src/content.js`), with the Stockholm Beauty Week 2026 award ("Bästa skönhetssalong"). The jury's motivation is translated into Swedish from her English Instagram post of 19 October 2026.
+- [ ] The headings and short texts written for the new pages (`pages` in `src/content.js`), such as "Från Mongoliet till Stockholm" and the group introductions on the treatments page.
 - [ ] The inside pages of the animated Hudterapeuten magazine are invented editorial layouts built from her own photos, with no readable article text (`src/magazine/pages.js`). If she has real pages from the issue and the right to show them, they can replace these.
 
 ## Contact (`contact` and `studios` in `src/content.js`)

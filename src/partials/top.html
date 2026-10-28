@@ -1,0 +1,97 @@
+<!-- Shared top of every page: skip link, first-visit portal, header, phone menu and page curtain. -->
+  <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
+
+  <!-- First visit: sound, then language (src/portal.js). It only shows while the
+       head script's .portal-open is set, so without JavaScript the site opens directly. -->
+  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
+    <p class="portal-mark" aria-hidden="true">BE <em>BEAUTY</em></p>
+    <div class="portal-step" data-step="sound">
+      <span class="portal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <h2 class="portal-title" id="portal-title" data-portal-text="soundTitle"></h2>
+      <p class="portal-lead" data-portal-text="soundLead"></p>
+      <div class="portal-actions">
+        <button type="button" class="portal-yes" data-sound-choice="on">
+          <span class="portal-yes-label"><span data-portal-text="yes"></span><span class="portal-yes-tag" data-portal-text="recommended"></span></span>
+          <span class="portal-yes-arrow" aria-hidden="true">→</span>
+        </button>
+        <button type="button" class="portal-no" data-sound-choice="off" data-portal-text="no"></button>
+      </div>
+    </div>
+    <div class="portal-step" data-step="lang" hidden>
+      <h2 class="portal-title" data-portal-text="langTitle"></h2>
+      <p class="portal-lead" data-portal-text="langLead"></p>
+      <div class="portal-langs" role="group">
+        <button type="button" class="portal-lang" data-pick="sv" lang="sv">
+          <span class="portal-lang-name">Svenska</span><span class="portal-lang-code">SV</span>
+          <span class="portal-progress" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="portal-lang" data-pick="en" lang="en">
+          <span class="portal-lang-name">English</span><span class="portal-lang-code">EN</span>
+          <span class="portal-progress" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="portal-auto">
+        <p aria-live="polite"><span data-portal-detected></span> · <span data-portal-count></span></p>
+        <button type="button" class="portal-pause" data-portal-pause aria-pressed="false"><span class="portal-pause-icon" aria-hidden="true"></span><span class="visually-hidden" data-portal-pause-label></span></button>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header" data-header>
+    <div class="header-inner">
+      <a class="wordmark" href="{{root}}" data-nav>BE <em>BEAUTY</em></a>
+      <nav class="nav" data-i18n-attr="aria-label:ui.menu">
+        <ul>
+          <li><a href="{{root}}#metoden" data-nav data-i18n="nav.method"></a></li>
+          <li><a href="{{root}}behandlingar/" data-nav data-i18n="nav.treatments"></a></li>
+          <li><a href="{{root}}om/" data-nav data-i18n="nav.about"></a></li>
+          <li><a href="{{root}}akademi/" data-nav data-i18n="nav.academy"></a></li>
+          <li><a href="{{root}}kontakt/" data-nav data-i18n="nav.contact"></a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="sound-toggle" data-sound-toggle aria-pressed="false" data-i18n-attr="aria-label:ui.sound"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
+          <button type="button" data-lang="sv" aria-pressed="true">SV</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-solid btn-small header-book" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+          <span class="visually-hidden" data-i18n="ui.menu"></span>
+          <span class="menu-toggle-lines" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-menu hidden>
+    <nav class="mobile-nav" data-i18n-attr="aria-label:ui.menu">
+      <ol>
+        <li><a href="{{root}}" data-nav><span class="mobile-nav-num">01</span><span data-i18n="nav.home"></span></a></li>
+        <li><a href="{{root}}behandlingar/" data-nav><span class="mobile-nav-num">02</span><span data-i18n="nav.treatments"></span></a></li>
+        <li><a href="{{root}}om/" data-nav><span class="mobile-nav-num">03</span><span data-i18n="nav.about"></span></a></li>
+        <li><a href="{{root}}akademi/" data-nav><span class="mobile-nav-num">04</span><span data-i18n="nav.academy"></span></a></li>
+        <li><a href="{{root}}kontakt/" data-nav><span class="mobile-nav-num">05</span><span data-i18n="nav.contact"></span></a></li>
+      </ol>
+    </nav>
+    <div class="mobile-menu-foot">
+      <a class="btn btn-solid" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.bookFull"></a>
+      <p class="mobile-menu-contact">
+        <a data-link="mailto" href="#" data-contact="email"></a>
+        <a data-link="instagram" href="#" target="_blank" rel="noopener"><span class="ig-icon"></span><span data-contact="instagram"></span></a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Between pages: a satin curtain sweeps up, the next page loads behind it (src/router.js). -->
+  <div class="curtain" data-curtain aria-hidden="true">
+    <svg class="curtain-shape" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">
+      <defs>
+        <linearGradient id="curtain-satin" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#2b161d"/><stop offset="0.55" stop-color="#5e2a36"/><stop offset="1" stop-color="#8e4651"/>
+        </linearGradient>
+      </defs>
+      <path data-curtain-path fill="url(#curtain-satin)" d="M0 100 Q50 100 100 100 L100 100 Q50 100 0 100 Z"/>
+    </svg>
+    <p class="curtain-title" data-curtain-title></p>
+  </div>

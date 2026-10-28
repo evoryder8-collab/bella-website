@@ -24,31 +24,34 @@ const ROSE = {
 };
 const STREET = { zoom: 15.4, pitch: 58 };
 
-// Loads MapLibre only when the studios section is close.
-export function initMap(container, chips) {
+// Loads MapLibre only when the studios section is close. Aborting the signal
+// (leaving the page) removes the map and frees its WebGL context.
+export function initMap(container, chips, { signal } = {}) {
   if (!container) return;
   const near = new IntersectionObserver(
     (entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
       near.disconnect();
-      load(container, [...chips]).catch((error) => console.warn('Map unavailable:', error));
+      load(container, [...chips], signal).catch((error) => console.warn('Map unavailable:', error));
     },
     { rootMargin: '600px 0px' },
   );
   near.observe(container);
+  signal?.addEventListener('abort', () => near.disconnect());
 }
 
-async function load(container, chips) {
+async function load(container, chips, signal) {
   const frame = container.parentElement;
   const space = frame.querySelector('[data-space]');
   paintStarfield(space);
-  window.addEventListener('resize', () => paintStarfield(space));
+  window.addEventListener('resize', () => paintStarfield(space), { signal });
 
   const [{ Map, Marker, setWorkerUrl }, { default: workerUrl }] = await Promise.all([
     import('maplibre-gl'),
     import('maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'),
     import('maplibre-gl/dist/maplibre-gl.css'),
   ]);
+  if (signal?.aborted) return;
   setWorkerUrl(workerUrl);
 
   const animate = !matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -65,6 +68,7 @@ async function load(container, chips) {
     // Transparent around the globe, so the starfield behind shows as space.
     canvasContextAttributes: { alpha: true },
   });
+  signal?.addEventListener('abort', () => map.remove());
 
   map.on('style.load', () => {
     map.setProjection({ type: 'globe' });
@@ -158,7 +162,7 @@ async function load(container, chips) {
     const turn = () => turning && map.easeTo({ center: [map.getCenter().lng + 30, 32], duration: 9000, easing: (t) => t });
     map.on('moveend', turn);
     turn();
-    whenVisible(container, () => {
+    whenVisible(container, signal, () => {
       turning = false;
       map.off('moveend', turn);
       focus(0, 8000);
@@ -166,7 +170,7 @@ async function load(container, chips) {
   });
 }
 
-function whenVisible(container, callback) {
+function whenVisible(container, signal, callback) {
   const visible = new IntersectionObserver(
     (entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -176,6 +180,7 @@ function whenVisible(container, callback) {
     { threshold: 0.55 },
   );
   visible.observe(container);
+  signal?.addEventListener('abort', () => visible.disconnect());
 }
 
 // 3D buildings in blush, with a pale roof cap, lit from the south-west.

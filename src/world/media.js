@@ -159,7 +159,9 @@ export function createMedia(scene) {
   const geometry = new PlaneGeometry(1, 1, 24, 24);
   const glow = new Color('#f2a7a4');
   const pearl = new Color('#fff6f1');
-  const items = [...document.querySelectorAll('[data-gl-media]')].map((container, order) => {
+  let count = 0;
+  const track = (container) => {
+    const order = count++;
     const img = container.querySelector('img');
     const alive = container.hasAttribute('data-gl-alive');
     const uniforms = {
@@ -206,7 +208,8 @@ export function createMedia(scene) {
       rect: null,
       sizeKey: '',
     };
-  });
+  };
+  let items = [...document.querySelectorAll('[data-gl-media]')].map(track);
 
   const load = (item) => {
     item.state = 'loading';
@@ -236,7 +239,19 @@ export function createMedia(scene) {
   const at = (x, y) => items.find(({ rect, state }) => state === 'ready' && rect && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
 
   return {
-    items,
+    // After a page change: drop the photos that left with the old page and
+    // pick up the new page's.
+    refresh() {
+      items = items.filter((item) => {
+        if (item.container.isConnected) return true;
+        scene.remove(item.mesh);
+        item.mesh.material.dispose();
+        item.uniforms.uImage.value?.dispose();
+        return false;
+      });
+      const known = new Set(items.map((item) => item.container));
+      for (const container of document.querySelectorAll('[data-gl-media]')) if (!known.has(container)) items.push(track(container));
+    },
 
     // Call once per frame, after scrolling has been applied.
     update({ vw, vh, k, dt, bend, time, pointer, pointerActive }) {

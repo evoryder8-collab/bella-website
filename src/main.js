@@ -1,13 +1,15 @@
 import { copy } from './content.js';
 import { currentLang, initI18n } from './i18n.js';
-import { initMotion, lockScroll, playIntro, scrollToTarget } from './motion.js';
+import { initMotion, lockScroll, mountMotion, playIntro } from './motion.js';
 import { initCarousel } from './carousel.js';
 import { initDeck } from './deck.js';
 import { initFigures } from './figures.js';
+import { drawLaurels } from './laurel.js';
 import { initMagazine } from './magazine.js';
 import { initMap } from './map.js';
 import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
+import { initRouter } from './router.js';
 import { isPlaying, onSoundChange, setMuted, soundPreference, startSound } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
@@ -20,17 +22,37 @@ initI18n();
 initMenu();
 initHeader();
 initBookBar();
-initAnchors();
-initFigures(document.querySelector('[data-figure-stage]'));
-initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'));
-initDeck(document.querySelector('[data-deck]'));
-initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'));
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 
 if (!reducedMotion) {
   initMotion();
   loadWorld();
-  initMagazine(document.querySelector('[data-magazine]'));
+}
+
+// Each page's own pieces start here, and stop when the router swaps the page
+// for another; with reduced motion, links simply load the next page.
+if (reducedMotion) mountPage();
+else initRouter({ mount: mountPage });
+
+function mountPage({ entering = false } = {}) {
+  const controller = new AbortController();
+  const { signal } = controller;
+  document.querySelectorAll('[data-figure-stage]').forEach((stage) => initFigures(stage, { signal }));
+  initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'), { signal });
+  initDeck(document.querySelector('[data-deck]'), { signal });
+  initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'), { signal });
+  drawLaurels(document.querySelector('main'));
+  let stopMotion = null;
+  if (!reducedMotion) {
+    stopMotion = mountMotion();
+    initMagazine(document.querySelector('[data-magazine]'), { signal });
+    // Arriving on the home page from another page: its hero plays its entrance.
+    if (entering) playIntro();
+  }
+  return () => {
+    controller.abort();
+    stopMotion?.();
+  };
 }
 
 // The page waits behind the portal on a first visit; its entrance plays once
@@ -153,18 +175,6 @@ function initBookBar() {
   };
   window.addEventListener('scroll', update, { passive: true });
   show();
-}
-
-function initAnchors() {
-  for (const link of document.querySelectorAll('a[href^="#"]')) {
-    link.addEventListener('click', (event) => {
-      const id = link.getAttribute('href');
-      const target = id === '#top' ? document.body : document.querySelector(id);
-      if (!target || !scrollToTarget(target)) return;
-      event.preventDefault();
-      history.replaceState(null, '', id === '#top' ? location.pathname + location.search : id);
-    });
-  }
 }
 
 // The 3D world (three.js) loads after the page is up, so it never delays the

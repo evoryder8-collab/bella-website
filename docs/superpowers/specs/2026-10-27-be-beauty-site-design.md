@@ -185,7 +185,8 @@ decorative lines that looked like placeholders.
   As the visitor scrolls the section pins and the frame straightens and grows to fill the screen (full height
   on computers, the whole width on phones so the marks burned in at its top are never cropped), the header
   and floating stones stepping aside, and the film plays in that stretch of scroll, out loud when the site's
-  sound is on (the song dips under it, and the tap that turns sound on lets iOS play it out loud later).
+  sound is on (the song fades out and rests, keeping its place, and fades back in once the film is left,
+  paused or over; the tap that turns sound on lets iOS play the film out loud later).
   A second after it starts, a glowing "Keep scrolling" hint rises at its foot. Leaving takes little scrolling
   (the section is 200svh, 180svh on phones), and the first of it is felt: the frame eases back, smaller with
   rounded corners, the dark lifting and the hint fading. Sound and fullscreen buttons

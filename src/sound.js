@@ -38,7 +38,6 @@ const VOICES = {
   sv: [new URL('./voice/bella-intro-sv.m4a', import.meta.url).href, new URL('./voice/bella-intro-sv.mp3', import.meta.url).href],
 };
 const DUCK = 0.3; // the song's own level while she speaks
-const FILM_DUCK = 0.06; // and while a film plays with its own sound
 
 let ctx = null;
 let master = null;
@@ -52,6 +51,8 @@ let airGain = null;
 let sfx = null;
 let muted = false;
 let pausing = 0;
+let filmOn = false; // a film is playing out loud, and the song rests under it
+let resting = 0;
 const takes = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, []]));
 const turns = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, 0]));
 let magicHeard = false;
@@ -173,7 +174,7 @@ export function startSound() {
       song.pause();
     } else if (!muted) {
       ctx.resume();
-      song.play().catch(() => {});
+      if (!filmOn) song.play().catch(() => {});
     }
   });
 }
@@ -187,7 +188,7 @@ export function setMuted(value) {
     // The song rests once it has faded out, and carries on where it was.
     clearTimeout(pausing);
     if (value) pausing = setTimeout(() => muted && song.pause(), 1200);
-    else song.play().catch(() => {});
+    else if (!filmOn) song.play().catch(() => {});
   }
   notify();
 }
@@ -242,15 +243,34 @@ export function greet(lang, { delay = 0 } = {}) {
     const source = ctx.createBufferSource();
     source.buffer = buffer;
     source.connect(master);
-    source.onended = () => songLevel.gain.setTargetAtTime(SONG_LEVEL, ctx.currentTime, 1.4);
+    source.onended = () => !filmOn && songLevel.gain.setTargetAtTime(SONG_LEVEL, ctx.currentTime, 1.4);
     source.start(at);
   });
 }
 
-// While a film plays out loud the song all but rests under it, and rises again after.
+// While a film plays out loud the song fades out and rests, keeping its
+// place: phones stop it themselves when a film's sound starts, so the site does
+// it gently first. When the film stops, is left or ends, the song carries on
+// where it was and fades back in (unless the visitor has muted the site).
 export function duckSong(on) {
-  if (!ctx) return;
-  songLevel.gain.setTargetAtTime(SONG_LEVEL * (on ? FILM_DUCK : 1), ctx.currentTime, on ? 0.4 : 1.2);
+  if (!ctx || on === filmOn) return;
+  filmOn = on;
+  const level = songLevel.gain;
+  const now = ctx.currentTime;
+  level.cancelScheduledValues(now);
+  level.setValueAtTime(level.value, now);
+  clearTimeout(resting);
+  if (on) {
+    level.setTargetAtTime(0, now, 0.25);
+    resting = setTimeout(() => filmOn && song.pause(), 1200);
+    return;
+  }
+  if (muted) return level.setValueAtTime(SONG_LEVEL, now);
+  if (ctx.state !== 'running') ctx.resume();
+  // From silence if a phone had stopped it, so it always rises smoothly.
+  if (song.paused) level.setValueAtTime(0, now);
+  song.play().catch(() => {});
+  level.setTargetAtTime(SONG_LEVEL, now, 1.1);
 }
 
 function peakOf(buffer) {

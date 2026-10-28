@@ -126,8 +126,9 @@ decorative lines that looked like placeholders.
   while still two screens away, so tapping a group starts the new figure at once (crossfading with the last).
   The models are ~100k triangles, meshopt-compressed (about 300 KB each).
   With reduced motion there are no figures and the space closes.
-- **Floating social gems**: Instagram and Facebook fixed at the right edge as two small 3D rose-quartz gua sha
-  stones (`src/socials3d.js`), each with its mark inlaid in rose gold on both faces, arriving one by one once the
+- **Floating social gems**: Instagram and Facebook fixed at the right edge as two small 3D gua sha
+  stones (`src/socials3d.js`) in the polished rose gold of the Face, Signature TCM and Body figures, each with its
+  mark engraved in a deeper satin rose on both faces, arriving one by one once the
   visitor starts scrolling, then turning slowly and bobbing in place, and turning face-on when a finger or mouse
   comes near (round CSS gems without WebGL). A tap never leaves the site on its
   own: a small card rises from the gem ("You're about to visit BE BEAUTY on Facebook") with Continue and Cancel.

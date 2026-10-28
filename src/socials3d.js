@@ -1,5 +1,6 @@
 import {
   CanvasTexture,
+  Color,
   DirectionalLight,
   ExtrudeGeometry,
   Group,
@@ -17,8 +18,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { STONE_SEGMENTS, stoneShape } from './world/quartz.js';
 
-// The floating social links as small rose-quartz gua sha stones, each with its
-// network's mark inlaid in deep rose gold on both faces. They stand where the
+// The floating social links as small gua sha stones in the polished rose gold
+// of the Face, Signature TCM and Body figures (src/sculpture), each with its
+// network's mark engraved in a deeper satin rose on both faces. They stand where the
 // links are, arrive face-on with the marks to the visitor and hold there a
 // moment, then turn slowly and bob as if held in water, turning face-on again
 // when a mouse or finger comes near. They follow the links' own arrival
@@ -51,6 +53,32 @@ function mark(path) {
 
 const ease = (from, to, rate, dt) => from + (to - from) * Math.min(1, dt * rate);
 
+// The figures' rose gold (src/sculpture), with the same soft rose light
+// round its edges.
+function roseGold() {
+  const material = new MeshPhysicalMaterial({
+    color: '#efc0b0',
+    roughness: 0.2,
+    metalness: 1,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    iridescence: 0.18,
+    iridescenceIOR: 1.35,
+    envMapIntensity: 1.15,
+    transparent: true,
+  });
+  const rim = { value: new Color('#f4a6a2') };
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.uRim = rim;
+    shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 uRim;').replace(
+      '#include <emissivemap_fragment>',
+      `#include <emissivemap_fragment>
+      totalEmissiveRadiance += uRim * pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 3.0) * 0.5;`,
+    );
+  };
+  return material;
+}
+
 export function initSocialStones(dock) {
   let renderer;
   try {
@@ -67,12 +95,15 @@ export function initSocialStones(dock) {
   canvas.setAttribute('aria-hidden', 'true');
   dock.prepend(canvas);
 
+  // Lit as the figures are: a warm key light and a rose one from below.
   const scene = new Scene();
   scene.environment = new PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-  scene.environmentIntensity = 0.9;
-  const key = new DirectionalLight('#fff3ec', 1.5);
-  key.position.set(-2, 3, 4);
-  scene.add(key);
+  scene.environmentIntensity = 0.85;
+  const key = new DirectionalLight('#fff3ec', 1.6);
+  key.position.set(2, 4, 5);
+  const rim = new DirectionalLight('#f2aaaa', 0.9);
+  rim.position.set(-4, -1, 2);
+  scene.add(key, rim);
   const camera = new PerspectiveCamera(FOV, 1, 1, 4000);
 
   // The gua sha of the world, stood upright and smoothed into a pebble.
@@ -92,24 +123,11 @@ export function initSocialStones(dock) {
 
   const stones = [...dock.querySelectorAll('.social')].map((link, i) => {
     const group = new Group();
-    const quartz = new MeshPhysicalMaterial({
-      color: '#f0b9b8',
-      roughness: 0.08,
-      clearcoat: 1,
-      clearcoatRoughness: 0.03,
-      iridescence: 0.3,
-      iridescenceIOR: 1.3,
-      sheen: 0.4,
-      sheenColor: '#ffe8e4',
-      emissive: '#ff9aa2',
-      emissiveIntensity: 0.05,
-      envMapIntensity: 1.6,
-      transparent: true,
-    });
-    group.add(new Mesh(geometry, quartz));
+    const metal = roseGold();
+    group.add(new Mesh(geometry, metal));
     const path = link.querySelector('svg path')?.getAttribute('d');
     const gold = path
-      ? new MeshPhysicalMaterial({ map: mark(path), color: '#a3584f', metalness: 0.7, roughness: 0.28, envMapIntensity: 1.3, transparent: true, depthWrite: false })
+      ? new MeshPhysicalMaterial({ map: mark(path), color: '#6f302b', metalness: 0.35, roughness: 0.55, envMapIntensity: 0.8, transparent: true, depthWrite: false })
       : null;
     if (gold) {
       for (const side of [1, -1]) {
@@ -121,7 +139,7 @@ export function initSocialStones(dock) {
       }
     }
     scene.add(group);
-    const state = { link, group, quartz, gold, phase: i * 2.1, spin: 0, near: false, lift: 0, shown: 0 };
+    const state = { link, group, metal, gold, phase: i * 2.1, spin: 0, near: false, lift: 0, shown: 0 };
     const near = (value) => () => (state.near = value);
     link.addEventListener('pointerenter', near(true));
     link.addEventListener('pointerleave', near(false));
@@ -172,7 +190,7 @@ export function initSocialStones(dock) {
       // Starting gently, a moment apart, after they have shown their marks.
       else stone.spin += SPIN * dt * Math.min(1, Math.max(0, (stone.shown - HOLD - stone.phase * 0.4) / 1.5));
       group.rotation.set(reduced ? 0 : Math.sin(time * 0.7 + stone.phase) * 0.14, stone.spin, reduced ? 0 : Math.sin(time * 0.5 + stone.phase) * 0.09);
-      stone.quartz.opacity = opacity;
+      stone.metal.opacity = opacity;
       if (stone.gold) stone.gold.opacity = opacity;
     }
     renderer.render(scene, camera);

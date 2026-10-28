@@ -179,7 +179,7 @@ export const copy = {
     },
     awardFilm: {
       label: 'Utmärkelsen · 2026',
-      title: 'Bästa skönhetssalong, <em>Stockholm Beauty Week.</em>',
+      title: '<em>Stockholm Beauty Week.</em>',
       hint: 'Scrolla för att se',
       tag: 'Prisutdelningen · 0:38',
       aria: 'Film: BE BEAUTY tar emot priset Bästa skönhetssalong på Stockholm Beauty Week 2026',
@@ -561,7 +561,7 @@ export const copy = {
     },
     awardFilm: {
       label: 'The award · 2026',
-      title: 'Best Beauty Salon, <em>Stockholm Beauty Week.</em>',
+      title: '<em>Stockholm Beauty Week.</em>',
       hint: 'Scroll to watch',
       tag: 'The ceremony · 0:38',
       aria: 'Film: BE BEAUTY receives Best Beauty Salon at Stockholm Beauty Week 2026',

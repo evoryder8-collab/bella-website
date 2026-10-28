@@ -173,7 +173,7 @@ decorative lines that looked like placeholders.
   Week (October 2026), with the jury's motivation, before the dark opens on the hero.
 - **The award film** (`src/award.js`, 2026-10-28): after the three pillars, with a breath of night between, the
   ceremony film (0:38, vertical) works as the Zoltan site's film does. A 9:16 frame in rose-gold glass floats
-  tilted in 3D (following the mouse or the phone's tilt) beside "Best Beauty Salon, Stockholm Beauty Week."
+  tilted in 3D (following the mouse or the phone's tilt) beside "The award · 2026" and "Stockholm Beauty Week."
   As the visitor scrolls the section pins and the frame straightens and grows to fill the screen (full height
   on computers, the whole width on phones so the marks burned in at its top are never cropped), the header
   and floating stones stepping aside, and the film plays in that stretch of scroll, out loud when the site's

@@ -48,7 +48,8 @@ function quality() {
   const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
   return {
     coarse,
-    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 1.5 : 1.75),
+    // Phones draw at up to 2x for crisp sculptures; a slow device steps itself down (below).
+    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 2 : 1.75),
     transmission: lowEnd ? 0 : coarse ? 0.5 : 0.7,
     pearls: lowEnd ? 80 : coarse ? 140 : 230,
     step: coarse ? 26 : 18,

@@ -115,9 +115,13 @@ decorative lines that looked like placeholders.
   fades out at the chest in a fine halftone. Signature TCM: the same bust deepening to satin rose bronze, with
   pearl acupoints on the real face, gold light flowing along the gua sha lift lines and a rose-quartz stone
   gliding up the cheek. Body: the full figure in rose bronze after the Chinese acupuncture statues, with gold
-  meridians (front, arms and down the spine) on a slow turn, dressed over the chest and round the hips in
-  sculpted blush-silk blooms with gilded hearts and leaves (`src/world/flowers.js`) that open as it forms.
-  Figures dissolve into each other through rose dust. With reduced motion there is no world and the space closes.
+  meridians (front, arms and down the spine). It always forms facing you, holds a moment, then eases into a slow
+  turn. It is dressed in a blanket of mostly white and pink flowers across the chest (roses, peonies, blossoms,
+  buds, sage leaves), a bouquet over the hips and one large heart-shaped leaf laid over the back
+  (`src/world/flowers.js`), all opening as it forms. Each sculpture materialises upwards from its base along a
+  glowing scan line, with rose-gold sparkles and, for the figure, a pool of light as a pedestal. The models are
+  ~100k triangles, meshopt-compressed (about 300 KB each), and phones draw at up to 2x.
+  With reduced motion there is no world and the space closes.
 - **Floating social gems**: rose-quartz Instagram and Facebook buttons fixed at the right edge, arriving one by
   one once the visitor starts scrolling, then floating and catching a glint.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,

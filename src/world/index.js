@@ -7,7 +7,7 @@ import { createMedia } from './media.js';
 import { createPearls } from './pearls.js';
 import { createQuartz } from './quartz.js';
 import { createRibbon } from './ribbon.js';
-import { chime, setBrightness, setScrollEnergy } from '../sound.js';
+import { chime, setScrollEnergy } from '../sound.js';
 
 // One fixed WebGL world behind the whole page. The camera never moves; things
 // anchored to the document (ribbon, pearls) sit in a group that slides up with
@@ -250,10 +250,9 @@ export function initWorld() {
     const dark = Boolean(centre?.dark) || atmo.uDim.value > 0.5;
     pearls.setDark(dark);
 
-    // Sound follows the world: air with scroll speed, a darker pad in dark chapters.
+    // Sound follows the world: the air rises with scroll speed.
     if (frames % 4 === 0) {
       setScrollEnergy(Math.min(1, Math.abs(speed) / 2600));
-      setBrightness(dark ? 0.15 : 1);
     }
 
     // Stone. Outside the portal it scrolls with the page like a thing placed

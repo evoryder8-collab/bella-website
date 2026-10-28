@@ -1,20 +1,18 @@
-// The soundscape, mostly composed live with Web Audio: a slow ambient pad that
-// drifts through four chords, a breath of "air" that rises with scrolling like
-// moving through silk, and crystal chimes for the quartz stone. The whooshes are
-// recorded (src/sfx, about 130 KB in all, with a button click, the magazine's
-// riffle and a sparkle for the 3D figures) and load once sound starts. Everything
-// is silent until startSound() runs from a click (browsers only allow audio
-// after a gesture), and every call before that is a no-op.
+// The soundscape: Bella's own signature song, "Late Night Polish" (src/music),
+// streamed and looping at 40% volume, with a breath of "air" composed live that
+// rises with scrolling like moving through silk, and crystal chimes for the
+// quartz stone. The whooshes are recorded (src/sfx, about 130 KB in all, with a
+// button click, the magazine's riffle and a sparkle for the 3D figures) and load
+// once sound starts. Everything is silent until startSound() runs from a click
+// (browsers only allow audio after a gesture), and every call before that is a
+// no-op.
 
 const SCALE = [587.33, 659.26, 739.99, 880, 987.77, 1174.66]; // D major pentatonic, D5–D6
-const CHORDS = [
-  [146.83, 220.0, 277.18, 329.63, 369.99], // Dmaj9
-  [123.47, 185.0, 220.0, 293.66, 329.63], // Bm11
-  [98.0, 146.83, 185.0, 246.94, 329.63], // Gmaj9
-  [110.0, 164.81, 246.94, 293.66, 369.99], // A9sus
-];
-const CHORD_SECONDS = 14;
 const STORAGE_KEY = 'bebeauty-sound';
+const MASTER = 0.85; // everything together, when sound is on
+// The song plays at 40% of full volume (through the master, hence the division).
+const SONG = new URL('./music/late-night-polish.mp3', import.meta.url).href;
+const SONG_LEVEL = 0.4 / MASTER;
 
 // Recorded sounds: two long whooshes and three short ones, each kind played in
 // turn, and one take each of the rest.
@@ -33,12 +31,12 @@ const TAKES = {
 let ctx = null;
 let master = null;
 let bus = null;
-let padFilter = null;
+let song = null;
 let airFilter = null;
 let airGain = null;
 let sfx = null;
-let voices = [];
 let muted = false;
+let pausing = 0;
 const takes = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, []]));
 const turns = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, 0]));
 let magicHeard = false;
@@ -87,49 +85,16 @@ function noiseBuffer(seconds) {
   return buffer;
 }
 
-function buildPad() {
-  padFilter = ctx.createBiquadFilter();
-  padFilter.type = 'lowpass';
-  padFilter.frequency.value = 900;
-  padFilter.Q.value = 0.6;
-  padFilter.connect(bus);
-
-  voices = CHORDS[0].map((frequency, i) => {
-    const gain = ctx.createGain();
-    gain.gain.value = 0;
-    gain.gain.setTargetAtTime(0.05, ctx.currentTime, 2);
-    // Each voice breathes at its own slow rate.
-    const lfo = ctx.createOscillator();
-    const depth = ctx.createGain();
-    lfo.frequency.value = 0.05 + i * 0.021;
-    depth.gain.value = 0.025;
-    lfo.connect(depth).connect(gain.gain);
-    lfo.start();
-    const oscillators = [
-      ['sine', 0],
-      ['triangle', 5],
-      ['sine', -4],
-    ].map(([type, cents]) => {
-      const osc = ctx.createOscillator();
-      osc.type = type;
-      osc.frequency.value = frequency;
-      osc.detune.value = cents;
-      osc.connect(gain);
-      osc.start();
-      return osc;
-    });
-    gain.connect(padFilter);
-    return { oscillators };
-  });
-
-  let chord = 0;
-  setInterval(() => {
-    if (!ctx || ctx.state !== 'running') return;
-    chord = (chord + 1) % CHORDS.length;
-    CHORDS[chord].forEach((frequency, i) => {
-      for (const osc of voices[i].oscillators) osc.frequency.setTargetAtTime(frequency, ctx.currentTime, 2.5);
-    });
-  }, CHORD_SECONDS * 1000);
+// Streamed rather than decoded whole (it is three minutes long), through the
+// same master as everything else, so muting and fading treat it alike.
+function buildSong() {
+  song = new Audio(SONG);
+  song.loop = true;
+  song.preload = 'auto';
+  const level = ctx.createGain();
+  level.gain.value = SONG_LEVEL;
+  ctx.createMediaElementSource(song).connect(level).connect(master);
+  song.play().catch(() => {});
 }
 
 function buildAir() {
@@ -179,16 +144,21 @@ export function startSound() {
   sfx.connect(send).connect(reverb);
   loadTakes();
 
-  buildPad();
+  buildSong();
   buildAir();
-  master.gain.setTargetAtTime(0.85, ctx.currentTime, 1.5);
+  master.gain.setTargetAtTime(MASTER, ctx.currentTime, 1.5);
   muted = false;
   notify();
 
   document.addEventListener('visibilitychange', () => {
     if (!ctx) return;
-    if (document.hidden) ctx.suspend();
-    else if (!muted) ctx.resume();
+    if (document.hidden) {
+      ctx.suspend();
+      song.pause();
+    } else if (!muted) {
+      ctx.resume();
+      song.play().catch(() => {});
+    }
   });
 }
 
@@ -197,7 +167,11 @@ export function setMuted(value) {
   remember(value ? 'off' : 'on');
   if (ctx) {
     if (!value && ctx.state !== 'running') ctx.resume();
-    master.gain.setTargetAtTime(value ? 0 : 0.85, ctx.currentTime, value ? 0.25 : 0.8);
+    master.gain.setTargetAtTime(value ? 0 : MASTER, ctx.currentTime, value ? 0.25 : 0.8);
+    // The song rests once it has faded out, and carries on where it was.
+    clearTimeout(pausing);
+    if (value) pausing = setTimeout(() => muted && song.pause(), 1200);
+    else song.play().catch(() => {});
   }
   notify();
 }
@@ -378,10 +352,4 @@ export function setScrollEnergy(energy) {
   const now = ctx.currentTime;
   airGain.gain.setTargetAtTime(0.012 + energy * 0.06, now, 0.25);
   airFilter.frequency.setTargetAtTime(700 + energy * 2400, now, 0.3);
-}
-
-// Darker sections close the pad's filter a little, lighter ones open it.
-export function setBrightness(brightness) {
-  if (!ctx) return;
-  padFilter.frequency.setTargetAtTime(520 + brightness * 900, ctx.currentTime, 1.2);
 }

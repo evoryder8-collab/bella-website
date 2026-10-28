@@ -7,7 +7,7 @@ import { tilt } from '../tilt.js';
 // turns invisible once its texture is ready. In WebGL a photo:
 // - dissolves in organically from the bottom with a glowing rim (driven by the
 //   same --reveal value GSAP animates for the CSS clip fallback),
-// - flows like liquid under a finger or the quartz stone,
+// - ripples gently, like water, under a finger or the quartz stone,
 // - bends slightly with scroll speed,
 // - and the hero portrait drifts with a phone's tilt (src/tilt.js).
 //
@@ -139,11 +139,12 @@ const fragmentShader = /* glsl */ `
     float strength = length(flow);
     if (strength > 1.2) flow *= 1.2 / strength;
 
-    vec2 suv = uv - flow * 0.06;
-    vec2 split = flow * 0.012;
+    // A gentle ripple: the photo shifts and its colours part only a little.
+    vec2 suv = uv - flow * 0.018;
+    vec2 split = flow * 0.0036;
     vec4 base = photo(suv);
     vec3 color = vec3(photo(suv + split).r, base.g, photo(suv - split).b);
-    color += uGlow * clamp(heat, 0.0, 1.0) * 0.1;
+    color += uGlow * clamp(heat, 0.0, 1.0) * 0.03;
 
     vec2 s = (uv - uStone.xy) * vec2(aspect, 1.0);
     color += uGlow * exp(-dot(s, s) / 0.025) * 0.2 * uStone.z;

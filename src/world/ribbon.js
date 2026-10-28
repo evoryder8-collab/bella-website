@@ -5,7 +5,7 @@ import { BufferAttribute, BufferGeometry, Color, DoubleSide, Mesh, MeshPhysicalM
 // shoulders, out past the left edge, and back across in front of her; after
 // that it weaves between the edges and crosses at section changes in a long,
 // soft S, behind the photos and the copy. It rolls gently rather than spinning,
-// so its rose face stays to you, ripples on its own and parts around a finger.
+// so its rose face stays to you, ripples on its own and parts a little round a finger.
 
 const WIDTH = 0.32;
 const ACROSS = 7; // vertices across the ribbon
@@ -48,8 +48,8 @@ export function createRibbon() {
         transformed += objectNormal * sin(uTime * 0.8 + aLength * 2.6) * 0.045;
         vec3 away = transformed - uPointer;
         float push = exp(-dot(away.xy, away.xy) / 0.45);
-        transformed.xy += normalize(away.xy + 1e-4) * push * 0.32;
-        transformed.z += push * 0.35;`,
+        transformed.xy += normalize(away.xy + 1e-4) * push * 0.1;
+        transformed.z += push * 0.1;`,
       );
   };
 

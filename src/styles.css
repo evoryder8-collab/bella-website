@@ -1869,12 +1869,18 @@ main,
     inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 
-/* The cards are see-through glass: the cards behind stay visible through the
-   top one, but its heavy frost (on phones too: one blurred card is cheap)
-   melts their words into soft colour, so only the top card reads. */
+/* Every card is frosted glass, on phones too (the stack is only four cards):
+   whatever lies behind a card, the cards further back and their words, melts
+   into soft colour, so even a half-swiped card never shows a mush of text. The
+   top card is frosted the most. */
+.deck.is-ready .review-card {
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+}
+
 .deck.is-ready .review-card[aria-hidden='false'] {
-  backdrop-filter: blur(22px) saturate(1.45);
-  -webkit-backdrop-filter: blur(22px) saturate(1.45);
+  backdrop-filter: blur(24px) saturate(1.45);
+  -webkit-backdrop-filter: blur(24px) saturate(1.45);
 }
 
 .deck.is-ready .review-card:active {
@@ -3741,8 +3747,19 @@ html:not(.motion) .figure-stage {
   pointer-events: none;
 }
 
+.social > span {
+  /* The icon is the only thing in the gem: centred, with no text line around it. */
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+
 .social svg {
   position: relative;
+  display: block;
   width: 19px;
   height: 19px;
   fill: currentColor;

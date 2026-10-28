@@ -44,11 +44,14 @@ function watchPointer() {
 
 function quality() {
   const coarse = matchMedia('(pointer: coarse)').matches;
-  const lowEnd = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 3;
+  // Safari reports at most a few cores whatever the iPhone or Mac, so only very
+  // few cores, or little memory where the browser says (Android), mean low-end.
+  const lowEnd = (navigator.hardwareConcurrency || 8) <= 2 || (navigator.deviceMemory || 8) <= 3;
   return {
     coarse,
-    // Phones draw at up to 2x for crisp sculptures; a slow device steps itself down (below).
-    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 2 : 1.75),
+    // Drawn at the screen's own sharpness (Bella's hero photo is drawn here);
+    // a device that can't keep up steps itself down (below).
+    dpr: Math.min(window.devicePixelRatio, lowEnd ? 1.5 : coarse ? 3 : 2),
     transmission: lowEnd ? 0 : coarse ? 0.5 : 0.7,
     stars: lowEnd ? 260 : coarse ? 480 : 720,
     step: coarse ? 40 : 30, // most px between the ribbon's points on its straight runs
@@ -299,12 +302,13 @@ export function initWorld() {
 
     renderer.render(scene, camera);
 
-    // If the device can't keep up, render fewer pixels (once).
+    // If the device can't keep up once the page has settled (loading and the
+    // entrance are always busy), render a few fewer pixels (once).
     frames++;
-    if (frames > 30 && frames < 150 && dt > 1 / 38) slow++;
-    if (!degraded && slow > 40) {
+    if (frames > 240 && frames < 600 && dt > 1 / 40) slow++;
+    if (!degraded && slow > 150) {
       degraded = true;
-      renderer.setPixelRatio(Math.max(1, renderer.getPixelRatio() - 0.4));
+      renderer.setPixelRatio(Math.max(1.5, renderer.getPixelRatio() * 0.75));
       renderer.transmissionResolutionScale = 0.35;
       layout();
     }

@@ -24,6 +24,8 @@ import {
   Sprite,
   SpriteMaterial,
   TubeGeometry,
+  Matrix4,
+  Quaternion,
   Vector3,
 } from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -42,8 +44,8 @@ import figureUrl from '../models/figure.glb?url';
 //   turns slowly under a travelling light and dissolves into rose dust at the
 //   chest.
 // - Signature TCM: the same bust with acupressure points glowing on the face,
-//   light flowing along the gua sha lift lines, and a small rose-quartz stone
-//   gliding up the cheek.
+//   light flowing along the gua sha lift lines, and a rose-quartz gua sha
+//   giving slow lifting strokes along the jaw, cheekbone and brow.
 // - Body: the full figure in rose bronze, after the classic Chinese
 //   acupuncture statues, with meridians of light and points, on a slow turn,
 //   dressed in a blanket of white and pink flowers across the chest, a bouquet
@@ -86,7 +88,25 @@ const BUST_LINES = [
   [[0.002, 0.3255], [0.022, 0.3228], [0.0413, 0.3145], [0.0523, 0.3046]],
   [[0.0627, 0.232], [0.055, 0.188], [0.0468, 0.155], [0.0385, 0.1248]],
 ].flatMap(mirrorLine);
-const STONE_PATH = BUST_LINES[2]; // up the cheek, on the right
+// The gua sha's strokes follow the lift lines outward: jaw, cheekbone and brow
+// on one side of the face, then the other. Each starts clear of the chin, the
+// crease by the nose and the middle of the brow.
+const STROKE_LINES = [
+  [[0.012, 0.1935], [0.022, 0.1946], [0.0413, 0.2045], [0.055, 0.2183], [0.0627, 0.2348]],
+  [[0.02, 0.2556], [0.0275, 0.2573], [0.044, 0.2639], [0.0594, 0.2705]],
+  [[0.008, 0.325], [0.022, 0.3228], [0.0413, 0.3145], [0.0523, 0.3046]],
+];
+const STROKES = [...STROKE_LINES, ...STROKE_LINES.map((line) => line.map(([x, y]) => [-x, y]))];
+// Seconds for each part of a stroke: settling onto the skin, the glide, a
+// moment's rest at the hairline, lifting away, and the pause before the next.
+const STROKE = { down: 0.6, glide: 2.3, rest: 0.35, up: 0.75, gap: 0.4 };
+const STROKE_TIME = STROKE.down + STROKE.glide + STROKE.rest + STROKE.up + STROKE.gap;
+// Held about 18° off the skin, so one long edge presses and the other lifts.
+const TILT = 0.32;
+// The stone's size, and half its length in the bust's metres: a stroke starts
+// with its tail at the start of the line, so it never crosses the nose or chin.
+const STONE_SCALE = 0.016;
+const STONE_HALF = 1.15 * STONE_SCALE;
 
 const BODY_POINTS = mirror([
   [0, 1.524], // Yintang
@@ -221,6 +241,20 @@ const lineFragment = /* glsl */ `
     float p = fract(vUv.x - uTime * 0.32 + uSeed);
     float pulse = exp(-pow(p - 0.5, 2.0) * 90.0);
     gl_FragColor = vec4(mix(uColor, uFlash, pulse), (0.62 + 0.38 * pulse) * min(1.0, uReveal * 1.5));
+  }
+`;
+// The warmth a gua sha stroke leaves on the skin: brightest just behind the
+// stone, softer further back.
+const trailFragment = /* glsl */ `
+  uniform float uHead;
+  uniform float uOpacity;
+  uniform vec3 uColor;
+  varying vec2 vUv;
+  void main() {
+    float behind = uHead - vUv.x;
+    if (behind < 0.0) discard;
+    float warmth = 0.28 + 0.72 * exp(-behind * 7.0);
+    gl_FragColor = vec4(uColor, warmth * smoothstep(0.0, 0.08, vUv.x) * uOpacity);
   }
 `;
 
@@ -415,6 +449,100 @@ function overlay(at, points, lines, { color, flash, pointColor, size, radius }) 
   };
 }
 
+// One stroke of the gua sha along a line of the face: the path just over the
+// skin, the skin's normals along it, and the trail of warmth it leaves.
+function stroke(at, line) {
+  const hits = [];
+  for (let j = 0; j < line.length - 1; j++) {
+    for (let s = 0; s < 8; s++) {
+      const t = s / 8;
+      const hit = at(line[j][0] + (line[j + 1][0] - line[j][0]) * t, line[j][1] + (line[j + 1][1] - line[j][1]) * t);
+      if (hit) hits.push(hit);
+    }
+  }
+  const end = at(...line[line.length - 1]);
+  if (end) hits.push(end);
+  if (hits.length < 2) return null;
+  const path = new CatmullRomCurve3(hits.map(({ point, normal }) => point.clone().addScaledVector(normal, 0.0006)));
+  const uniforms = { uHead: { value: 0 }, uOpacity: { value: 0 }, uColor: { value: new Color('#ffd6c2') } };
+  const trail = new Mesh(
+    new TubeGeometry(path, hits.length * 4, 0.0015, 6, false),
+    new ShaderMaterial({ uniforms, vertexShader: lineVertex, fragmentShader: trailFragment, transparent: true, depthWrite: false, blending: AdditiveBlending }),
+  );
+  // Where the stone's middle starts and stops along the line.
+  const length = path.getLength();
+  const from = Math.min(0.45, STONE_HALF / length);
+  const to = Math.max(from, 1 - (STONE_HALF * 0.3) / length);
+  return { path, normals: hits.map(({ normal }) => normal), trail, uniforms, from, to };
+}
+
+const stoneNormal = new Vector3();
+const stoneAlong = new Vector3();
+const stoneAcross = new Vector3();
+const stoneBasis = new Matrix4();
+const stoneTilt = new Quaternion();
+const AXIS_X = new Vector3(1, 0, 0);
+
+// Where the gua sha is in its ritual: it settles onto the skin, glides outward
+// with a trail of warmth behind it, rests a moment, lifts away, and comes down
+// at the start of the next line.
+function guaSha({ stone, stoneShadow, strokes }, time, shown) {
+  if (import.meta.env.DEV && typeof window.__guaShaTime === 'number') time = window.__guaShaTime;
+  // A stage's first frame can land a moment before its clock starts.
+  time = Math.max(0, time);
+  const round = Math.floor(time / STROKE_TIME);
+  const current = round % strokes.length;
+  const { down, glide, rest, up } = STROKE;
+  let t = time - round * STROKE_TIME;
+  let u = 1;
+  let lift = 0;
+  let drift = 0;
+  let opacity = 1;
+  let warmth = 1;
+  if (t < down) {
+    const k = 1 - (1 - t / down) ** 3;
+    u = 0;
+    lift = (1 - k) * 0.012;
+    opacity = k;
+  } else if ((t -= down) < glide) {
+    const k = t / glide;
+    u = k * k * k * (k * (k * 6 - 15) + 10);
+  } else if ((t -= glide) >= rest) {
+    t -= rest;
+    const k = Math.min(1, t / up);
+    lift = k * k * 0.016;
+    drift = k * 0.005;
+    opacity = 1 - k;
+    warmth = 1 - t / (up + STROKE.gap);
+  }
+  const { path, normals, from, to } = strokes[current];
+  u = from + (to - from) * u;
+  strokes.forEach(({ uniforms }, i) => {
+    uniforms.uHead.value = u;
+    uniforms.uOpacity.value = i === current ? warmth * shown * 0.85 : 0;
+  });
+
+  // Laid along the skin: its long axis along the stroke, its face on the skin,
+  // then tilted so the upper edge lifts.
+  const at = path.getUtoTmapping(u) * (normals.length - 1);
+  const i = Math.min(normals.length - 2, Math.floor(at));
+  stoneNormal.lerpVectors(normals[i], normals[i + 1], at - i).normalize();
+  path.getTangentAt(u, stoneAlong);
+  stoneAcross.crossVectors(stoneNormal, stoneAlong).normalize();
+  stoneAlong.crossVectors(stoneAcross, stoneNormal);
+  path.getPointAt(u, stoneShadow.position).addScaledVector(stoneAlong, drift);
+  stone.position.copy(stoneShadow.position).addScaledVector(stoneNormal, 0.0045 + lift);
+  stoneShadow.position.addScaledVector(stoneNormal, 0.0008);
+  stoneBasis.makeBasis(stoneAlong, stoneAcross, stoneNormal);
+  stoneShadow.quaternion.setFromRotationMatrix(stoneBasis);
+  stone.quaternion.copy(stoneShadow.quaternion).multiply(stoneTilt.setFromAxisAngle(AXIS_X, stoneAcross.y >= 0 ? TILT : -TILT));
+  stone.material.opacity = opacity * shown * 0.9;
+  stone.visible = stone.material.opacity > 0.01;
+  // The shadow softens and fades as the stone lifts.
+  stoneShadow.material.opacity = stone.material.opacity * 0.38 * Math.max(0, 1 - lift / 0.012);
+  stoneShadow.visible = stone.visible;
+}
+
 // ---- The models: loaded once for every stage, with their surface lookups ----
 let assets = null;
 const loadAssets = () =>
@@ -461,23 +589,42 @@ function buildSet({ bust, figure, bustAt, bodyAt }) {
 
   // TCM: points and lift lines on the face, and the stone up the cheek.
   const tcm = overlay(bustAt, BUST_POINTS, BUST_LINES, { color: '#c98760', flash: '#fff3e6', pointColor: '#fff6ee', size: 0.0034, radius: 0.0014 });
-  const stoneGeometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 6, curveSegments: 48 });
+  // The gua sha: a slim rose-quartz stone, smooth like the one in the world.
+  let stoneGeometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 8, curveSegments: 64 });
+  stoneGeometry.deleteAttribute('uv');
+  stoneGeometry.deleteAttribute('normal');
+  stoneGeometry = mergeVertices(stoneGeometry, 1e-4);
+  stoneGeometry.computeVertexNormals();
   stoneGeometry.center();
   const stone = new Mesh(
     stoneGeometry,
-    new MeshPhysicalMaterial({ color: '#f8c9c6', roughness: 0.1, clearcoat: 1, clearcoatRoughness: 0.04, iridescence: 0.4, iridescenceIOR: 1.4, sheen: 1, sheenColor: '#ffffff', emissive: '#ff8f97', emissiveIntensity: 0.28, transparent: true, opacity: 0 }),
+    // Rose quartz, a little translucent, polished so the room's light models it.
+    new MeshPhysicalMaterial({
+      color: '#f3c4c3',
+      roughness: 0.05,
+      clearcoat: 1,
+      clearcoatRoughness: 0.02,
+      iridescence: 0.3,
+      iridescenceIOR: 1.3,
+      specularIntensity: 1,
+      specularColor: '#fff4f2',
+      emissive: '#ff9aa2',
+      emissiveIntensity: 0.1,
+      envMapIntensity: 1.7,
+      transparent: true,
+      opacity: 0,
+    }),
   );
-  stone.scale.setScalar(0.028);
-  const glide = [];
-  for (let j = 0; j < STONE_PATH.length - 1; j++) {
-    for (let s = 0; s < 6; s++) {
-      const t = s / 6;
-      const hit = bustAt(STONE_PATH[j][0] + (STONE_PATH[j + 1][0] - STONE_PATH[j][0]) * t, STONE_PATH[j][1] + (STONE_PATH[j + 1][1] - STONE_PATH[j][1]) * t);
-      if (hit) glide.push(hit);
-    }
-  }
-  const stonePath = glide.length > 1 ? new CatmullRomCurve3(glide.map(({ point, normal }) => point.clone().addScaledVector(normal, 0.006))) : null;
-  const stoneNormals = glide.map(({ normal }) => normal);
+  stone.scale.setScalar(STONE_SCALE);
+  // A soft shadow where it meets the skin, so it rests on the face.
+  const stoneShadow = new Mesh(
+    new PlaneGeometry(1, 1),
+    new MeshBasicMaterial({ map: glow(), color: '#3d1616', transparent: true, opacity: 0, depthWrite: false }),
+  );
+  stoneShadow.scale.set(STONE_HALF * 2.4, STONE_HALF * 1.35, 1);
+  tcm.group.add(stoneShadow);
+  const strokes = STROKES.map((line) => stroke(bustAt, line)).filter(Boolean);
+  for (const { trail } of strokes) tcm.group.add(trail);
   tcm.group.add(stone);
 
   // Body: meridians, points and the dress of flowers and the leaf.
@@ -527,8 +674,8 @@ function buildSet({ bust, figure, bustAt, bodyAt }) {
     meridians,
     dress,
     stone,
-    stonePath,
-    stoneNormals,
+    stoneShadow,
+    strokes,
     bust: { pivot: bustPivot, material: porcelain.material, uniforms: porcelain.uniforms },
     body: { pivot: bodyPivot, uniforms: bronze.uniforms },
   };
@@ -681,20 +828,7 @@ function createStage(el, { group, pointer, signal }) {
       set.dress.open(1 - (1 - bloom) ** 3);
     }
 
-    // The stone glides up the cheek, lifts away and starts again.
-    if (set.stonePath) {
-      const cycle = (time % 3.4) / 3.4;
-      const s = Math.min(1, cycle / 0.72);
-      const eased = s * s * (3 - 2 * s);
-      const normal = set.stoneNormals[Math.min(set.stoneNormals.length - 1, Math.round(eased * (set.stoneNormals.length - 1)))];
-      const tangent = set.stonePath.getTangentAt(eased);
-      set.stone.position.copy(set.stonePath.getPointAt(eased)).addScaledVector(normal, cycle > 0.72 ? (cycle - 0.72) * 0.05 : 0);
-      set.stone.matrix.makeBasis(tangent, new Vector3().crossVectors(normal, tangent).normalize(), normal);
-      set.stone.quaternion.setFromRotationMatrix(set.stone.matrix);
-      const shownStone = cycle < 0.08 ? cycle / 0.08 : cycle > 0.72 ? Math.max(0, 1 - (cycle - 0.72) / 0.2) : 1;
-      set.stone.material.opacity = shownStone * reveal.tcm * reveal.bust;
-      set.stone.visible = set.stone.material.opacity > 0.01;
-    }
+    if (set.strokes.length) guaSha(set, time, reveal.tcm * reveal.bust);
   }
 
   // Prepared well ahead; drawn only while on screen.

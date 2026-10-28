@@ -150,7 +150,8 @@ function createCurtain() {
       Object.assign(edge, { top: 100, topBend: 100, bottom: 100, bottomBend: 100 });
       draw();
       el.classList.add('is-active');
-      whoosh(0.6);
+      // A long whoosh, peaking as the satin edge sweeps past the middle.
+      whoosh(0.8, { long: true, peakIn: 0.38 });
       return gsap
         .timeline({ onUpdate: draw })
         .to(edge, { topBend: -12, duration: 0.55, ease: 'power2.in' }, 0)

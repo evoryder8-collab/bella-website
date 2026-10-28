@@ -1,5 +1,5 @@
 import { CanvasTexture, DoubleSide, Group, Mesh, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Texture, Vector2, Vector4, WebGLRenderer } from 'three';
-import { paper } from '../sound.js';
+import { paper, riffle } from '../sound.js';
 import { paintPages } from './pages.js';
 
 // The Hudterapeuten cover as a real magazine. It lifts off the page, bursts
@@ -111,18 +111,20 @@ const smoothstep = (a, b, x) => {
 const easeOut = (t) => 1 - (1 - t) ** 3;
 const random = (seed) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
+// The recorded riffle (src/sfx/pages-riffle.mp3) starts this long after the
+// magazine does, so its first loud flip is the cover lifting, and the leaves
+// riffle back on its later flips, slowing as the last pages fall.
+const RIFFLE_START = 0.064;
+const CLOSING = [0.984, 1.06, 1.12, 1.188, 1.276, 1.36, 1.46, 1.58, 1.656];
+
 // When each leaf is flicked, and how hard (positive opens, negative closes).
 function schedule() {
   const rng = random(73);
   const kicks = Array.from({ length: LEAVES }, () => []);
   kicks[0].push({ at: 0.12, speed: 12.6 });
   for (let i = 1; i < OPENED; i++) kicks[i].push({ at: 0.24 + (i - 1) * 0.036, speed: 14.6 + rng() * 1.2 });
-  let at = 1.05;
-  for (let i = OPENED - 1; i >= 1; i--) {
-    kicks[i].push({ at, speed: -(14.2 + rng() * 1.4) });
-    at += 0.08 - (OPENED - 1 - i) * 0.004;
-  }
-  kicks[0].push({ at: at + 0.16, speed: -11.4 });
+  for (let i = OPENED - 1; i >= 1; i--) kicks[i].push({ at: CLOSING[OPENED - 1 - i], speed: -(14.2 + rng() * 1.4) });
+  kicks[0].push({ at: CLOSING.at(-1) + 0.2, speed: -11.4 });
   return kicks;
 }
 
@@ -238,13 +240,15 @@ export async function createBook(figure, img) {
     let thump = 0;
     let thumpV = 0;
     const close = leaves[0].kicks[1];
+    // With the recording playing, the leaves stay quiet but for the cover's slap.
+    const recorded = riffle(RIFFLE_START);
 
     const land = (leaf, i, speed) => {
       if (speed < 3) return;
       if (i === 0 && leaf.kicks[1] === close && time > close.at) {
         thumpV -= 60;
         paper(1.1, 520);
-      } else paper(0.25, 1100);
+      } else if (!recorded) paper(0.25, 1100);
     };
 
     const step = () => {
@@ -255,7 +259,7 @@ export async function createBook(figure, img) {
           force += kick.speed / KICK;
           if (!kick.fired) {
             kick.fired = true;
-            paper(i === 0 ? 0.9 : 0.45, i === 0 ? 2000 : 2600 + Math.random() * 900);
+            if (!recorded) paper(i === 0 ? 0.9 : 0.45, i === 0 ? 2000 : 2600 + Math.random() * 900);
           }
         }
         leaf.omega += force * STEP;

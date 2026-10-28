@@ -80,8 +80,8 @@ export function playPremiere({ onReveal }) {
     .fromTo(awardText, { opacity: 0, y: 14, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.3, ease: 'expo.out', stagger: 0.22 }, 4.15)
     .call(() => chime(0.5, 987.77), null, 4.4)
     .to(award, { opacity: 0, y: -14, filter: 'blur(10px)', duration: 0.8, ease: 'power2.in' }, 6.3)
-    // The dark opens on her portrait.
-    .call(() => whoosh(0.7), null, 6.75)
+    // The dark opens on her portrait, with a long whoosh that peaks as it rushes wide.
+    .call(() => whoosh(1, { long: true, peakIn: 1 }), null, 6.75)
     .call(onReveal, null, 6.75)
     .to(stage, { '--glow': 1, duration: 0.6, ease: 'power1.out' }, 6.75)
     .to(stage, { '--iris': reach, duration: 2.4, ease: 'power2.inOut' }, 6.8);

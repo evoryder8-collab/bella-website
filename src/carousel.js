@@ -2,7 +2,7 @@
 // with group chips that jump through it, a progress line and a gentle fan of
 // the upcoming cards.
 
-import { chime } from './sound.js';
+import { chime, whoosh } from './sound.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -69,6 +69,7 @@ export function initCarousel(root, chipsRoot, { signal } = {}) {
         pinned = null;
         schedule();
       }, 900);
+      if (chip.getAttribute('aria-pressed') !== 'true') whoosh(0.45);
       goTo(cards.find((card) => card.dataset.cardGroup === chip.dataset.group));
       schedule();
     });

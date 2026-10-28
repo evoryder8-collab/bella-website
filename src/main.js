@@ -9,7 +9,7 @@ import { initMap } from './map.js';
 import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
 import { initRouter } from './router.js';
-import { isPlaying, onSoundChange, setMuted, soundPreference, startSound } from './sound.js';
+import { isPlaying, onSoundChange, setMuted, soundPreference, startSound, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -23,6 +23,8 @@ initHeader();
 initBookBar();
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 initSocials();
+// Every button, and every link dressed as one, answers with a soft click.
+document.addEventListener('click', (event) => event.target.closest?.('button, .btn, .social, .leave-go') && tap());
 
 if (!reducedMotion) {
   initMotion();

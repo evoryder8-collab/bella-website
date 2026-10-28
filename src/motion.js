@@ -5,6 +5,7 @@ import 'lenis/dist/lenis.css';
 import { copy } from './content.js';
 import { currentLang, onLangChange } from './i18n.js';
 import { lookup } from './i18n-lookup.js';
+import { scrollRush } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -43,6 +44,17 @@ export function initMotion() {
   // scrollers (the treatment cards) keep their own native scrolling.
   lenis = new Lenis({ lerp: 0.09, syncTouch: true, syncTouchLerp: 0.085, touchInertiaExponent: 1.6, allowNestedScroll: true });
   lenis.on('scroll', ScrollTrigger.update);
+  // How fast the page is moving, for the whoosh of a strong fling (a jump to
+  // another place, like a page change, is not a fling).
+  let lastY = 0;
+  let lastT = 0;
+  lenis.on('scroll', ({ scroll }) => {
+    const t = performance.now();
+    const moved = Math.abs(scroll - lastY);
+    if (lastT && moved < innerHeight * 2) scrollRush((moved / Math.max(t - lastT, 8)) * 1000);
+    lastY = scroll;
+    lastT = t;
+  });
   gsap.ticker.add((time) => lenis.raf(time * 1000));
   gsap.ticker.lagSmoothing(0);
 

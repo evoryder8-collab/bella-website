@@ -31,6 +31,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createDress } from './flowers.js';
+import { magic } from '../sound.js';
 import { stoneShape } from '../world/quartz.js';
 import bustUrl from '../models/bust.glb?url';
 import figureUrl from '../models/figure.glb?url';
@@ -740,7 +741,14 @@ function createStage(el, { group, pointer, signal }) {
 export function mountSculptures(stages, { signal }) {
   loadAssets().catch(() => {});
   let wanted = 0;
-  document.addEventListener('treatmentgroup', (event) => (wanted = event.detail), { signal });
+  document.addEventListener(
+    'treatmentgroup',
+    (event) => {
+      if (event.detail !== wanted) magic();
+      wanted = event.detail;
+    },
+    { signal },
+  );
   const pointer = { x: -1, y: -1, at: -1e9 };
   const move = (x, y) => Object.assign(pointer, { x, y, at: performance.now() });
   window.addEventListener('pointermove', (event) => move(event.clientX, event.clientY), { passive: true, signal });

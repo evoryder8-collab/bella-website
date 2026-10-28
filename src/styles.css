@@ -559,6 +559,30 @@ main,
   transform: translateY(-100%);
 }
 
+/* Phones, at the top of the page: the masthead sits on the hero photo, so a
+   blush mist fades down behind it and the foil reads clearly. */
+.site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: calc(100% + 40px);
+  background: linear-gradient(to bottom, rgb(246 233 228 / 0.94), rgb(246 233 228 / 0.78) 48%, rgb(246 233 228 / 0.32) 78%, rgb(246 233 228 / 0));
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+
+.site-header.is-scrolled::before,
+.menu-open .site-header::before {
+  opacity: 0;
+}
+
+@media (min-width: 900px) {
+  .site-header::before {
+    display: none;
+  }
+}
+
 .menu-open .site-header {
   height: var(--header-h);
   background: transparent;
@@ -977,8 +1001,9 @@ main,
   position: absolute;
   inset: 0;
   background:
-    /* Fully night at the very bottom, where the approach scene begins in the same colour. */
-    linear-gradient(to top, rgb(36 20 26) 0%, rgb(36 20 26 / 0.86) 12%, rgb(36 20 26 / 0.62) 34%, rgb(36 20 26 / 0) 60%),
+    /* Fully night at the very bottom, where the approach scene begins in the same
+       colour, and deep enough behind the title that it never sits on her bright blazer. */
+    linear-gradient(to top, rgb(36 20 26) 0%, rgb(36 20 26 / 0.9) 14%, rgb(36 20 26 / 0.76) 30%, rgb(36 20 26 / 0.56) 44%, rgb(36 20 26 / 0.26) 58%, rgb(36 20 26 / 0) 70%),
     linear-gradient(to bottom, rgb(246 233 228 / 0.35), rgb(246 233 228 / 0) 22%);
   pointer-events: none;
 }
@@ -997,6 +1022,19 @@ main,
   font-size: min(21vw, 9.5rem);
   line-height: 0.86;
   letter-spacing: -0.01em;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Phones: a soft pool of shade behind the title, so its hairlines hold against
+   the photo (on the title itself, as each line clips for its entrance). */
+.hero-title::before {
+  content: '';
+  position: absolute;
+  inset: -22% -14% -18% -16%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgb(36 20 26 / 0.5), rgb(36 20 26 / 0.22) 62%, transparent);
+  pointer-events: none;
 }
 
 .hero-title .line {
@@ -1071,6 +1109,10 @@ main,
 
   .hero-title {
     font-size: min(10.5vw, 10rem);
+  }
+
+  .hero-title::before {
+    display: none; /* wine on blush here, beside the photo rather than on it */
   }
 
   .hero-tagline {

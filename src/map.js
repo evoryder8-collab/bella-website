@@ -41,7 +41,7 @@ export function initMap(container, chips, { signal } = {}) {
 }
 
 async function load(container, chips, signal) {
-  const frame = container.parentElement;
+  const frame = container.closest('.studio-map');
   const space = frame.querySelector('[data-space]');
   paintStarfield(space);
   window.addEventListener('resize', () => paintStarfield(space), { signal });

@@ -9,30 +9,48 @@ export const TONES = {
   dark: { base: '#24141a', glow: '#8e4651' },
 };
 
-// Half of each blend: most of a section's top padding, so the colour has fully
-// changed before any copy starts and light text never sits on a light background.
-const blendWidth = () => {
-  const section = document.querySelector('.section');
-  return Math.max(60, (section ? parseFloat(getComputedStyle(section).paddingTop) : 100) * 0.85);
+// How far a blend reaches into a section: most of its padding on that side,
+// so the colour changes in the space between chapters and never behind copy.
+// (Where tones change, the sections have extra padding for this: --tone-gap in
+// styles.css.) Full-bleed scenes without padding meet at their edge, where
+// both fade to the same night colour.
+const reach = (el, side) => (parseFloat(getComputedStyle(el)[side === 'top' ? 'paddingTop' : 'paddingBottom']) || 0) * 0.9;
+
+const STEPS = 14;
+const ease = (t) => t * t * t * (t * (t * 6 - 15) + 10);
+const rgb = (hex) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+const mix = (a, b, t) => {
+  const [x, y] = [rgb(a), rgb(b)];
+  return `#${x.map((v, i) => Math.round(v + (y[i] - v) * t).toString(16).padStart(2, '0')).join('')}`;
 };
 
-// Sections in page order with their top edge in document pixels. A pinned
-// section is measured by its pin spacer, which holds its full scroll length.
+// Colour stops down the page, in document pixels: flat through each section,
+// then an eased blend (many stops, so it has no visible start or end) into the
+// next tone. A pinned section is measured by its pin spacer, which holds its
+// full scroll length.
 export function toneStops() {
   const scrollY = window.scrollY;
   const sections = [...document.querySelectorAll('[data-tone]')].map((el) => {
     const box = el.parentElement.classList.contains('pin-spacer') ? el.parentElement : el;
-    return { tone: TONES[el.dataset.tone], top: box.getBoundingClientRect().top + scrollY };
+    return { el, tone: TONES[el.dataset.tone], top: box.getBoundingClientRect().top + scrollY };
   });
   const total = document.documentElement.scrollHeight;
-  const blend = blendWidth();
   const stops = [];
   sections.forEach((section, i) => {
-    const next = sections[i + 1];
-    const start = i === 0 ? 0 : section.top + blend;
-    const end = next ? next.top - blend : total;
-    stops.push({ at: start, tone: section.tone }, { at: Math.max(start, end), tone: section.tone });
+    const prev = sections[i - 1];
+    if (!prev) return stops.push({ at: 0, tone: section.tone });
+    if (prev.tone === section.tone) return;
+    const from = section.top - reach(prev.el, 'bottom');
+    const to = Math.max(from, section.top + reach(section.el, 'top'));
+    for (let step = 0; step <= STEPS; step++) {
+      const t = ease(step / STEPS);
+      stops.push({
+        at: from + ((to - from) * step) / STEPS,
+        tone: { base: mix(prev.tone.base, section.tone.base, t), glow: mix(prev.tone.glow, section.tone.glow, t) },
+      });
+    }
   });
+  if (sections.length) stops.push({ at: total, tone: sections[sections.length - 1].tone });
   return { stops, total };
 }
 

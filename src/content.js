@@ -164,12 +164,12 @@ export const copy = {
     },
     method: {
       label: 'Bellas signaturmetod',
-      title: 'Femina <em>Bella Est</em><sup>®</sup>',
+      title: 'Femina\u00a0<em>Bella\u00a0Est</em><sup>®</sup>',
       lead: 'En strukturerad och medveten ansiktsmassage som förenar skulpterande rörelser, meridianstimulering och lymfaktivering.',
       body: 'Rytmisk manuell massage, lymfdränage, akupressur, Gua Sha och vakuum arbetar tillsammans längs ansiktets meridianer. Ansiktets arkitektur lyfts, spänningar släpper och den inre balansen återställs: en naturlig facelift-effekt med mer spänst och klarare hy.',
       techniques: ['Gua Sha', 'Akupressur', 'Lymfdränage', 'Vakuum', 'Meridianer', 'Skulptering'],
       stage: 'I juni 2026 lärde Bella ut metoden som workshop på Asia Massage Championship i Tokyo.',
-      cta: 'Boka Femina Bella Est · 1 495 kr',
+      cta: 'Boka Femina\u00a0Bella\u00a0Est · 1 495 kr',
       imageAlt: 'Bella arbetar med händerna längs en klients panna',
     },
     treatments: {
@@ -181,7 +181,7 @@ export const copy = {
       items: withMeta(
         [
           {
-            name: 'Femina Bella Est<sup>®</sup> Gua Sha facelift',
+            name: 'Femina\u00a0Bella\u00a0Est<sup>®</sup> Gua Sha facelift',
             tag: 'Mest populär',
             description: 'Bellas egen metod: Gua Sha, akupressur, lymfdränage och vakuum för en naturlig facelift-effekt.',
           },
@@ -196,7 +196,7 @@ export const copy = {
             description: 'Mjukar upp spända käkmuskler inifrån och utifrån. För dig som pressar tänderna eller bär stress i käken.',
           },
           {
-            name: 'Jaw Release + Femina Bella Est',
+            name: 'Jaw Release + Femina\u00a0Bella\u00a0Est',
             tag: '',
             description: 'Släpper djupa spänningar i käke, ansikte och nacke och avslutas med Bellas signaturlyft.',
           },
@@ -487,12 +487,12 @@ export const copy = {
     },
     method: {
       label: 'Bella’s signature method',
-      title: 'Femina <em>Bella Est</em><sup>®</sup>',
+      title: 'Femina\u00a0<em>Bella\u00a0Est</em><sup>®</sup>',
       lead: 'A structured, mindful facial massage that brings together sculpting movements, meridian stimulation and lymphatic activation.',
       body: 'Rhythmic manual massage, lymphatic drainage, acupressure, gua sha and vacuum work together along the meridians of the face. It lifts the facial architecture, releases tension and restores inner balance: a natural facelift effect with firmer, clearer skin.',
       techniques: ['Gua sha', 'Acupressure', 'Lymphatic drainage', 'Vacuum', 'Meridians', 'Sculpting'],
       stage: 'In June 2026 Bella taught the method as a workshop at the Asia Massage Championship in Tokyo.',
-      cta: 'Book Femina Bella Est · SEK 1,495',
+      cta: 'Book Femina\u00a0Bella\u00a0Est · SEK 1,495',
       imageAlt: 'Bella working her hands along a client’s forehead',
     },
     treatments: {
@@ -504,7 +504,7 @@ export const copy = {
       items: withMeta(
         [
           {
-            name: 'Femina Bella Est<sup>®</sup> gua sha facelift',
+            name: 'Femina\u00a0Bella\u00a0Est<sup>®</sup> gua sha facelift',
             tag: 'Most popular',
             description: 'Bella’s own method: gua sha, acupressure, lymphatic drainage and vacuum for a natural facelift effect.',
           },
@@ -519,7 +519,7 @@ export const copy = {
             description: 'Softens tight jaw muscles from inside and out. For anyone who clenches or carries stress in the jaw.',
           },
           {
-            name: 'Jaw Release + Femina Bella Est',
+            name: 'Jaw Release + Femina\u00a0Bella\u00a0Est',
             tag: '',
             description: 'Releases deep tension in the jaw, face and neck, and finishes with Bella’s signature lift.',
           },

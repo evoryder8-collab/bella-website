@@ -9,6 +9,9 @@ import { Color, LinearFilter, Mesh, PlaneGeometry, ShaderMaterial, SRGBColorSpac
 // - flows like liquid under a finger or the quartz stone,
 // - bends slightly with scroll speed.
 //
+// Photos marked data-gl-fade (the full-screen approach scene) fade out at their
+// bottom edge, so they melt into the colour of the section below.
+//
 // Photos also marked data-gl-alive are living frames: their edge breathes and
 // flows instead of being a fixed rectangle, a pearl rim of light travels round
 // it, a rose aura glows outside it, a glint of light sweeps across the photo as
@@ -37,6 +40,7 @@ const fragmentShader = /* glsl */ `
   uniform vec2 uSize;
   uniform float uPad;
   uniform float uAlive;
+  uniform float uFade;
   uniform float uRadius;
   uniform vec4 uCover;
   uniform float uZoom;
@@ -131,7 +135,7 @@ const fragmentShader = /* glsl */ `
     color = mix(color, uGlow * 1.25, revealRim * 0.85);
 
     if (uAlive < 0.5) {
-      gl_FragColor = vec4(color, 1.0);
+      gl_FragColor = vec4(color, uFade > 0.0 ? smoothstep(0.0, uFade, uv.y) : 1.0);
       #include <colorspace_fragment>
       return;
     }
@@ -164,11 +168,13 @@ export function createMedia(scene) {
     const order = count++;
     const img = container.querySelector('img');
     const alive = container.hasAttribute('data-gl-alive');
+    const fade = container.hasAttribute('data-gl-fade') ? 0.2 : 0;
     const uniforms = {
       uImage: { value: null },
       uSize: { value: new Vector2(1, 1) },
       uPad: { value: alive ? PAD : 0 },
       uAlive: { value: alive ? 1 : 0 },
+      uFade: { value: fade },
       uRadius: { value: 0 },
       uCover: { value: new Vector4(1, 1, 0, 0) },
       uZoom: { value: 1 },
@@ -185,7 +191,7 @@ export function createMedia(scene) {
       uPearl: { value: pearl },
       uStone: { value: new Vector3() },
     };
-    const material = new ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: alive, depthWrite: !alive });
+    const material = new ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: alive || fade > 0, depthWrite: !alive && !fade });
     const mesh = new Mesh(geometry, material);
     mesh.visible = false;
     mesh.frustumCulled = false;

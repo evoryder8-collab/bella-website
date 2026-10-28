@@ -63,7 +63,7 @@
         <p class="section-label approach-label" aria-hidden="true" data-i18n="approach.label"></p>
         <ol class="approach-list">
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media" data-gl-media>
+            <figure class="approach-media" data-gl-media data-gl-fade>
               <img src="./src/images/studio.jpg" width="1179" height="1150" loading="lazy" alt="" data-i18n-attr="alt:approach.items.0.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -73,7 +73,7 @@
             </div>
           </li>
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media" data-gl-media>
+            <figure class="approach-media" data-gl-media data-gl-fade>
               <img src="./src/images/guasha.jpg" width="1179" height="1291" loading="lazy" alt="" data-i18n-attr="alt:approach.items.1.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -83,7 +83,7 @@
             </div>
           </li>
           <li class="approach-panel" data-approach-panel>
-            <figure class="approach-media" data-gl-media>
+            <figure class="approach-media" data-gl-media data-gl-fade>
               <img src="./src/images/treatment-light.jpg" width="1120" height="1400" loading="lazy" alt="" data-i18n-attr="alt:approach.items.2.imageAlt">
             </figure>
             <div class="approach-copy">
@@ -397,8 +397,10 @@
         <h2 class="section-title" id="studios-title" data-reveal data-i18n="studios.title"></h2>
       </div>
       <div class="studio-map">
-        <canvas class="space" data-space aria-hidden="true"></canvas>
-        <div class="map" data-map role="img" data-i18n-attr="aria-label:studios.mapAlt"></div>
+        <div class="map-melt">
+          <canvas class="space" data-space aria-hidden="true"></canvas>
+          <div class="map" data-map role="img" data-i18n-attr="aria-label:studios.mapAlt"></div>
+        </div>
         <div class="map-chips" role="group" data-i18n-attr="aria-label:studios.label">
           <button type="button" class="chip" data-studio="0" aria-pressed="false" data-i18n="studios.items.0.name"></button>
           <button type="button" class="chip" data-studio="1" aria-pressed="false" data-i18n="studios.items.1.name"></button>

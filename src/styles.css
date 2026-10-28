@@ -19,6 +19,7 @@
   --gutter: clamp(20px, 5.4vw, 72px);
   --max: 1320px;
   --section-space: clamp(112px, 18vw, 200px);
+  --tone-gap: clamp(90px, 14vh, 200px); /* extra room where the colour changes */
   --header-h: 64px;
   --radius: 28px;
   --frame: 30px; /* photo corners */
@@ -168,6 +169,30 @@ button {
 
 .section {
   padding-block: var(--section-space);
+}
+
+/* Where neighbouring sections change colour, both leave extra room, so the
+   blend between them (src/tones.js) is long and gentle and never passes
+   behind copy. */
+main > :is(.section, .page-hero):is(
+    [data-tone='light']:has(+ :is([data-tone='rose'], [data-tone='dark'])),
+    [data-tone='rose']:has(+ :is([data-tone='light'], [data-tone='dark'])),
+    [data-tone='dark']:has(+ :is([data-tone='light'], [data-tone='rose'])),
+    :is([data-tone='light'], [data-tone='rose']):last-child
+  ) {
+  padding-bottom: calc(var(--section-space) + var(--tone-gap));
+}
+
+main > .section:is(
+    :is([data-tone='rose'], [data-tone='dark']) + [data-tone='light'],
+    :is([data-tone='light'], [data-tone='dark']) + [data-tone='rose'],
+    :is([data-tone='light'], [data-tone='rose']) + [data-tone='dark']
+  ) {
+  padding-top: calc(var(--section-space) + var(--tone-gap));
+}
+
+main:has(> :is([data-tone='light'], [data-tone='rose']):last-child) + .site-footer {
+  padding-top: calc(72px + var(--tone-gap));
 }
 
 /* ---------- Tones and the world ----------
@@ -703,7 +728,8 @@ main,
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to top, rgb(36 20 26 / 0.94) 0%, rgb(36 20 26 / 0.62) 34%, rgb(36 20 26 / 0) 60%),
+    /* Fully night at the very bottom, where the approach scene begins in the same colour. */
+    linear-gradient(to top, rgb(36 20 26) 0%, rgb(36 20 26 / 0.86) 12%, rgb(36 20 26 / 0.62) 34%, rgb(36 20 26 / 0) 60%),
     linear-gradient(to bottom, rgb(246 233 228 / 0.35), rgb(246 233 228 / 0) 22%);
   pointer-events: none;
 }
@@ -903,7 +929,7 @@ main,
   inset: 0 0 auto;
   z-index: 2;
   height: 34%;
-  background: linear-gradient(to bottom, rgb(36 20 26 / 0.96), rgb(36 20 26 / 0.45) 45%, transparent);
+  background: linear-gradient(to bottom, rgb(36 20 26), rgb(36 20 26 / 0.7) 22%, rgb(36 20 26 / 0.3) 55%, transparent);
   pointer-events: none;
 }
 
@@ -932,6 +958,9 @@ main,
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* The same bottom fade without WebGL. */
+  -webkit-mask-image: linear-gradient(to top, transparent, #000 20%);
+  mask-image: linear-gradient(to top, transparent, #000 20%);
 }
 
 /* Keep Bella, the stone and the face in frame on tall phone screens. */
@@ -951,7 +980,9 @@ main,
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgb(36 20 26 / 0.9) 0%, rgb(36 20 26 / 0.35) 45%, rgb(36 20 26 / 0.15) 100%);
+  /* Clear at the very bottom, where the photo itself fades out (data-gl-fade) and
+     the page's own colour carries on into the next section. */
+  background: linear-gradient(to top, rgb(36 20 26 / 0) 0%, rgb(36 20 26 / 0.85) 16%, rgb(36 20 26 / 0.62) 28%, rgb(36 20 26 / 0.35) 48%, rgb(36 20 26 / 0.15) 100%);
 }
 
 .approach-copy {
@@ -1013,7 +1044,7 @@ main,
   z-index: 3;
   display: block;
   height: 1px;
-  background: var(--line-light);
+  background: linear-gradient(90deg, transparent, var(--line-light) 12%, var(--line-light) 88%, transparent);
 }
 
 .approach-progress span {
@@ -1056,7 +1087,9 @@ main,
   margin-top: 18px;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3rem, 13vw, 6rem);
+  /* The method's name always reads as one line, so it is sized to fit the screen. */
+  font-size: clamp(2rem, 10.2vw, 6rem);
+  white-space: nowrap;
   line-height: 0.98;
   letter-spacing: -0.01em;
 }
@@ -2033,22 +2066,45 @@ main,
 
 .studio-map {
   position: relative;
-  height: clamp(460px, 76svh, 760px);
+  height: clamp(520px, 88svh, 860px);
   margin-top: 32px;
   overflow: hidden;
-  /* Melts into the page above and below instead of sitting in a box. */
-  mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+}
+
+/* The map and space melt into the page above and below with a long eased
+   fade, instead of sitting in a box. The fade sits on a still wrapper, so it
+   holds while space drifts, and the chips stay crisp above it. */
+.map-melt {
+  --melt: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 0.06) 5%,
+    rgb(0 0 0 / 0.22) 11%,
+    rgb(0 0 0 / 0.5) 18%,
+    rgb(0 0 0 / 0.8) 25%,
+    #000 32%,
+    #000 68%,
+    rgb(0 0 0 / 0.8) 75%,
+    rgb(0 0 0 / 0.5) 82%,
+    rgb(0 0 0 / 0.22) 89%,
+    rgb(0 0 0 / 0.06) 95%,
+    transparent 100%
+  );
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-mask-image: var(--melt);
+  mask-image: var(--melt);
 }
 
 /* Two classes so this beats maplibre-gl.css (.maplibregl-map { position: relative }). */
-.studio-map > .map {
+.map-melt > .map {
   position: absolute;
   inset: 0;
 }
 
 /* Deep space behind the globe (src/starfield.js); it fades out as the camera lands. */
-.studio-map > .space {
+.map-melt > .space {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2059,7 +2115,7 @@ main,
   will-change: transform, opacity;
 }
 
-.studio-map.has-map > .space {
+.studio-map.has-map .space {
   transition: opacity 0.6s linear;
 }
 

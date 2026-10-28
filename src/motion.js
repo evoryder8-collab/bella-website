@@ -156,6 +156,8 @@ function approachScene() {
       .to({}, { duration: 0.4 });
   });
   tl.fromTo('[data-approach-bar]', { scaleX: 0 }, { scaleX: 1, duration: tl.duration() }, 0);
+  // The progress line bows out at the end, so no line crosses into the next section.
+  tl.to('.approach-progress', { opacity: 0, duration: 0.35 }, tl.duration() - 0.35);
 }
 
 function textReveals() {

@@ -122,6 +122,11 @@ decorative lines that looked like placeholders.
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
   follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and
   the BE BEAUTY title after it. A tap or key fast-forwards it. Returning visitors get the shorter hero entrance.
+- **Seamless chapters** (2026-10-28): where neighbouring sections change colour they leave extra room
+  (`--tone-gap`), and the colour eases across it in many stops, so no band or line shows. The hero and the
+  approach scene both end in the same night colour, the approach photos fade out at their bottom edge in
+  WebGL (`data-gl-fade`) so the page's own colour carries on, its progress line bows out, and the studio map
+  melts in through a long eased fade on a still wrapper.
 - **The award**: after "presents", a laurel wreath grows round 2026 over "Best Beauty Salon", Stockholm Beauty
   Week (October 2026), with the jury's motivation, before the dark opens on the hero.
 - **Pages** (2026-10-28, approved by the user on the condition that the home page stays exactly as it is):

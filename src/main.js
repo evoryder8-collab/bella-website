@@ -11,7 +11,7 @@ import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
 import { initTilt } from './tilt.js';
 import { initRouter } from './router.js';
-import { isPlaying, onSoundChange, setMuted, soundPreference, startSound, tap } from './sound.js';
+import { greet, isPlaying, onSoundChange, setMuted, soundPreference, startSound, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -75,6 +75,8 @@ if (portalOpen) lockScroll(true);
 initSoundToggle(portalOpen);
 initPortal({
   onEnter: ({ fromPortal }) => {
+    // Straight from the ritual, with sound: Bella says hello as her name appears.
+    if (fromPortal) greet(currentLang(), { delay: 1.1 });
     if (reducedMotion || !fromPortal) {
       document.querySelector('[data-premiere]')?.remove();
       lockScroll(false);

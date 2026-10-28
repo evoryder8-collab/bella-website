@@ -4,6 +4,7 @@ import { DirectionalLight, Group, MathUtils, NeutralToneMapping, PerspectiveCame
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAtmosphere } from './atmosphere.js';
 import { createMedia } from './media.js';
+import { createPlate } from './plate.js';
 import { createQuartz } from './quartz.js';
 import { createRibbon } from './ribbon.js';
 import { createStars } from './stars.js';
@@ -103,6 +104,16 @@ export function initWorld() {
   let portraitEl = null;
   let restEl = null;
   const portalStone = document.querySelector('[data-portal-stone]');
+  // In the ritual the stone carries the house's name on its face.
+  quartz.mesh.geometry.computeBoundingBox();
+  const stoneBox = quartz.mesh.geometry.boundingBox;
+  const stoneLength = stoneBox.max.x - stoneBox.min.x;
+  const eyebrow = portalStone && document.querySelector('[data-portal] [data-portal-text="eyebrow"]')?.textContent;
+  const plate = eyebrow ? createPlate(eyebrow) : null;
+  if (plate) {
+    plate.mesh.position.set(0, 0.006, stoneBox.max.z + 0.002);
+    quartz.group.add(plate.mesh);
+  }
   const findPage = () => {
     portraitEl = document.querySelector('.hero-media');
     restEl = document.querySelector('[data-stone-rest]');
@@ -151,7 +162,7 @@ export function initWorld() {
   layout();
 
   // ---- The stone's choreography ----
-  const stone = { x: vw + 200, y: vh * 0.3, vx: 0, vy: 0, scale: 0.5, glow: 0.03, rz: 0, spin: 0 };
+  const stone = { x: vw + 200, y: vh * 0.3, vx: 0, vy: 0, scale: 0.5, glow: 0.03, rz: 0, spin: 0, tilt: 0.45 };
   let lastScroll = window.scrollY;
   let bend = 0;
   let elapsed = 0;
@@ -162,17 +173,18 @@ export function initWorld() {
   window.addEventListener('bb:pulse', () => (pulse = 1));
 
   // The stone belongs to the hero: floating in the first-visit ritual's halo
-  // (brighter while touched), then resting by Bella's cheek and following a finger over her portrait. It leaves with
+  // (most of its width, and brighter while touched), then resting by Bella's cheek and following a finger over her portrait. It leaves with
   // the hero as you scroll rather than following you down the page. On the
   // other pages it floats, turning slowly, beside the page's title.
   const target = (now, t) => {
     if (html.classList.contains('portal-open')) {
       const spot = portalStone?.getBoundingClientRect();
       const touched = html.classList.contains('portal-touched');
+      const kz = (k * (CAMERA_Z - STONE_Z)) / CAMERA_Z;
       return {
         x: spot ? spot.left + spot.width / 2 : vw / 2,
         y: spot ? spot.top + spot.height / 2 : vh * 0.3,
-        scale: (q.coarse ? 0.95 : 1.05) * (touched ? 1.06 : 1),
+        scale: (spot ? (spot.width * 0.8 * kz) / stoneLength : 1) * (touched ? 1.06 : 1),
         glow: touched ? 1 : 0.45,
         follow: false,
         portrait: false,
@@ -281,15 +293,24 @@ export function initWorld() {
     stone.scale += (goal.scale - stone.scale) * Math.min(1, dt * 3);
     stone.glow += (goal.glow + pulse * 0.9 - stone.glow) * Math.min(1, dt * 2.5);
     const portrait = goal.portrait;
-    stone.spin += dt * (portrait ? 0 : 0.45);
+    if (portalOpen) {
+      // Held face-on in the ritual, its name to the visitor, swaying a little.
+      const front = Math.round(stone.spin / (Math.PI * 2)) * Math.PI * 2;
+      stone.spin += (front + Math.sin(elapsed * 0.55) * 0.18 - stone.spin) * Math.min(1, dt * 2.5);
+    } else stone.spin += dt * (portrait ? 0 : 0.45);
+    stone.tilt += ((portalOpen ? 0.12 : 0.45) - stone.tilt) * Math.min(1, dt * 2.5);
     stone.rz += ((portrait ? -0.55 : 0) - stone.rz) * Math.min(1, dt * 3);
+    if (plate) {
+      plate.material.opacity += ((portalOpen ? 1 : 0) - plate.material.opacity) * Math.min(1, dt * (portalOpen ? 2 : 5));
+      plate.mesh.visible = plate.material.opacity > 0.01;
+    }
 
     const kz = (k * (CAMERA_Z - STONE_Z)) / CAMERA_Z;
     const g = quartz.group;
     g.position.set((stone.x - vw / 2) * kz, -(stone.y - vh / 2) * kz, STONE_Z);
     g.scale.setScalar(stone.scale);
     g.rotation.set(
-      0.45 + MathUtils.clamp(stone.vy * 0.0006, -0.5, 0.5) + Math.sin(elapsed * 0.7) * 0.08,
+      stone.tilt + MathUtils.clamp(stone.vy * 0.0006, -0.5, 0.5) + Math.sin(elapsed * 0.7) * 0.08,
       stone.spin + (portrait ? Math.sin(elapsed * 0.5) * 0.5 : 0),
       stone.rz - MathUtils.clamp(stone.vx * 0.0006, -0.6, 0.6),
     );

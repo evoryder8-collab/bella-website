@@ -13,9 +13,9 @@
       document.documentElement.classList.add('motion');
       setTimeout(() => document.documentElement.classList.contains('motion-ready') || document.documentElement.classList.remove('motion'), 3000);
     }
-    // First visit (or ?intro): open the sound and language portal before anything else paints.
+    // The first three visits (or ?intro): open the ritual before anything else paints.
     try {
-      if (!localStorage.getItem('bebeauty-entered') || /[?&]intro\b/.test(location.search)) document.documentElement.classList.add('portal-open');
+      if ((parseInt(localStorage.getItem('bebeauty-entered'), 10) || 0) < 3 || /[?&]intro\b/.test(location.search)) document.documentElement.classList.add('portal-open');
     } catch {
       document.documentElement.classList.add('portal-open');
     }

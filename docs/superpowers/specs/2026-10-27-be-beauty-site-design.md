@@ -147,12 +147,17 @@ decorative lines that looked like placeholders.
   pill that glides to the chosen one and a line saying it changes the sculpture; phones keep the row of chips.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
-- **First-visit ritual** (`src/portal.js`): one screen in the dark 3D world that says plainly what BE BEAUTY
-  is ("Face sculpting · Stockholm", "A natural facelift, by hand.", the methods, her Best Beauty Salon 2026
-  award) round the rose-quartz stone. Touching the stone closes a ring of light round it, sends ripples out
-  and enters with sound; "Enter in silence" and Svenska · English (set from the device or a `?lang=` link,
-  no countdown) sit at the foot. The header's wordmark, clicked on the home page, shows it again (as does `?intro`), in the language chosen before. An earlier couture-invitation version is kept
-  on the `portal-invitation` branch; the user found it unclear for newcomers.
+- **First-visit ritual** (`src/portal.js`), shown on a visitor's first three visits: three steps in the dark
+  3D world, one question at a time, under the rose-quartz stone engraved with "BE BEAUTY" and "Face
+  sculpting · Stockholm" (`src/world/plate.js`), which holds face-on and sways while the ritual is open.
+  1) Sound on?, with a large rose-gold satin "Yes, with sound" (Recommended beneath) and a smaller "No
+  thanks"; that tap starts the sound. 2) The language, as on the Zoltan site: the visitor's own (device,
+  `?lang=` link or earlier choice) is lit and fills over a five-second countdown with a ring, "Continuing in
+  English" and Pause; touching a choice or the keyboard pauses it. 3) The stone grows to the centre with
+  "A natural facelift, by hand." and her Best Beauty Salon 2026 award; touching it closes a ring of light
+  round it, sends ripples out and enters. The header's wordmark, clicked on the home page, shows it again
+  (as does `?intro`). An earlier couture-invitation version is kept on the `portal-invitation` branch; the
+  user found it unclear for newcomers.
 - **Premiere** (`src/premiere.js`): after the portal the screen goes dark with dust drifting in a beam of
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
   follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and

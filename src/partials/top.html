@@ -1,40 +1,56 @@
 <!-- Shared top of every page: skip link, first-visit portal, header, phone menu and page curtain. -->
   <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
 
-  <!-- First visit: the quartz ritual (src/portal.js). What BE BEAUTY is, said
-       plainly, round the rose-quartz stone of the 3D world: touching the stone
-       enters with sound. It only shows while the head script's .portal-open is
-       set, so without JavaScript the site opens directly. -->
-  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title" tabindex="-1">
-    <div class="ritual-head">
-      <p class="portal-mark"><span class="foil foil-light">BE <em>BEAUTY</em></span></p>
-      <p class="ritual-eyebrow" data-portal-text="eyebrow"></p>
-    </div>
-    <button type="button" class="ritual-stone" data-portal-stone data-portal-label="enter">
+  <!-- The first visits: the quartz ritual (src/portal.js), in three steps round
+       the rose-quartz stone of the 3D world, engraved with the house's name:
+       sound on or off, the language (chosen for the visitor after a countdown),
+       then the stone itself, touched to enter. It only shows while the head
+       script's .portal-open is set, so without JavaScript the site opens directly. -->
+  <div class="portal" data-portal data-step="sound" role="dialog" aria-modal="true" aria-labelledby="portal-sound-title" tabindex="-1">
+    <button type="button" class="ritual-stone" data-portal-stone data-portal-label="enter" tabindex="-1" aria-hidden="true">
       <span class="ritual-halo" aria-hidden="true"></span>
       <svg class="ritual-ring" viewBox="0 0 100 100" focusable="false" aria-hidden="true">
         <circle class="ritual-ring-track" cx="50" cy="50" r="48.5"/>
         <circle class="ritual-ring-fill" cx="50" cy="50" r="48.5" pathLength="1"/>
       </svg>
       <span class="ritual-ripples" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="ritual-gem" aria-hidden="true"></span>
+      <span class="ritual-gem" aria-hidden="true">
+        <span class="ritual-plate"><span class="ritual-plate-name">BE <em>BEAUTY</em></span><span data-portal-text="eyebrow"></span></span>
+      </span>
     </button>
-    <p class="ritual-touch" data-portal-text="touch" aria-hidden="true"></p>
-    <div class="ritual-copy">
-      <h2 class="ritual-title" id="portal-title" data-portal-html="title"></h2>
-      <p class="ritual-lead" data-portal-text="lead"></p>
+
+    <div class="ritual-step" data-step-panel="sound">
+      <h2 class="ritual-ask" id="portal-sound-title" data-portal-text="soundTitle"></h2>
+      <p class="ritual-hint" data-portal-text="soundLead"></p>
+      <div class="ritual-sound">
+        <button type="button" class="ritual-yes" data-sound="on">
+          <span class="ritual-yes-label"><svg class="ritual-sound-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.5 9.25h3.4L11.6 5.3v13.4l-4.7-3.95H3.5z"/><path d="M15 9.2a4 4 0 0 1 0 5.6"/><path d="M17.6 6.6a7.6 7.6 0 0 1 0 10.8"/></svg><span data-portal-text="yes"></span></span>
+          <span class="ritual-yes-tag" data-portal-text="recommended"></span>
+        </button>
+        <button type="button" class="ritual-no" data-sound="off" data-portal-text="no"></button>
+      </div>
+    </div>
+
+    <div class="ritual-step" data-step-panel="lang" hidden>
+      <h2 class="ritual-ask" id="portal-lang-title" data-portal-text="langTitle"></h2>
+      <div class="ritual-langs">
+        <button type="button" class="ritual-lang" data-pick="sv" lang="sv"><span class="ritual-lang-fill" aria-hidden="true"></span><span class="ritual-lang-name">Svenska</span></button>
+        <button type="button" class="ritual-lang" data-pick="en" lang="en"><span class="ritual-lang-fill" aria-hidden="true"></span><span class="ritual-lang-name">English</span></button>
+      </div>
+      <div class="ritual-countdown">
+        <span class="ritual-clock" aria-hidden="true"><svg viewBox="0 0 36 36"><circle cx="18" cy="18" r="16"/><circle class="ritual-clock-fill" cx="18" cy="18" r="16" pathLength="1"/></svg><span data-countdown-n>5</span></span>
+        <span class="ritual-countdown-label" role="status" data-countdown-label></span>
+        <button type="button" class="ritual-countdown-toggle" aria-pressed="false" data-countdown-toggle></button>
+      </div>
+    </div>
+
+    <div class="ritual-step" data-step-panel="stone" hidden>
+      <p class="ritual-touch" data-portal-text="touch" aria-hidden="true"></p>
+      <h2 class="ritual-title" id="portal-stone-title" data-portal-html="title"></h2>
       <p class="ritual-award">
         <span class="ritual-wreath" aria-hidden="true"><svg class="award-laurel" data-laurel viewBox="0 0 320 200" focusable="false"></svg><span>2026</span></span>
         <span class="ritual-award-text"><em data-portal-text="award"></em><span data-portal-text="awardKicker"></span></span>
       </p>
-    </div>
-    <div class="ritual-foot">
-      <button type="button" class="ritual-silence" data-portal-silence data-portal-text="silence"></button>
-      <div class="ritual-langs" role="radiogroup" data-portal-label="langLabel">
-        <button type="button" role="radio" aria-checked="false" data-pick="sv" lang="sv">Svenska</button>
-        <span class="ritual-dot" aria-hidden="true"></span>
-        <button type="button" role="radio" aria-checked="false" data-pick="en" lang="en">English</button>
-      </div>
     </div>
   </div>
 

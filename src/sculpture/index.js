@@ -34,7 +34,7 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createDress } from './flowers.js';
 import { magic } from '../sound.js';
-import { stoneShape } from '../world/quartz.js';
+import { STONE_SEGMENTS, stoneShape } from '../world/quartz.js';
 import bustUrl from '../models/bust.glb?url';
 import figureUrl from '../models/figure.glb?url';
 
@@ -590,7 +590,7 @@ function buildSet({ bust, figure, bustAt, bodyAt }) {
   // TCM: points and lift lines on the face, and the stone up the cheek.
   const tcm = overlay(bustAt, BUST_POINTS, BUST_LINES, { color: '#c98760', flash: '#fff3e6', pointColor: '#fff6ee', size: 0.0034, radius: 0.0014 });
   // The gua sha: a slim rose-quartz stone, smooth like the one in the world.
-  let stoneGeometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 8, curveSegments: 64 });
+  let stoneGeometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 8, curveSegments: STONE_SEGMENTS });
   stoneGeometry.deleteAttribute('uv');
   stoneGeometry.deleteAttribute('normal');
   stoneGeometry = mergeVertices(stoneGeometry, 1e-4);

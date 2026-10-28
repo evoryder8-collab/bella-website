@@ -15,7 +15,7 @@ import {
 } from 'three';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
-import { stoneShape } from './world/quartz.js';
+import { STONE_SEGMENTS, stoneShape } from './world/quartz.js';
 
 // The floating social links as small rose-quartz gua sha stones, each with its
 // network's mark inlaid in deep rose gold on both faces. They stand where the
@@ -73,7 +73,7 @@ export function initSocialStones(dock) {
   const camera = new PerspectiveCamera(FOV, 1, 1, 4000);
 
   // The gua sha of the world, stood upright and smoothed into a pebble.
-  let geometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 8, curveSegments: 64 });
+  let geometry = new ExtrudeGeometry(stoneShape(), { depth: 0.03, bevelEnabled: true, bevelThickness: 0.05, bevelSize: 0.05, bevelSegments: 8, curveSegments: STONE_SEGMENTS });
   geometry.deleteAttribute('uv');
   geometry.deleteAttribute('normal');
   geometry = mergeVertices(geometry, 1e-4);

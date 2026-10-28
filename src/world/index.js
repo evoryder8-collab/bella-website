@@ -7,7 +7,7 @@ import { createMedia } from './media.js';
 import { createPearls } from './pearls.js';
 import { createQuartz } from './quartz.js';
 import { createRibbon } from './ribbon.js';
-import { chime, setScrollEnergy } from '../sound.js';
+import { setScrollEnergy } from '../sound.js';
 
 // One fixed WebGL world behind the whole page. The camera never moves; things
 // anchored to the document (ribbon, pearls) sit in a group that slides up with
@@ -155,7 +155,6 @@ export function initWorld() {
   let slow = 0;
   let degraded = false;
   let pulse = 0;
-  let lastTouchChime = 0;
   window.addEventListener('bb:pulse', () => (pulse = 1));
 
   // The stone belongs to the hero: presented alone in the portal, then resting
@@ -269,12 +268,6 @@ export function initWorld() {
     stone.vy = (stone.y - py) / Math.max(dt, 1e-3);
     stone.scale += (goal.scale - stone.scale) * Math.min(1, dt * 3);
     stone.glow += (goal.glow + pulse * 0.9 - stone.glow) * Math.min(1, dt * 2.5);
-    // A chime as a finger leads the stone fast across the portrait.
-    const stoneSpeed = Math.hypot(stone.vx, stone.vy);
-    if (goal.follow && stoneSpeed > 500 && now - lastTouchChime > 240) {
-      lastTouchChime = now;
-      chime(Math.min(0.7, stoneSpeed / 3000));
-    }
     const portrait = goal.portrait;
     stone.spin += dt * (portrait ? 0 : 0.45);
     stone.rz += ((portrait ? -0.55 : 0) - stone.rz) * Math.min(1, dt * 3);

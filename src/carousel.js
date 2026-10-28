@@ -2,7 +2,7 @@
 // with group chips that jump through it, a progress line and a gentle fan of
 // the upcoming cards.
 
-import { chime, whoosh } from './sound.js';
+import { whoosh } from './sound.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -21,7 +21,6 @@ export function initCarousel(root, chipsRoot, { signal } = {}) {
     track.scrollTo({ left: card.offsetLeft - padding(), behavior: reducedMotion ? 'auto' : 'smooth' });
 
   let frame = 0;
-  let lastActive = 0;
   let lastGroup = null;
   // A tapped chip holds its group while the track glides there, so the figure
   // doesn't flicker through the groups in between.
@@ -32,12 +31,6 @@ export function initCarousel(root, chipsRoot, { signal } = {}) {
     const { scrollLeft, scrollWidth, clientWidth } = track;
     const at = (scrollLeft + padding() - cards[0].offsetLeft) / step();
     const active = Math.min(cards.length - 1, Math.max(0, Math.round(at)));
-    // A soft tick of crystal as each card settles into place.
-    if (active !== lastActive) {
-      lastActive = active;
-      chime(0.3);
-    }
-
     progress.style.transform = `scaleX(${Math.min(1, (scrollLeft + clientWidth) / scrollWidth)})`;
     const group = pinned ?? cards[active].dataset.cardGroup;
     // The 3D figure (src/sculpture) follows the group in view.
@@ -107,7 +100,6 @@ function nudge(track, signal) {
       seen.disconnect();
       setTimeout(() => {
         if (touched) return;
-        chime(0.25);
         lean(Math.min(96, track.clientWidth * 0.22));
         setTimeout(() => !touched && lean(Math.min(48, track.clientWidth * 0.11)), 3600);
       }, 450);

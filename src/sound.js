@@ -1,13 +1,11 @@
 // The soundscape: Bella's own signature song, "Late Night Polish" (src/music),
 // streamed and looping at 40% volume, with a breath of "air" composed live that
-// rises with scrolling like moving through silk, and crystal chimes for the
-// quartz stone. The whooshes are recorded (src/sfx, about 130 KB in all, with a
+// rises with scrolling like moving through silk. The whooshes are recorded (src/sfx, about 130 KB in all, with a
 // button click, the magazine's riffle and a sparkle for the 3D figures) and load
 // once sound starts. Everything is silent until startSound() runs from a click
 // (browsers only allow audio after a gesture), and every call before that is a
 // no-op.
 
-const SCALE = [587.33, 659.26, 739.99, 880, 987.77, 1174.66]; // D major pentatonic, D5–D6
 const STORAGE_KEY = 'bebeauty-sound';
 const MASTER = 0.85; // everything together, when sound is on
 // The song plays at 40% of full volume (through the master, hence the division).
@@ -40,7 +38,6 @@ let pausing = 0;
 const takes = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, []]));
 const turns = Object.fromEntries(Object.keys(TAKES).map((kind) => [kind, 0]));
 let magicHeard = false;
-let lastChime = 0;
 const listeners = new Set();
 
 export function soundPreference() {
@@ -179,43 +176,6 @@ export function setMuted(value) {
 export function declineSound() {
   remember('off');
   if (ctx) setMuted(true);
-}
-
-// A struck crystal: inharmonic partials with long, shimmering decays.
-export function chime(level = 1, note) {
-  if (!isPlaying()) return;
-  const now = ctx.currentTime;
-  if (now - lastChime < 0.12) return;
-  lastChime = now;
-  const frequency = note ?? SCALE[Math.floor(Math.random() * SCALE.length)];
-  const out = ctx.createGain();
-  out.gain.value = 0.11 * level;
-  out.connect(bus);
-  [
-    [1, 1, 3.2],
-    [2.76, 0.42, 1.8],
-    [5.4, 0.2, 1.1],
-    [8.93, 0.08, 0.6],
-  ].forEach(([ratio, gain, decay]) => {
-    const osc = ctx.createOscillator();
-    const env = ctx.createGain();
-    osc.frequency.value = frequency * ratio;
-    env.gain.setValueAtTime(0, now);
-    env.gain.linearRampToValueAtTime(gain, now + 0.006);
-    env.gain.exponentialRampToValueAtTime(0.0001, now + decay);
-    osc.connect(env).connect(out);
-    osc.start(now);
-    osc.stop(now + decay + 0.05);
-  });
-}
-
-// A rising arpeggio, for entering the site.
-export function bloom() {
-  if (!isPlaying()) return;
-  [0, 2, 3, 5].forEach((step, i) => setTimeout(() => {
-    lastChime = 0;
-    chime(0.8 - i * 0.12, SCALE[step]);
-  }, i * 170));
 }
 
 // Each take is decoded once, and where its loudest moment falls is noted, so a

@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { laurel } from './laurel.js';
-import { chime, whoosh } from './sound.js';
+import { whoosh } from './sound.js';
 
 // Between the first-visit portal and the page. The screen goes dark, with dust
 // drifting in a beam of light; "Bella Bayar" writes itself letter by letter in
@@ -53,8 +53,6 @@ export function playPremiere({ onReveal }) {
       { opacity: 1, yPercent: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'expo.out', stagger: 0.075 },
       0.55,
     )
-    .call(() => chime(0.7, 587.33), null, 0.7)
-    .call(() => chime(0.5, 880), null, 1.25)
     .add(() => name.classList.add('is-lit'), 1.6)
     .fromTo('[data-premiere-line]', { scaleX: 0 }, { scaleX: 1, duration: 1.1, ease: 'expo.inOut' }, 1.5)
     .fromTo(
@@ -63,7 +61,6 @@ export function playPremiere({ onReveal }) {
       { opacity: 1, letterSpacing: '0.62em', y: 0, duration: 1.4, ease: 'expo.out' },
       1.8,
     )
-    .call(() => chime(0.45, 1174.66), null, 1.95)
     // The name lifts away; the laurel grows around the award.
     .to(letters, { opacity: 0, yPercent: -35, filter: 'blur(12px)', duration: 0.9, ease: 'power2.in', stagger: { each: 0.035, from: 'center' } }, 3.1)
     .to(['[data-premiere-line]', '[data-premiere-presents]'], { opacity: 0, y: -10, duration: 0.7, ease: 'power2.in' }, 3.15)
@@ -76,9 +73,7 @@ export function playPremiere({ onReveal }) {
       { scale: 1, opacity: 1, duration: 0.7, ease: 'back.out(2)', stagger: (i) => (i % 19) * 0.05 },
       3.85,
     )
-    .call(() => chime(0.55, 739.99), null, 3.9)
     .fromTo(awardText, { opacity: 0, y: 14, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1.3, ease: 'expo.out', stagger: 0.22 }, 4.15)
-    .call(() => chime(0.5, 987.77), null, 4.4)
     .to(award, { opacity: 0, y: -14, filter: 'blur(10px)', duration: 0.8, ease: 'power2.in' }, 6.3)
     // The dark opens on her portrait, with a long whoosh that peaks as it rushes wide.
     .call(() => whoosh(1, { long: true, peakIn: 1 }), null, 6.75)

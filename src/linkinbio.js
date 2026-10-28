@@ -1,6 +1,6 @@
 import { contact, copy, studios } from './content.js';
 import { currentLang } from './i18n.js';
-import { chime, whoosh } from './sound.js';
+import { whoosh } from './sound.js';
 
 // The link in bio (linkinbio/): its opening, the selector that turns the 3D
 // figure between the three methods, the save-my-contact card and the buttons
@@ -27,7 +27,6 @@ function opening(hero, signal) {
       requestAnimationFrame(() => {
         hero.classList.add('is-open');
         whoosh(0.8, { long: true, peakIn: 0.8 });
-        setTimeout(() => chime(0.5, 880), 1300);
       }),
     );
   };

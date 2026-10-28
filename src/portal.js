@@ -1,6 +1,6 @@
 import { copy, LANGS } from './content.js';
 import { setLang } from './i18n.js';
-import { bloom, chime, declineSound, startSound } from './sound.js';
+import { declineSound, startSound } from './sound.js';
 
 // The first-visit portal: "Sound on?" first, then the language, detected from
 // the device and picked automatically after a five-second countdown (which can
@@ -79,7 +79,6 @@ export function initPortal({ onEnter }) {
     entered = true;
     setLang(lang);
     remember();
-    bloom();
     pulse();
     // Keep the portal on screen while it dissolves; the page and the world
     // (stone, light) start their entrance underneath at the same moment.
@@ -132,7 +131,6 @@ export function initPortal({ onEnter }) {
     pause.addEventListener('click', () => {
       paused = !paused;
       render();
-      if (!paused) chime(0.4);
     });
     for (const option of options) option.addEventListener('click', () => enter(option.dataset.pick));
   };
@@ -141,7 +139,6 @@ export function initPortal({ onEnter }) {
     button.addEventListener('click', () => {
       if (button.dataset.soundChoice === 'on') {
         startSound();
-        setTimeout(() => chime(1, 880), 260);
       } else {
         declineSound();
       }

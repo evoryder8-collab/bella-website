@@ -4,13 +4,13 @@ import { DirectionalLight, Group, MathUtils, NeutralToneMapping, PerspectiveCame
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createAtmosphere } from './atmosphere.js';
 import { createMedia } from './media.js';
-import { createPearls } from './pearls.js';
 import { createQuartz } from './quartz.js';
 import { createRibbon } from './ribbon.js';
+import { createStars } from './stars.js';
 import { setScrollEnergy } from '../sound.js';
 
 // One fixed WebGL world behind the whole page. The camera never moves; things
-// anchored to the document (ribbon, pearls) sit in a group that slides up with
+// anchored to the document (ribbon, stars) sit in a group that slides up with
 // the scroll, the photos are re-laid over their DOM boxes every frame, and the
 // quartz stone flies between chapters in screen space.
 
@@ -50,8 +50,8 @@ function quality() {
     // Phones draw at up to 2x for crisp sculptures; a slow device steps itself down (below).
     dpr: Math.min(window.devicePixelRatio, lowEnd ? 1 : coarse ? 2 : 1.75),
     transmission: lowEnd ? 0 : coarse ? 0.5 : 0.7,
-    pearls: lowEnd ? 80 : coarse ? 140 : 230,
-    step: coarse ? 26 : 18,
+    stars: lowEnd ? 260 : coarse ? 480 : 720,
+    step: coarse ? 40 : 30, // most px between the ribbon's points on its straight runs
   };
 }
 
@@ -87,10 +87,10 @@ export function initWorld() {
   const atmosphere = createAtmosphere();
   const media = createMedia(scene);
   const ribbon = createRibbon();
-  const pearls = createPearls();
+  const stars = createStars();
   const quartz = createQuartz({ transmission: q.transmission > 0 });
   const doc = new Group();
-  doc.add(ribbon.mesh, pearls.points);
+  doc.add(ribbon.mesh, stars.points);
   scene.add(atmosphere.mesh, doc, quartz.group);
 
   const html = document.documentElement;
@@ -125,8 +125,8 @@ export function initWorld() {
     sections = [...document.querySelectorAll('[data-tone]')].map((el) => ({ el, dark: el.dataset.tone === 'dark' }));
     const boundaries = sections.slice(1).map(({ el }) => boxOf(el).top + window.scrollY);
     ribbon.build({ total, vh, k, step: q.step, boundaries, halfWidthAt, sweep: Boolean(portraitEl?.isConnected) });
-    pearls.build({ total, k, count: q.pearls, halfWidthAt });
-    pearls.uniforms.uPixelRatio.value = renderer.getPixelRatio();
+    stars.build({ total, k, count: q.stars, halfWidthAt });
+    stars.uniforms.uPixelRatio.value = renderer.getPixelRatio();
   };
   let pending = 0;
   const relayout = () => {
@@ -214,7 +214,7 @@ export function initWorld() {
     lastScroll = scrollY;
     bend += (MathUtils.clamp(speed / 3200, -1, 1) - bend) * Math.min(1, dt * 6);
 
-    // Pointer in world space for the ribbon and pearls (doc group local).
+    // Pointer in world space for the ribbon and stars (doc group local).
     doc.position.y = scrollY * k;
     const idle = now - pointer.moved > 1800;
     if (pointer.x >= 0) {
@@ -224,10 +224,10 @@ export function initWorld() {
         return [(pointer.x - vw / 2) * k * f, -(pointer.y - vh / 2) * k * f - doc.position.y];
       };
       ribbon.uniforms.uPointer.value.set(...at(-1.2), 0);
-      pearls.uniforms.uPointer.value.set(...at(-0.6), 0);
+      stars.uniforms.uPointer.value.set(...at(-0.6), 0);
     }
     ribbon.uniforms.uTime.value = elapsed;
-    pearls.uniforms.uTime.value = elapsed;
+    stars.uniforms.uTime.value = elapsed;
 
     const atmo = atmosphere.uniforms;
     atmo.uViewport.value.set(vw, vh);
@@ -247,7 +247,7 @@ export function initWorld() {
       return r.top <= vh / 2 && r.bottom >= vh / 2;
     });
     const dark = Boolean(centre?.dark) || atmo.uDim.value > 0.5;
-    pearls.setDark(dark);
+    stars.setDark(dark);
 
     // Sound follows the world: the air rises with scroll speed.
     if (frames % 4 === 0) {

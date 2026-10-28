@@ -2,12 +2,18 @@ import { BufferAttribute, BufferGeometry, Color, DoubleSide, Mesh, MeshPhysicalM
 
 // A satin ribbon that runs the full height of the page, the thread the camera
 // follows as you scroll. In the hero it sweeps in front of the portrait; after
-// that it weaves between the edges and crosses at section changes, behind the
-// photos and the copy. It ripples on its own and parts around a finger.
+// that it weaves between the edges and crosses at section changes in a long,
+// soft S, behind the photos and the copy. It rolls gently rather than spinning,
+// so its rose face stays to you, ripples on its own and parts around a finger.
 
-const WIDTH = 0.3;
-const ACROSS = 5; // vertices across the ribbon
+const WIDTH = 0.32;
+const ACROSS = 7; // vertices across the ribbon
 const CURL = 0.9; // radians the surface turns across its width, like folded satin
+// The centre line is traced every few pixels, then kept densely only where it
+// bends or rolls, so the curves are smooth and the straight runs stay light.
+const TRACE = 6; // px between traced points
+const BEND = 0.03; // radians of turn before a point is kept
+const ROLL = 0.08; // radians of roll before a point is kept
 
 const smooth = (a, b, x) => {
   const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
@@ -17,15 +23,19 @@ const smooth = (a, b, x) => {
 export function createRibbon() {
   const uniforms = { uTime: { value: 0 }, uPointer: { value: new Vector3(0, 0, -99) } };
   const material = new MeshPhysicalMaterial({
-    color: new Color('#e2a0a4'),
-    roughness: 0.34,
+    // Rose satin: a soft sheen and only a little gloss, with a warm glow of its
+    // own so the side turned from the light stays pink instead of going grey.
+    color: new Color('#e6a2a6'),
+    roughness: 0.42,
     sheen: 1,
-    sheenColor: new Color('#ffc7c2'),
-    sheenRoughness: 0.24,
-    clearcoat: 0.6,
-    clearcoatRoughness: 0.18,
+    sheenColor: new Color('#ffd0cb'),
+    sheenRoughness: 0.3,
+    clearcoat: 0.25,
+    clearcoatRoughness: 0.3,
+    emissive: new Color('#e3979c'),
+    emissiveIntensity: 0.24,
     side: DoubleSide,
-    envMapIntensity: 0.9,
+    envMapIntensity: 0.6,
   });
   material.onBeforeCompile = (shader) => {
     Object.assign(shader.uniforms, uniforms);
@@ -56,16 +66,18 @@ export function createRibbon() {
     build({ total, vh, k, step, boundaries, halfWidthAt, sweep = true }) {
       // Through each chapter the ribbon rides one edge of the screen, clear of the
       // copy; it sweeps across only in the gap between chapters.
+      // On wide screens it has further to travel, so the S is drawn out longer.
+      const wide = Math.min(1.6, Math.max(1, (halfWidthAt(0) * 2) / (vh * k)));
       const sideAt = (y) => {
         let side = 1;
         boundaries.forEach((b, i) => {
           if (i === 0 && sweep) return; // hero to the pinned scene: stays on the right
-          side += (i % 2 ? -2 : 2) * smooth(b - vh * 0.1, b + vh * 0.16, y);
+          side += (i % 2 ? -2 : 2) * smooth(b - vh * 0.22 * wide, b + vh * 0.28 * wide, y);
         });
         return side;
       };
-      const points = [];
-      for (let y = -0.4 * vh; y <= total + 0.4 * vh; y += step) {
+      const traced = [];
+      for (let y = -0.4 * vh; y <= total + 0.4 * vh; y += TRACE) {
         let z = -1.6 + Math.sin(y / (vh * 0.95) + 1.2) * 0.95;
         let nx = sideAt(y) * (1.0 + 0.05 * Math.sin(y / (vh * 0.37)));
         // Hero: one diagonal sweep in front of the portrait, then back behind the photos.
@@ -75,8 +87,28 @@ export function createRibbon() {
         // Placed so the point crosses the centre of the screen exactly when page
         // position y does; at other depths it then drifts with natural parallax
         // either side of that moment instead of slipping further off down the page.
-        points.push({ p: new Vector3(nx * halfWidthAt(z), -(y - vh / 2) * k, z), twist: (y / (vh * 0.8)) * Math.PI });
+        traced.push({ p: new Vector3(nx * halfWidthAt(z), -(y - vh / 2) * k, z), twist: 0.85 * Math.sin(y / (vh * 1.15) + 0.6) });
       }
+      // Kept where the line has turned or rolled enough since the last kept
+      // point, and at least every `step` px along straight runs.
+      const points = [traced[0]];
+      const before = new Vector3();
+      const after = new Vector3();
+      let turned = 0;
+      let run = 0;
+      for (let i = 1; i < traced.length - 1; i++) {
+        before.subVectors(traced[i].p, traced[i - 1].p).normalize();
+        after.subVectors(traced[i + 1].p, traced[i].p).normalize();
+        turned += before.angleTo(after);
+        run += TRACE;
+        const kept = points[points.length - 1];
+        if (turned > BEND || Math.abs(traced[i].twist - kept.twist) > ROLL || run >= step) {
+          points.push(traced[i]);
+          turned = 0;
+          run = 0;
+        }
+      }
+      points.push(traced[traced.length - 1]);
 
       const count = points.length;
       const position = new Float32Array(count * ACROSS * 3);

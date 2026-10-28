@@ -14,8 +14,8 @@ import { whoosh } from './sound.js';
 // (#metoden) glide there instead. The header, menu and footer stay.
 
 // The page each folder holds, for the curtain's title.
-const PAGES = { '': 'home', om: 'about', behandlingar: 'treatments', akademi: 'academy', kontakt: 'contact' };
-const NAMES = { home: 'nav.home', about: 'nav.about', treatments: 'nav.treatments', academy: 'nav.academy', contact: 'nav.contact' };
+const PAGES = { '': 'home', om: 'about', behandlingar: 'treatments', akademi: 'academy', kontakt: 'contact', linkinbio: 'links' };
+const NAMES = { home: 'nav.home', about: 'nav.about', treatments: 'nav.treatments', academy: 'nav.academy', contact: 'nav.contact', links: 'pages.links.label' };
 
 const pageOf = (url) => PAGES[url.pathname.split('/').filter(Boolean).pop()] ?? (url.pathname.endsWith('/') ? 'home' : null);
 

@@ -1,0 +1,218 @@
+<!doctype html>
+<!-- Bella's link in bio, for Instagram: every way to reach her, with the award,
+     the magazine and the three methods in 3D. Not linked from the site's menus.
+     Text is filled from src/content.js like the other pages; src/linkinbio.js
+     plays its opening and runs the method selector, save-contact and copy buttons. -->
+<html lang="sv">
+<head>
+<!-- @include head -->
+  <title data-i18n="pages.links.title"></title>
+  <meta name="description" content="" data-i18n-attr="content:pages.links.description">
+</head>
+<body>
+<!-- @include top -->
+
+  <main id="main" data-page="links" class="lb">
+    <!-- The opening: the dark opens on her portrait, then her name, the award and her honours. -->
+    <section class="lb-hero" id="top" data-tone="dark" aria-labelledby="lb-name" data-lb-hero>
+      <div class="lb-col">
+        <figure class="lb-portrait" data-lb-portrait>
+          <span class="lb-portrait-halo" aria-hidden="true"></span>
+          <img src="../src/images/hero-bella.jpg" width="996" height="1343" alt="" data-i18n-attr="alt:hero.imageAlt" fetchpriority="high">
+        </figure>
+        <p class="lb-hello" data-lb-rise data-i18n="pages.links.hello"></p>
+        <h1 class="lb-name" id="lb-name" data-lb-rise><span class="foil foil-light" data-i18n="pages.links.name"></span></h1>
+        <p class="lb-role" data-lb-rise data-i18n="pages.links.role"></p>
+        <div class="lb-seal" data-lb-rise>
+          <svg class="award-laurel" data-laurel viewBox="0 0 320 200" focusable="false" aria-hidden="true"></svg>
+          <span class="lb-seal-year">2026</span>
+        </div>
+        <p class="lb-award" data-lb-rise><em data-i18n="premiere.award"></em><span data-i18n="premiere.awardKicker"></span></p>
+        <ul class="lb-honours" data-lb-rise>
+          <li data-i18n="pages.links.honours.0"></li>
+          <li data-i18n="pages.links.honours.1"></li>
+          <li data-i18n="pages.links.honours.2"></li>
+          <li data-i18n="pages.links.honours.3"></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- The one thing most visitors came for. -->
+    <section class="lb-section lb-book-section" data-tone="light">
+      <div class="lb-col">
+        <a class="lb-book" data-link="book" href="#" target="_blank" rel="noopener" data-reveal>
+          <span class="lb-book-sheen" aria-hidden="true"></span>
+          <span class="lb-book-face"><img src="../src/images/hero-bella.jpg" width="996" height="1343" alt="" loading="lazy"></span>
+          <span class="lb-book-text"><strong data-i18n="pages.links.book"></strong><span data-i18n="pages.links.bookSub"></span></span>
+          <span class="lb-book-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Hudterapeuten: the paper magazine opens, riffles and shuts (src/magazine). -->
+    <section class="lb-section lb-press" data-tone="light" aria-labelledby="lb-press-label">
+      <div class="lb-col">
+        <p class="section-label lb-label" id="lb-press-label" data-reveal data-i18n="pages.links.pressLabel"></p>
+        <figure class="press lb-magazine" data-magazine>
+          <img src="../src/images/hudterapeuten.jpg" width="573" height="809" loading="lazy" alt="" data-i18n-attr="alt:proof.pressAlt">
+          <figcaption data-i18n="proof.press"></figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- The three methods, each a 3D sculpture on its own selector (src/sculpture). -->
+    <section class="lb-section lb-methods" data-tone="light" aria-labelledby="lb-methods-title">
+      <div class="lb-col">
+        <p class="section-label lb-label" data-reveal data-i18n="pages.links.methodsLabel"></p>
+        <h2 class="lb-title" id="lb-methods-title" data-reveal data-i18n="pages.links.methodsTitle"></h2>
+        <div class="figure-stage lb-figure" data-figure-stage aria-hidden="true"></div>
+        <div class="lb-chips" role="group" data-i18n-attr="aria-label:pages.links.methodsLabel" data-lb-methods>
+          <button type="button" class="chip" data-method="0" aria-pressed="true"><span class="chip-num" aria-hidden="true">01</span><span data-i18n="treatments.groups.0"></span></button>
+          <button type="button" class="chip" data-method="1" aria-pressed="false"><span class="chip-num" aria-hidden="true">02</span><span data-i18n="treatments.groups.1"></span></button>
+          <button type="button" class="chip" data-method="2" aria-pressed="false"><span class="chip-num" aria-hidden="true">03</span><span data-i18n="treatments.groups.2"></span></button>
+        </div>
+        <p class="lb-hint" aria-hidden="true" data-i18n="treatments.pick"></p>
+        <div class="lb-method-leads" aria-live="polite">
+          <p class="lb-method-lead is-shown" data-method-lead="0" data-i18n="pages.treatments.groupLeads.0"></p>
+          <p class="lb-method-lead" data-method-lead="1" data-i18n="pages.treatments.groupLeads.1"></p>
+          <p class="lb-method-lead" data-method-lead="2" data-i18n="pages.treatments.groupLeads.2"></p>
+        </div>
+        <a class="text-link lb-more" href="../behandlingar/" data-nav data-i18n="pages.common.seeTreatments"></a>
+      </div>
+    </section>
+
+    <!-- Every way to reach her. -->
+    <section class="lb-section lb-links" data-tone="light" aria-labelledby="lb-links-label">
+      <div class="lb-col">
+        <p class="section-label lb-label" id="lb-links-label" data-reveal data-i18n="pages.links.linksLabel"></p>
+        <ul class="lb-list">
+          <li data-reveal>
+            <a class="lb-link" data-link="instagram" href="#" target="_blank" rel="noopener">
+              <span class="lb-gem"><span class="ig-icon"></span></span>
+              <span class="lb-link-text"><span class="lb-kicker">Instagram · <span data-contact="instagram"></span></span><strong data-i18n="pages.links.instagram"></strong></span>
+              <span class="lb-photo"><img src="../src/images/paris-championship.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" data-link="facebook" href="#" target="_blank" rel="noopener">
+              <span class="lb-gem"><span class="fb-icon"></span></span>
+              <span class="lb-link-text"><span class="lb-kicker">Facebook · BE BEAUTY</span><strong data-i18n="pages.links.facebook"></strong></span>
+              <span class="lb-photo"><img src="../src/images/studio.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" data-link="mailto" href="#">
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6.5h16v11H4z"/><path d="m4.5 7 7.5 6 7.5-6"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker" data-contact="email"></span><strong data-i18n="pages.links.email"></strong></span>
+              <span class="lb-photo"><img src="../src/images/bella-studio.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" href="#" data-lb-vcard>
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="4.5" width="16" height="15" rx="2.5"/><circle cx="12" cy="10.5" r="2.6"/><path d="M7.6 16.6c.9-1.9 2.5-2.8 4.4-2.8s3.5.9 4.4 2.8"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker">vCard · Bella Bayar</span><strong data-i18n="pages.links.save"></strong><span class="lb-sub" data-i18n="pages.links.saveText"></span></span>
+              <span class="lb-photo"><img src="../src/images/hero-bella.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">＋</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" href="../akademi/" data-nav>
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5v4c1.6 1.4 3.5 2 5.5 2s3.9-.6 5.5-2v-4"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker">BE BEAUTY Academy</span><strong data-i18n="pages.links.academy"></strong></span>
+              <span class="lb-photo"><img src="../src/images/academy.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" data-link="corporate" href="#">
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="7.5" width="17" height="11.5" rx="2"/><path d="M9 7.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v1.5M3.5 12.5h17"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker">Corporate Wellness</span><strong data-i18n="pages.links.corporate"></strong></span>
+              <span class="lb-photo"><img src="../src/images/treatment-light.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+
+        <p class="section-label lb-label lb-label-site" data-reveal data-i18n="pages.links.siteLabel"></p>
+        <ul class="lb-list">
+          <li data-reveal>
+            <a class="lb-link" href="../behandlingar/" data-nav>
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3.5c.6 4.2 2.3 5.9 6.5 6.5-4.2.6-5.9 2.3-6.5 6.5-.6-4.2-2.3-5.9-6.5-6.5 4.2-.6 5.9-2.3 6.5-6.5z"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker" data-i18n="pages.links.treatmentsText"></span><strong data-i18n="pages.links.treatments"></strong></span>
+              <span class="lb-photo"><img src="../src/images/treatment-hands.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+          <li data-reveal>
+            <a class="lb-link" href="../om/" data-nav>
+              <span class="lb-gem"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 19.5c1.3-3.4 3.9-5 7-5s5.7 1.6 7 5"/></svg></span>
+              <span class="lb-link-text"><span class="lb-kicker" data-i18n="pages.links.aboutText"></span><strong data-i18n="pages.links.about"></strong></span>
+              <span class="lb-photo"><img src="../src/images/jury-asia.jpg" alt="" loading="lazy"></span>
+              <span class="lb-arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Both studios, on the rose 3D map (src/map.js). -->
+    <section class="studios lb-studios" data-tone="light" aria-labelledby="lb-studios-title">
+      <div class="lb-col">
+        <p class="section-label lb-label" data-reveal data-i18n="pages.links.studiosLabel"></p>
+        <h2 class="lb-title" id="lb-studios-title" data-reveal data-i18n="pages.links.studiosTitle"></h2>
+      </div>
+      <div class="studio-map lb-map">
+        <div class="map-melt">
+          <canvas class="space" data-space aria-hidden="true"></canvas>
+          <div class="map" data-map role="img" data-i18n-attr="aria-label:studios.mapAlt"></div>
+        </div>
+        <div class="map-chips" role="group" data-i18n-attr="aria-label:studios.label">
+          <button type="button" class="chip" data-studio="0" aria-pressed="false" data-i18n="studios.items.0.name"></button>
+          <button type="button" class="chip" data-studio="1" aria-pressed="false" data-i18n="studios.items.1.name"></button>
+        </div>
+      </div>
+      <div class="lb-col lb-studio-cards">
+        <div class="lb-studio" data-reveal>
+          <p class="lb-kicker">01</p>
+          <h3 data-i18n="studios.items.0.name"></h3>
+          <p data-i18n="studios.items.0.address"></p>
+          <div class="lb-studio-actions">
+            <a class="lb-pill lb-pill-solid" data-link="directions0" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+            <button type="button" class="lb-pill" data-lb-copy="0" data-i18n="pages.links.copy"></button>
+          </div>
+        </div>
+        <div class="lb-studio" data-reveal>
+          <p class="lb-kicker">02</p>
+          <h3 data-i18n="studios.items.1.name"></h3>
+          <p data-i18n="studios.items.1.address"></p>
+          <div class="lb-studio-actions">
+            <a class="lb-pill lb-pill-solid" data-link="directions1" href="#" target="_blank" rel="noopener" data-i18n="studios.directions"></a>
+            <button type="button" class="lb-pill" data-lb-copy="1" data-i18n="pages.links.copy"></button>
+          </div>
+        </div>
+        <div class="lb-studio lb-hours" data-reveal>
+          <p class="lb-kicker" data-i18n="studios.hoursLabel"></p>
+          <p data-i18n="studios.hours"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lb-closing" data-tone="dark">
+      <div class="lb-col">
+        <p class="lb-closing-line" data-reveal><span class="foil foil-light" data-i18n="pages.links.closing"></span></p>
+        <p class="lb-closing-sub" data-reveal data-i18n="pages.links.closingSub"></p>
+        <a class="lb-book lb-book-small" data-link="book" href="#" target="_blank" rel="noopener" data-reveal>
+          <span class="lb-book-sheen" aria-hidden="true"></span>
+          <span class="lb-book-text"><strong data-i18n="pages.links.book"></strong></span>
+          <span class="lb-book-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+<!-- @include bottom -->
+</body>
+</html>

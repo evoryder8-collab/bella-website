@@ -9,7 +9,7 @@ import { links } from './src/links.js';
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
 // Every page of the site; the home page is index.html, the others live in folders.
-const PAGES = ['index.html', 'om/index.html', 'behandlingar/index.html', 'akademi/index.html', 'kontakt/index.html'];
+const PAGES = ['index.html', 'om/index.html', 'behandlingar/index.html', 'akademi/index.html', 'kontakt/index.html', 'linkinbio/index.html'];
 
 // Pulls the shared parts (src/partials/*.html) into each page where it says
 // <!-- @include name -->, with {{root}} as the relative path back to the site root.

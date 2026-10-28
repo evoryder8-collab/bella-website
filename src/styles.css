@@ -4638,3 +4638,801 @@ html:not(.motion) .figure-stage {
     animation: none;
   }
 }
+
+/* ---------- Link in bio (linkinbio/) ----------
+   One column, phone first, centred on wider screens. The opening is a dark
+   stage: an arch of light opens on Bella's portrait, then her name in
+   champagne foil, the 2026 award in its laurel and her honours rise in turn
+   (src/linkinbio.js). Below come booking, the magazine, the three methods in
+   3D, every way to reach her as photo cards, and both studios on the map. */
+
+.lb-col {
+  width: min(100% - var(--gutter) * 2, 520px);
+  margin-inline: auto;
+}
+
+.lb-section {
+  padding-block: clamp(34px, 8vw, 56px);
+}
+
+.lb-label {
+  justify-content: center;
+}
+
+.lb-label::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.lb-title {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 9vw, 2.8rem);
+  line-height: 1.06;
+  text-align: center;
+}
+
+.lb-title em {
+  color: var(--rose-deep);
+}
+
+.lb-kicker {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+}
+
+/* The opening */
+
+.lb-hero {
+  position: relative;
+  padding-block: calc(var(--header-h) + 30px) 60px;
+  color: var(--cream);
+  text-align: center;
+  overflow: hidden;
+}
+
+.lb-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 46% at 50% 26%, rgb(142 70 81 / 0.38), transparent 70%);
+  pointer-events: none;
+}
+
+.lb-portrait {
+  position: relative;
+  width: min(56vw, 230px);
+  aspect-ratio: 4 / 5;
+  margin: 0 auto;
+  border-radius: 999px 999px 32px 32px;
+}
+
+.lb-portrait img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 16%;
+  border-radius: inherit;
+  transition:
+    clip-path 2s cubic-bezier(0.65, 0, 0.2, 1),
+    scale 2.6s var(--ease),
+    filter 2s var(--ease);
+}
+
+/* A fine arch of rose light around her. */
+.lb-portrait::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  padding: 1px;
+  border-radius: 999px 999px 40px 40px;
+  background: linear-gradient(160deg, rgb(255 236 228 / 0.85), rgb(185 116 104 / 0.15) 38%, rgb(241 201 185 / 0.7) 72%, rgb(185 116 104 / 0.12));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 1.6s var(--ease) 0.9s;
+}
+
+.lb-portrait-halo {
+  position: absolute;
+  inset: -16% -22%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(231 163 160 / 0.5), rgb(231 163 160 / 0.12) 60%, transparent);
+  filter: blur(10px);
+  animation: satin-breathe 6s ease-in-out infinite;
+  transition: opacity 2s var(--ease) 0.4s;
+}
+
+.lb-hello {
+  margin-top: 28px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.lb-name {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.9rem, 14vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.lb-role {
+  max-width: 30ch;
+  margin: 14px auto 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: rgb(255 244 238 / 0.78);
+}
+
+.lb-seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(50vw, 200px);
+  aspect-ratio: 320 / 200;
+  margin: 30px auto 0;
+}
+
+.lb-seal-year {
+  position: relative;
+  margin-top: 8%;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 8vw, 2.2rem);
+  letter-spacing: 0.04em;
+}
+
+.lb-award {
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.lb-award em {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.lb-award span {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.lb-honours {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.lb-honours li {
+  padding: 8px 13px;
+  border: 1px solid rgb(241 201 185 / 0.22);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.06);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.lb-honours li::before {
+  content: '✦';
+  margin-right: 7px;
+  font-size: 0.6rem;
+  color: var(--rose);
+}
+
+/* Before it opens: dark, the portrait a sliver of light, the words waiting. */
+html.motion .lb-hero:not(.is-open) .lb-portrait img {
+  clip-path: inset(50% 30% 50% 30% round 999px);
+  scale: 1.16;
+  filter: brightness(0.6);
+}
+
+html.motion .lb-hero:not(.is-open) .lb-portrait::after,
+html.motion .lb-hero:not(.is-open) .lb-portrait-halo {
+  opacity: 0;
+}
+
+.lb-portrait img {
+  clip-path: inset(0 0 0 0 round 999px 999px 32px 32px);
+}
+
+[data-lb-rise] {
+  transition:
+    opacity 1.2s var(--ease) var(--delay, 0s),
+    translate 1.4s var(--ease) var(--delay, 0s),
+    filter 1.2s var(--ease) var(--delay, 0s);
+}
+
+html.motion .lb-hero:not(.is-open) [data-lb-rise] {
+  opacity: 0;
+  translate: 0 18px;
+  filter: blur(8px);
+}
+
+/* Book with Bella: wine satin with a sheen drifting across it. */
+.lb-book {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 12px 12px 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  color: var(--cream);
+  text-decoration: none;
+  background: linear-gradient(135deg, #2b161d, #5e2a36 55%, #8e4651);
+  box-shadow:
+    0 26px 46px -26px rgb(58 31 38 / 0.85),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+  transition:
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+
+.lb-book-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(112deg, transparent 18%, rgb(255 226 216 / 0.24) 36%, transparent 50%, rgb(255 236 228 / 0.12) 64%, transparent 78%) 0 0 / 300% 300%;
+  animation: satin-fold 6s ease-in-out infinite alternate;
+}
+
+.lb-book:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 32px 52px -26px rgb(58 31 38 / 0.9),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
+}
+
+.lb-book:active {
+  transform: scale(0.98);
+}
+
+.lb-book-face {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 2px rgb(241 201 185 / 0.55),
+    0 0 18px rgb(231 163 160 / 0.45);
+}
+
+.lb-book-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 14%;
+}
+
+.lb-book-text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.lb-book-text strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.1;
+}
+
+.lb-book-text span {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: rgb(255 244 238 / 0.72);
+}
+
+.lb-book-arrow {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--wine);
+  font-size: 1.05rem;
+  transition: translate 0.45s var(--ease);
+}
+
+.lb-book:hover .lb-book-arrow {
+  translate: 3px 0;
+}
+
+/* The magazine, centred. */
+.lb-magazine {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  width: min(62vw, 260px);
+  margin: 26px auto 0;
+  transform: rotate(-3deg);
+  text-align: center;
+}
+
+.lb-magazine figcaption {
+  rotate: 3deg;
+}
+
+/* The three methods */
+
+.lb-figure {
+  height: 320px;
+  margin-top: 6px;
+}
+
+.lb-chips {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 4px;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background:
+    linear-gradient(160deg, rgb(255 251 249 / 0.88), rgb(255 246 241 / 0.6)) padding-box,
+    linear-gradient(150deg, #f1c9b9, #d9a090 45%, #f8ddd2 70%, #c08176) border-box;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.8),
+    0 18px 36px -22px rgb(58 31 38 / 0.55);
+}
+
+.lb-chips::before {
+  content: '';
+  position: absolute;
+  inset: 5px auto 5px 5px;
+  width: calc((100% - 10px) / 3);
+  border-radius: 999px;
+  background: linear-gradient(160deg, #5e2a36, var(--wine) 60%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.16),
+    0 8px 18px -8px rgb(58 31 38 / 0.8);
+  transition: translate 0.6s var(--ease);
+}
+
+.lb-chips:has([data-method='1'][aria-pressed='true'])::before {
+  translate: 100% 0;
+}
+
+.lb-chips:has([data-method='2'][aria-pressed='true'])::before {
+  translate: 200% 0;
+}
+
+.lb-chips .chip {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  min-height: 58px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: normal;
+  text-align: center;
+  transition: color 0.4s var(--ease);
+}
+
+.lb-chips .chip[aria-pressed='true'] {
+  background: none;
+  color: var(--cream);
+}
+
+.lb-chips .chip-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--rose-deep);
+  transition: color 0.4s var(--ease);
+}
+
+.lb-chips .chip[aria-pressed='true'] .chip-num {
+  color: var(--rose);
+}
+
+.lb-hint {
+  margin-top: 12px;
+  font-size: 0.625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--wine-soft);
+}
+
+.lb-method-leads {
+  display: grid;
+  margin-top: 16px;
+}
+
+.lb-method-lead {
+  grid-area: 1 / 1;
+  max-width: 36ch;
+  margin-inline: auto;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--wine-soft);
+  opacity: 0;
+  translate: 0 8px;
+  transition:
+    opacity 0.5s var(--ease),
+    translate 0.6s var(--ease);
+}
+
+.lb-method-lead.is-shown {
+  opacity: 1;
+  translate: none;
+}
+
+.lb-more {
+  display: table;
+  margin: 16px auto 0;
+}
+
+/* Every way to reach her: glass cards, a rose-quartz gem, a photo melting in. */
+
+.lb-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.lb-label-site {
+  margin-top: 36px;
+}
+
+.lb-link {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 80px;
+  padding: 12px 12px 12px 14px;
+  overflow: hidden;
+  border-radius: 26px;
+  color: var(--wine);
+  text-decoration: none;
+  background: linear-gradient(120deg, rgb(255 251 249 / 0.94), rgb(251 238 233 / 0.86) 60%, rgb(251 238 233 / 0.4));
+  box-shadow:
+    0 18px 36px -26px rgb(58 31 38 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+  transition:
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease);
+}
+
+/* A glint crosses the card when it is touched or hovered. */
+.lb-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.45) 50%, transparent 65%) 160% 0 / 250% 100% no-repeat;
+  pointer-events: none;
+  transition: background-position 0.9s var(--ease);
+}
+
+.lb-link:hover::after,
+.lb-link:focus-visible::after,
+.lb-link:active::after {
+  background-position: -60% 0;
+}
+
+.lb-link:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 24px 40px -24px rgb(58 31 38 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+.lb-link:active {
+  transform: scale(0.985);
+}
+
+.lb-gem {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #fff8f4;
+  line-height: 0;
+  background:
+    radial-gradient(circle at 34% 26%, rgb(255 255 255 / 0.95) 0 6%, rgb(255 238 234 / 0.75) 14%, transparent 38%),
+    radial-gradient(circle at 50% 55%, #f0b2ad 0%, #c97a84 52%, #8e4651 100%);
+  box-shadow:
+    inset 0 -6px 10px rgb(80 24 40 / 0.45),
+    inset 0 4px 8px rgb(255 255 255 / 0.5),
+    0 10px 20px -10px rgb(58 31 38 / 0.7);
+}
+
+.lb-gem svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 1.5px rgb(80 24 40 / 0.5));
+}
+
+.lb-gem :is(.ig-icon, .fb-icon) svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+  stroke: none;
+}
+
+.lb-link-text {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  max-width: 64%;
+}
+
+.lb-link-text .lb-kicker {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Handles and addresses keep their own lettering. */
+.lb-link-text .lb-kicker[data-contact='email'],
+.lb-link-text .lb-kicker [data-contact] {
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.lb-link-text strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.14rem;
+  line-height: 1.2;
+}
+
+.lb-sub {
+  font-size: 0.75rem;
+  color: var(--wine-soft);
+}
+
+.lb-photo {
+  position: absolute;
+  inset: 0 0 0 auto;
+  z-index: -1;
+  width: 46%;
+  -webkit-mask-image: linear-gradient(to right, transparent 8%, rgb(0 0 0 / 0.55) 45%, #000 90%);
+  mask-image: linear-gradient(to right, transparent 8%, rgb(0 0 0 / 0.55) 45%, #000 90%);
+}
+
+.lb-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.72;
+  transition: scale 0.9s var(--ease);
+}
+
+.lb-link:hover .lb-photo img {
+  scale: 1.06;
+}
+
+.lb-arrow {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: rgb(255 251 249 / 0.88);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--wine);
+  font-size: 0.95rem;
+  box-shadow: 0 6px 14px -8px rgb(58 31 38 / 0.5);
+}
+
+/* Both studios */
+
+.lb-studios {
+  padding-top: clamp(34px, 8vw, 56px);
+}
+
+.lb-map {
+  height: clamp(380px, 62svh, 560px);
+  margin-top: 22px;
+}
+
+.lb-map .map-chips {
+  justify-content: center;
+}
+
+.lb-studio-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.lb-studio {
+  padding: 16px;
+  border-radius: 24px;
+  background: linear-gradient(140deg, rgb(255 251 249 / 0.94), rgb(251 238 233 / 0.84));
+  box-shadow:
+    0 18px 36px -26px rgb(58 31 38 / 0.6),
+    inset 0 1px 0 rgb(255 255 255 / 0.9);
+}
+
+.lb-studio h3 {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+
+.lb-studio p:not(.lb-kicker) {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--wine-soft);
+}
+
+.lb-hours {
+  grid-column: 1 / -1;
+  text-align: center;
+}
+
+.lb-studio-actions {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.lb-pill {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid rgb(58 31 38 / 0.18);
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--wine);
+  transition:
+    background-color 0.3s var(--ease),
+    transform 0.3s var(--ease);
+}
+
+.lb-pill:active {
+  transform: scale(0.97);
+}
+
+.lb-pill-solid {
+  border-color: var(--wine);
+  background: var(--wine);
+  color: var(--cream);
+}
+
+/* The close */
+
+.lb-closing {
+  padding-block: 64px 72px;
+  color: var(--cream);
+  text-align: center;
+}
+
+.lb-closing-line {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 8.4vw, 2.6rem);
+  line-height: 1.15;
+}
+
+.lb-closing-sub {
+  margin-top: 12px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.lb-book-small {
+  max-width: 320px;
+  margin: 30px auto 0;
+  padding-left: 26px;
+}
+
+.lb-book-small .lb-book-text strong {
+  font-size: 1.15rem;
+}
+
+/* The page opens on dark, so until it scrolls the masthead is light on it:
+   champagne foil, cream words, dusk satin, and no blush mist behind. */
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) {
+  color: var(--cream);
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled)::before {
+  display: none;
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) .foil {
+  --foil: #b97468 0%, #e7b3a5 14%, #fbe5dc 26%, #fffaf6 32%, #d9a090 44%, #a9605b 55%, #e0a898 67%, #fff4ee 77%, #c08176 89%, #b97468 100%;
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) :is(.wordmark, .wordmark-tagline) {
+  filter: none;
+  color: var(--rose);
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) .satin {
+  background:
+    radial-gradient(62% 58% at var(--px) var(--py), rgb(255 236 229 / 0.42), rgb(255 236 229 / 0) 72%),
+    linear-gradient(112deg, transparent 16%, rgb(255 255 255 / 0.2) 33%, transparent 47%, rgb(255 250 247 / 0.12) 61%, transparent 76%) 0 0 / 300% 300%,
+    linear-gradient(165deg, rgb(255 232 224 / 0.22), rgb(231 163 160 / 0.12));
+  box-shadow: 0 0 12px -2px rgb(231 163 160 / 0.35);
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) .lang-switch button[aria-pressed='true'] {
+  color: var(--night);
+}
+
+body:has(main[data-page='links']) .site-header:not(.is-scrolled) .header-book {
+  background: var(--cream);
+  border-color: var(--cream);
+  color: var(--wine);
+}
+
+/* The page is the links: no floating gems or booking bar over it. */
+body:has(main[data-page='links']) :is(.socials, .book-bar) {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lb-book-sheen,
+  .lb-portrait-halo {
+    animation: none;
+  }
+}

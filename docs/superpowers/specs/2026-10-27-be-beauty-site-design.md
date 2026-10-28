@@ -134,6 +134,12 @@ decorative lines that looked like placeholders.
   pages on a second row. The foil's light drifts as the page scrolls, a glint sweeps across every eight seconds
   and a small star twinkles off the Y; a rose-gold rule with its own glint runs under it. Once scrolled it
   tightens into frosted glass without the tagline. The footer and portal marks use the same foil in champagne.
+- **Link in bio** (`linkinbio/`, for Instagram; not linked from the menus, `noindex` like every page): a dark
+  opening where an arch of light opens on Bella's portrait and her name in champagne foil, the 2026 award in its
+  laurel and her honours rise in turn; then Book with Bella (Bokadirekt), the Hudterapeuten magazine, the three
+  methods as 3D sculptures on their own selector, photo cards for Instagram, Facebook, email, save my contact
+  (a vCard), the Academy, Corporate Wellness and the site's pages, both studios on the 3D map with directions and
+  copy-address, and a closing line. It is written in Bella's own voice ("Email me").
 - **Treatment selector (desktop)**: the sculpture stands on its own selector, three numbered choices with a wine
   pill that glides to the chosen one and a line saying it changes the sculpture; phones keep the row of chips.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,

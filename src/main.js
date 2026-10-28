@@ -4,6 +4,7 @@ import { initMotion, lockScroll, mountMotion, playIntro } from './motion.js';
 import { initCarousel } from './carousel.js';
 import { initDeck } from './deck.js';
 import { drawLaurels } from './laurel.js';
+import { initLinkInBio } from './linkinbio.js';
 import { initMagazine } from './magazine.js';
 import { initMap } from './map.js';
 import { initPortal } from './portal.js';
@@ -53,6 +54,7 @@ function mountPage({ entering = false } = {}) {
       .catch((error) => console.warn('Treatment figures unavailable:', error));
   }
   drawLaurels(document.querySelector('main'));
+  initLinkInBio(document.querySelector('main'), { signal });
   let stopMotion = null;
   if (!reducedMotion) {
     stopMotion = mountMotion();

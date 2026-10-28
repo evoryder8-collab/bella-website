@@ -38,6 +38,7 @@ const VOICES = {
   sv: [new URL('./voice/bella-intro-sv.m4a', import.meta.url).href, new URL('./voice/bella-intro-sv.mp3', import.meta.url).href],
 };
 const DUCK = 0.3; // the song's own level while she speaks
+const FILM_DUCK = 0.06; // and while a film plays with its own sound
 
 let ctx = null;
 let master = null;
@@ -126,6 +127,8 @@ function buildAir() {
 
 export function startSound() {
   remember('on');
+  // Always inside a tap: the award film (src/award.js) uses it to be allowed to play out loud later.
+  window.dispatchEvent(new CustomEvent('bb:sound-gesture'));
   if (ctx) {
     setMuted(false);
     return;
@@ -242,6 +245,12 @@ export function greet(lang, { delay = 0 } = {}) {
     source.onended = () => songLevel.gain.setTargetAtTime(SONG_LEVEL, ctx.currentTime, 1.4);
     source.start(at);
   });
+}
+
+// While a film plays out loud the song all but rests under it, and rises again after.
+export function duckSong(on) {
+  if (!ctx) return;
+  songLevel.gain.setTargetAtTime(SONG_LEVEL * (on ? FILM_DUCK : 1), ctx.currentTime, on ? 0.4 : 1.2);
 }
 
 function peakOf(buffer) {

@@ -169,6 +169,16 @@ decorative lines that looked like placeholders.
   melts in through a long eased fade on a still wrapper.
 - **The award**: after "presents", a laurel wreath grows round 2026 over "Best Beauty Salon", Stockholm Beauty
   Week (October 2026), with the jury's motivation, before the dark opens on the hero.
+- **The award film** (`src/award.js`, 2026-10-28): after the three pillars, with a breath of night between, the
+  ceremony film (0:38, vertical) works as the Zoltan site's film does. A 9:16 frame in rose-gold glass floats
+  tilted in 3D (following the mouse or the phone's tilt) beside "Best Beauty Salon, Stockholm Beauty Week."
+  As the visitor scrolls the section pins and the frame straightens and grows to fill the screen (full height
+  on computers, the whole width on phones so the marks burned in at its top are never cropped), the header
+  and floating stones stepping aside, and the film plays in that stretch of scroll, out loud when the site's
+  sound is on (the song dips under it, and the tap that turns sound on lets iOS play it out loud later).
+  A second after it starts, a glowing "Keep scrolling" hint rises at its foot. Sound and fullscreen buttons
+  sit top right, Watch again at the end; a tap from further away brings the visitor to it. With reduced
+  motion it is a still frame with the film's own controls.
 - **Pages** (2026-10-28, approved by the user on the condition that the home page stays exactly as it is):
   About Bella (`om/`: the award, her story, awards and education, a gallery), Treatments (`behandlingar/`: the
   full menu per group with its figure and prices), Academy (`akademi/`: courses and Corporate Wellness) and

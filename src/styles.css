@@ -1530,6 +1530,544 @@ main,
   transform: scaleX(0);
 }
 
+/* ---------- The award film (src/award.js) ----------
+   A tall section whose sticky stage plays the scroll choreography, as on the
+   Zoltan site: award.js drives --w --h --x --y --rx --ry --r --pad on the frame
+   and --k (0 floating, 1 full screen) on the section. It follows the three
+   pillars after a breath of night. */
+
+.film {
+  --k: 0;
+  position: relative;
+  height: 330svh;
+  margin-top: clamp(56px, 10svh, 120px);
+}
+
+.film-pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.film-theater {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 60% at 50% 50%, rgb(42 18 26 / 0.92), #0b0507 75%);
+  opacity: var(--k);
+  pointer-events: none;
+}
+
+.film-copy {
+  position: absolute;
+  z-index: 2;
+  left: max(var(--gutter), calc((100vw - 1200px) / 2));
+  top: 50%;
+  max-width: min(520px, 38vw);
+  translate: 0 -50%;
+  opacity: calc(1 - var(--k) * 1.8);
+  transform: translateY(calc(var(--k) * -50px));
+  pointer-events: none;
+}
+
+.film-title {
+  margin: 18px 0 26px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 4.4vw, 4rem);
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.film-title em {
+  display: block;
+  color: var(--rose);
+}
+
+.film-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgb(255 232 226 / 0.7);
+}
+
+.film-mouse {
+  position: relative;
+  width: 20px;
+  height: 30px;
+  border-radius: 12px;
+  box-shadow: inset 0 0 0 1.5px rgb(255 232 226 / 0.6);
+}
+
+.film-mouse i {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  width: 3px;
+  height: 6px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--rose);
+  animation: film-wheel 1.8s var(--ease) infinite;
+}
+
+@keyframes film-wheel {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(9px);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The frame. */
+.film-frame {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  width: var(--w, 300px);
+  height: var(--h, 533px);
+  transform: translate(-50%, -50%) translate3d(var(--x, 0), var(--y, 0), 0) perspective(1600px) rotateY(var(--ry, -16deg)) rotateX(var(--rx, 6deg));
+  cursor: pointer;
+  will-change: transform, width, height;
+}
+
+.film-floor {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  bottom: -9%;
+  height: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(0 0 0 / 0.7), transparent);
+  opacity: calc(1 - var(--k));
+  filter: blur(6px);
+}
+
+/* Rose-gold glass round the film, its glow fading as it fills the screen. */
+.film-bezel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: var(--pad, 10px);
+  border-radius: var(--r, 30px);
+  background: linear-gradient(160deg, rgb(255 236 228 / 0.2), rgb(255 236 228 / 0.05) 40%, rgb(239 192 176 / 0.12));
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 246 242 / 0.45),
+    inset 0 0 0 1px rgb(255 236 228 / 0.14),
+    0 0 0 1px rgb(239 192 176 / calc(0.4 * (1 - var(--k)))),
+    0 50px 120px -30px rgb(204 120 128 / calc(0.7 * (1 - var(--k)))),
+    0 30px 60px -20px rgb(0 0 0 / 0.8);
+}
+
+.film-video,
+.film-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: calc(var(--r, 30px) - var(--pad, 10px));
+  background: #000;
+}
+
+/* Its own cover lies over it whenever it isn't rolling: before it starts,
+   once it is scrolled past and at the end, so no stray frame shows. */
+.film-cover {
+  position: absolute;
+  inset: var(--pad, 10px);
+  width: calc(100% - 2 * var(--pad, 10px));
+  height: calc(100% - 2 * var(--pad, 10px));
+  pointer-events: none;
+  transition: opacity 0.5s var(--ease);
+}
+
+.film.is-rolling .film-cover {
+  opacity: 0;
+}
+
+.film.is-static .film-cover,
+.film-bezel:fullscreen .film-cover {
+  display: none;
+}
+
+.film-shine {
+  position: absolute;
+  inset: var(--pad, 10px);
+  border-radius: calc(var(--r, 30px) - var(--pad, 10px));
+  background: linear-gradient(115deg, transparent 32%, rgb(255 240 234 / 0.18) 46%, transparent 60%) 0 0 / 220% 100%;
+  opacity: calc(0.9 * (1 - var(--k)));
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: film-shine 6s var(--ease) infinite;
+}
+
+@keyframes film-shine {
+  0%,
+  30% {
+    background-position: 120% 0;
+  }
+  70%,
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+.film-tag {
+  position: absolute;
+  bottom: calc(var(--pad, 10px) + 16px);
+  left: calc(var(--pad, 10px) + 14px);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: rgb(26 12 17 / 0.62);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--cream);
+  opacity: calc(1 - var(--k) * 2);
+  pointer-events: none;
+}
+
+.film-tag svg {
+  width: 11px;
+  height: 11px;
+  fill: #efc0b0;
+}
+
+/* The controls arrive as it grows: sound and fullscreen at the top right, so
+   the scroll hint has the foot to itself. */
+.film-ui {
+  position: absolute;
+  top: calc(var(--pad, 10px) + 14px);
+  right: calc(var(--pad, 10px) + 14px);
+  display: flex;
+  gap: 8px;
+  opacity: clamp(0, calc((var(--k) - 0.55) * 3), 1);
+  pointer-events: none;
+}
+
+.film.is-full .film-ui {
+  pointer-events: auto;
+}
+
+.film-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(26 12 17 / 0.6);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 246 242 / 0.2),
+    inset 0 0 0 1px rgb(255 236 228 / 0.14);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--cream);
+  cursor: pointer;
+}
+
+.film-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.film-expand {
+  padding: 0;
+}
+
+.film-speaker {
+  fill: currentColor;
+}
+
+.film-wave,
+.film-slash {
+  transition: opacity 0.3s;
+}
+
+.film-sound.is-muted .film-wave,
+.film-sound:not(.is-muted) .film-slash {
+  opacity: 0;
+}
+
+/* Muted, the sound button calls softly to be tapped. */
+.film-sound.is-muted {
+  animation: film-call 1.8s var(--ease) infinite;
+}
+
+@keyframes film-call {
+  0% {
+    box-shadow:
+      inset 0 1px 0 rgb(255 246 242 / 0.2),
+      inset 0 0 0 1px rgb(239 192 176 / 0.7),
+      0 0 0 0 rgb(239 192 176 / 0.6);
+  }
+  70%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgb(255 246 242 / 0.2),
+      inset 0 0 0 1px rgb(239 192 176 / 0.7),
+      0 0 0 12px rgb(239 192 176 / 0);
+  }
+}
+
+.film-bar {
+  position: absolute;
+  left: var(--pad, 10px);
+  right: var(--pad, 10px);
+  bottom: var(--pad, 10px);
+  height: 3px;
+  overflow: hidden;
+  border-radius: 0 0 calc(var(--r, 30px) - var(--pad, 10px)) calc(var(--r, 30px) - var(--pad, 10px));
+  background: rgb(255 236 228 / 0.12);
+  opacity: var(--k);
+}
+
+.film-bar i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, #d39a8e, #f6d6cc);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.film-replay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 26px;
+  border: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(70% 80% at 36% 22%, rgb(255 247 243 / 0.9), rgb(255 247 243 / 0) 70%),
+    linear-gradient(165deg, #f6d6cc, #e7b3a5 48%, #d39a8e);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 240 234 / 0.35),
+    0 16px 40px -10px rgb(239 192 176 / 0.7);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wine);
+  cursor: pointer;
+}
+
+.film-replay[hidden] {
+  display: none;
+}
+
+.film-replay svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* A second into the film a hint glows in at its foot: scrolling on leaves it. */
+.film-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--pad, 10px) + 24px + env(safe-area-inset-bottom, 0px));
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px 9px 12px;
+  border-radius: 999px;
+  background: rgb(26 12 17 / 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 0 0 1px rgb(246 214 204 / 0.6),
+    0 0 18px rgb(239 192 176 / 0.45);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--cream);
+  text-shadow: 0 0 10px rgb(255 214 204 / 0.8);
+  opacity: 0;
+  translate: -50% 14px;
+  pointer-events: none;
+  transition:
+    opacity 0.9s var(--ease),
+    translate 0.9s var(--ease);
+}
+
+.film.is-hinting .film-scroll {
+  opacity: 1;
+  translate: -50% 0;
+  animation: film-glow 2.6s ease-in-out 0.9s infinite;
+}
+
+@keyframes film-glow {
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgb(255 232 224 / 0.9),
+      0 0 30px 4px rgb(239 192 176 / 0.7);
+  }
+}
+
+/* Two chevrons drifting down, one after the other. */
+.film-scroll-arrows {
+  position: relative;
+  width: 14px;
+  height: 18px;
+}
+
+.film-scroll-arrows i {
+  position: absolute;
+  left: 2px;
+  width: 9px;
+  height: 9px;
+  border-right: 1.5px solid #f6d6cc;
+  border-bottom: 1.5px solid #f6d6cc;
+  rotate: 45deg;
+  filter: drop-shadow(0 0 4px rgb(255 214 204 / 0.9));
+  animation: film-arrow 1.6s var(--ease) infinite;
+}
+
+.film-scroll-arrows i:last-child {
+  top: 6px;
+  animation-delay: 0.2s;
+}
+
+@keyframes film-arrow {
+  0% {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+/* Full screen: the header and the floating pieces step aside (the booking
+   bar as soon as the film holds the screen, so it never covers the frame). */
+html.film-full :is(.site-header, .socials),
+html.film-on .book-bar {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.film-bezel:fullscreen {
+  padding: 0;
+  border-radius: 0;
+  background: #000;
+}
+
+.film-bezel:fullscreen .film-video {
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.film-bezel:fullscreen :is(.film-shine, .film-tag) {
+  display: none;
+}
+
+/* Phones: the words above the frame. */
+@media (max-width: 759px) {
+  .film {
+    height: 300svh;
+  }
+
+  .film-copy {
+    left: var(--gutter);
+    right: var(--gutter);
+    top: max(84px, 10svh);
+    max-width: none;
+    translate: none;
+    text-align: center;
+  }
+
+  .film-copy .section-label {
+    justify-content: center;
+  }
+
+  .film-title {
+    margin: 12px 0 14px;
+    font-size: clamp(1.75rem, 7.6vw, 2.4rem);
+  }
+
+  .film-hint {
+    font-size: 0.625rem;
+  }
+}
+
+/* With reduced motion: a still frame that plays with its controls. */
+.film.is-static {
+  height: auto;
+}
+
+.film.is-static .film-pin {
+  position: relative;
+  height: auto;
+  display: grid;
+  justify-items: center;
+  gap: 32px;
+  padding: clamp(64px, 10vw, 112px) var(--gutter);
+}
+
+.film.is-static :is(.film-copy, .film-frame) {
+  position: relative;
+  left: auto;
+  top: auto;
+  translate: none;
+  transform: none;
+  opacity: 1;
+  max-width: 560px;
+  text-align: center;
+}
+
+.film.is-static .film-frame {
+  width: min(360px, 80vw);
+  height: auto;
+  aspect-ratio: 9 / 16;
+}
+
+.film.is-static :is(.film-hint, .film-ui, .film-bar, .film-theater, .film-scroll) {
+  display: none;
+}
+
 /* ---------- Method: Femina Bella Est ---------- */
 
 .method {
@@ -3071,6 +3609,12 @@ main,
 .portal-open .book-bar {
   opacity: 0 !important;
   pointer-events: none;
+}
+
+/* The page waits unseen behind the ritual's night, wherever it was left
+   scrolled (a link to the film, say), and keeps its layout for the world. */
+.portal-open :is(main, .site-footer) {
+  visibility: hidden;
 }
 
 .portal {

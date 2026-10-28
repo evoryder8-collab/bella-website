@@ -1,3 +1,4 @@
+import { initAwardFilm } from './award.js';
 import { copy } from './content.js';
 import { currentLang, initI18n } from './i18n.js';
 import { initMotion, lockScroll, mountMotion, playIntro } from './motion.js';
@@ -46,6 +47,7 @@ function mountPage({ entering = false } = {}) {
   initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'), { signal });
   initDeck(document.querySelector('[data-deck]'), { signal });
   initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'), { signal });
+  initAwardFilm(document.querySelector('[data-award]'), { signal, reduced: reducedMotion });
   // The 3D treatment figures, each in its own sharp canvas, loaded ahead of time.
   const stages = document.querySelectorAll('[data-figure-stage]');
   if (stages.length && !reducedMotion) {

@@ -96,6 +96,35 @@
       </div>
     </section>
 
+    <!-- The award: her Best Beauty Salon moment, a vertical film that floats, then
+         grows to fill the screen as you scroll and plays (src/award.js). -->
+    <section class="film" id="utmarkelse" data-award data-tone="dark" aria-labelledby="film-title">
+      <div class="film-pin">
+        <div class="film-theater" aria-hidden="true"></div>
+        <div class="film-copy">
+          <p class="section-label" data-i18n="awardFilm.label"></p>
+          <h2 class="film-title" id="film-title" data-i18n="awardFilm.title"></h2>
+          <p class="film-hint"><span class="film-mouse" aria-hidden="true"><i></i></span><span data-i18n="awardFilm.hint"></span></p>
+        </div>
+        <div class="film-frame">
+          <div class="film-floor" aria-hidden="true"></div>
+          <div class="film-bezel">
+            <video class="film-video" playsinline muted preload="none" poster="./src/images/award-cover.webp" data-i18n-attr="aria-label:awardFilm.aria"></video>
+            <img class="film-cover" src="./src/images/award-cover.webp" width="1080" height="1920" alt="" aria-hidden="true" loading="lazy" decoding="async">
+            <div class="film-shine" aria-hidden="true"></div>
+            <span class="film-tag"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg><span data-i18n="awardFilm.tag"></span></span>
+            <div class="film-ui">
+              <button type="button" class="film-btn film-sound" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="film-speaker" d="M3.5 9.25h3.4L11.6 5.3v13.4l-4.7-3.95H3.5z"/><path class="film-wave" d="M15 9.2a4 4 0 0 1 0 5.6"/><path class="film-wave" d="M17.6 6.6a7.6 7.6 0 0 1 0 10.8"/><path class="film-slash" d="M4 4.5l15.5 15"/></svg><span class="film-sound-label"></span></button>
+              <button type="button" class="film-btn film-expand" data-i18n-attr="aria-label:awardFilm.full"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+            </div>
+            <button type="button" class="film-replay" hidden><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"/></svg><span data-i18n="awardFilm.replay"></span></button>
+            <span class="film-scroll" aria-hidden="true"><span class="film-scroll-arrows"><i></i><i></i></span><span data-i18n="awardFilm.scroll"></span></span>
+            <span class="film-bar" aria-hidden="true"><i></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Femina Bella Est -->
     <section class="method section" id="metoden" data-tone="light" aria-labelledby="method-title">
       <div class="wrap method-grid">

@@ -4,10 +4,10 @@
   <!-- The first visits: the quartz ritual (src/portal.js), in three steps round
        the rose-quartz stone of the 3D world, engraved with the house's name:
        sound on or off, the language (chosen for the visitor after a countdown),
-       then the stone itself, touched to enter. It only shows while the head
+       then the stone grows to the centre and the site opens by itself. It only shows while the head
        script's .portal-open is set, so without JavaScript the site opens directly. -->
   <div class="portal" data-portal data-step="sound" role="dialog" aria-modal="true" aria-labelledby="portal-sound-title" tabindex="-1">
-    <button type="button" class="ritual-stone" data-portal-stone data-portal-label="enter" tabindex="-1" aria-hidden="true">
+    <div class="ritual-stone" data-portal-stone aria-hidden="true">
       <span class="ritual-halo" aria-hidden="true"></span>
       <svg class="ritual-ring" viewBox="0 0 100 100" focusable="false" aria-hidden="true">
         <circle class="ritual-ring-track" cx="50" cy="50" r="48.5"/>
@@ -17,7 +17,7 @@
       <span class="ritual-gem" aria-hidden="true">
         <span class="ritual-plate"><span class="ritual-plate-name">BE <em>BEAUTY</em></span><span data-portal-text="eyebrow"></span></span>
       </span>
-    </button>
+    </div>
 
     <div class="ritual-step" data-step-panel="sound">
       <h2 class="ritual-ask" id="portal-sound-title" data-portal-text="soundTitle"></h2>
@@ -45,7 +45,6 @@
     </div>
 
     <div class="ritual-step" data-step-panel="stone" hidden>
-      <p class="ritual-touch" data-portal-text="touch" aria-hidden="true"></p>
       <h2 class="ritual-title" id="portal-stone-title" data-portal-html="title"></h2>
       <p class="ritual-award">
         <span class="ritual-wreath" aria-hidden="true"><svg class="award-laurel" data-laurel viewBox="0 0 320 200" focusable="false"></svg><span>2026</span></span>

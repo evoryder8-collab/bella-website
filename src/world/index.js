@@ -163,6 +163,7 @@ export function initWorld() {
 
   // ---- The stone's choreography ----
   const stone = { x: vw + 200, y: vh * 0.3, vx: 0, vy: 0, scale: 0.5, glow: 0.03, rz: 0, spin: 0, tilt: 0.45 };
+  let placed = false;
   let lastScroll = window.scrollY;
   let bend = 0;
   let elapsed = 0;
@@ -281,6 +282,11 @@ export function initWorld() {
     // Stone. Outside the portal it scrolls with the page like a thing placed
     // on it, and eases only the rest of the way.
     const goal = target(now, elapsed);
+    // Arriving behind the ritual, the stone grows where it stands rather than flying in.
+    if (!placed) {
+      placed = true;
+      if (portalOpen) Object.assign(stone, { x: goal.x, y: goal.y, scale: 0 });
+    }
     if (!portalOpen) stone.y -= scrolled;
     const ease = 1 - Math.exp(-dt * (goal.follow ? 9 : 3.2));
     const px = stone.x;

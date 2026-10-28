@@ -34,7 +34,7 @@ if (!reducedMotion) {
   initMotion();
   loadWorld();
   initTilt();
-}
+} else document.documentElement.classList.add('no-world');
 
 // Each page's own pieces start here, and stop when the router swaps the page
 // for another; with reduced motion, links simply load the next page.
@@ -268,12 +268,20 @@ function initBookBar() {
 
 // The 3D world (three.js) loads after the page is up, so it never delays the
 // first paint; until then, and without WebGL, the page is complete without it.
+// Without the world (no WebGL, or the data saver), html.no-world shows the
+// ritual's drawn stone instead.
 function loadWorld() {
-  if (navigator.connection?.saveData) return;
+  const html = document.documentElement;
+  if (navigator.connection?.saveData) return html.classList.add('no-world');
   const start = () =>
     import('./world/index.js')
-      .then(({ initWorld }) => initWorld())
-      .catch((error) => console.warn('3D world unavailable:', error));
+      .then(({ initWorld }) => initWorld() === false && html.classList.add('no-world'))
+      .catch((error) => {
+        html.classList.add('no-world');
+        console.warn('3D world unavailable:', error);
+      });
+  // Behind the ritual the stone is the centrepiece, so the world starts at once.
+  if (html.classList.contains('portal-open')) return start();
   const whenIdle = () => ('requestIdleCallback' in window ? requestIdleCallback(start, { timeout: 2500 }) : setTimeout(start, 600));
   if (document.readyState === 'complete') whenIdle();
   else window.addEventListener('load', whenIdle, { once: true });

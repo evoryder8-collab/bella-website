@@ -10,14 +10,14 @@ import { declineSound, prepareGreeting, startSound, tap, whoosh } from './sound.
 //       thanks". That tap is the gesture browsers ask for before sound can start.
 //   2 · The language. The visitor's own (the device's, a ?lang= link's or the
 //       one they chose before) is lit and chosen after a five-second countdown.
-//   3 · The stone, with what BE BEAUTY is in a line and her award: touching it
-//       draws a ring of light round it and sends ripples out as the site opens.
+//   3 · The stone, with what BE BEAUTY is in a line and her award, loading by
+//       itself: a ring of light closes round it, then the site opens.
 // The head script decides whether it opens (the first three visits, or
 // ?intro); each entry is counted. On the home page the header's wordmark
 // opens it again.
 
 const ENTERED_KEY = 'bebeauty-entered'; // how many times the visitor has entered (and src/partials/head.html)
-const RING_MS = 700; // the ring of light takes this long to close round the stone
+const LOAD_MS = 1600; // the last step's ring of light closes round the stone in this long
 const RIPPLE_MS = 850; // then the ripples spread before the site opens
 const WAIT = 5000; // the language is chosen for the visitor after this long
 
@@ -86,7 +86,6 @@ export function initPortal({ onEnter }) {
   portal.querySelector('[data-laurel]').innerHTML = laurel('ritual-gold');
 
   // ---- The steps: one question on the screen at a time ----
-  const stone = portal.querySelector('[data-portal-stone]');
   const panels = [...portal.querySelectorAll('[data-step-panel]')];
   let step = 'sound';
   const show = (name) => {
@@ -94,12 +93,8 @@ export function initPortal({ onEnter }) {
     portal.dataset.step = name;
     for (const panel of panels) panel.hidden = panel.dataset.stepPanel !== name;
     portal.setAttribute('aria-labelledby', `portal-${name}-title`);
-    // The stone only answers once it is the last step's.
-    const ready = name === 'stone';
-    stone.tabIndex = ready ? 0 : -1;
-    stone.toggleAttribute('aria-hidden', !ready);
-    const first = ready ? stone : portal.querySelector(`[data-step-panel="${name}"] button`);
-    first?.focus({ preventScroll: true });
+    const first = portal.querySelector(`[data-step-panel="${name}"] button`);
+    (first ?? portal).focus({ preventScroll: true });
   };
   // The question on screen falls away, then the next one rises.
   const go = (name, then) => {
@@ -213,11 +208,15 @@ export function initPortal({ onEnter }) {
     lang = pick;
     setLang(lang);
     prepareGreeting(lang);
-    go('stone', letter);
+    go('stone', () => {
+      letter();
+      load();
+    });
   }
 
-  // ---- 3 · The stone. Touching it draws the ring of light closed round it;
-  // a tap is enough, the ring closing on its own. ----
+  // ---- 3 · The stone. It loads by itself: the stone grows to the centre, the
+  // ring of light closes slowly round it, and the site opens, the ripples
+  // spreading as it does. ----
   let entered = false;
   const leave = () => {
     // Keep the ritual on screen while it dissolves; the page and the world
@@ -229,34 +228,19 @@ export function initPortal({ onEnter }) {
     setTimeout(() => portal.remove(), 1300);
   };
   const enter = () => {
+    if (entered) return;
+    entered = true;
     remember();
     if (reduced) return leave();
+    html.classList.add('portal-touched');
     portal.classList.add('is-entering');
     pulse();
     whoosh(0.85, { long: true, peakIn: 0.7 });
     setTimeout(leave, RIPPLE_MS);
   };
-  let pressed = 0;
-  const press = () => {
-    if (entered || step !== 'stone') return;
-    pressed ||= performance.now();
-    portal.classList.add('is-pressing');
-    html.classList.add('portal-touched');
-  };
-  const release = () => {
-    if (entered) return;
-    pressed = 0;
-    portal.classList.remove('is-pressing');
-    html.classList.remove('portal-touched');
-  };
-  stone.addEventListener('pointerdown', press);
-  stone.addEventListener('pointerleave', release);
-  stone.addEventListener('pointercancel', release);
-  stone.addEventListener('click', () => {
-    if (entered || step !== 'stone') return;
-    entered = true;
-    press();
-    const held = performance.now() - pressed;
-    setTimeout(enter, reduced ? 0 : Math.max(0, RING_MS - held));
-  });
+  function load() {
+    if (reduced) return enter();
+    portal.classList.add('is-loading');
+    setTimeout(enter, LOAD_MS);
+  }
 }

@@ -138,8 +138,6 @@ export const copy = {
       paused: 'Automatiskt val pausat',
       pause: 'Pausa',
       resume: 'Fortsätt',
-      touch: 'Rör vid stenen för att kliva in',
-      enter: 'Kliv in på BE BEAUTY',
     },
     nav: {
       method: 'Metoden',
@@ -522,8 +520,6 @@ export const copy = {
       paused: 'Automatic choice paused',
       pause: 'Pause',
       resume: 'Resume',
-      touch: 'Touch the stone to enter',
-      enter: 'Enter BE BEAUTY',
     },
     nav: {
       method: 'The method',

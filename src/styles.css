@@ -3696,17 +3696,6 @@ html.film-on .book-bar {
   border: 0;
   border-radius: 50%;
   background: none;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ritual-stone:focus-visible {
-  outline: none;
-}
-
-.ritual-stone:focus-visible .ritual-ring-track {
-  stroke: rgb(255 226 216 / 0.5);
 }
 
 /* Above the questions the stone is the house's emblem: smaller, without its
@@ -3771,10 +3760,14 @@ html.film-on .book-bar {
     opacity 0.25s ease;
 }
 
-.portal.is-pressing .ritual-ring-fill {
+/* The last step loads by itself: the ring of light closes slowly round the
+   stone, then the site opens (src/portal.js, LOAD_MS). */
+.portal.is-loading .ritual-ring-fill {
   stroke-dashoffset: 0;
   opacity: 1;
-  transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.6, 1);
+  transition:
+    stroke-dashoffset 1.5s cubic-bezier(0.45, 0, 0.25, 1),
+    opacity 0.4s ease;
 }
 
 .ritual-ripples i {
@@ -3820,7 +3813,10 @@ html.film-on .book-bar {
   rotate: -18deg;
 }
 
-.has-world .ritual-gem {
+/* Only where the 3D world can't come (no WebGL, reduced motion, data saver):
+   until it arrives the stone's place stays empty, so the drawn stand-in never
+   flashes up first. */
+html:not(.no-world) .ritual-gem {
   display: none;
 }
 
@@ -3848,15 +3844,6 @@ html.film-on .book-bar {
   font-weight: 500;
   letter-spacing: 0.28em;
   text-transform: uppercase;
-}
-
-.ritual-touch {
-  margin-bottom: 24px;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgb(255 232 226 / 0.85);
 }
 
 .ritual-step {
@@ -4182,12 +4169,12 @@ html.film-on .book-bar {
   height: 100%;
 }
 
-/* The year in the wreath's open middle, which sits a little above the
-   centre of its box (the branches meet at the foot). */
+/* The year in the wreath's open middle, which sits well above the centre of
+   its box (the branches curl in and meet at the foot). */
 .ritual-wreath > span {
   position: absolute;
   left: 50%;
-  top: 47%;
+  top: 40%;
   translate: -50% -50%;
   font-family: var(--font-display);
   font-size: 0.75rem;
@@ -4641,7 +4628,9 @@ html:not(.motion) .figure-stage {
   opacity: 0;
 }
 
-/* The award: a laurel seal around the year, then the award and the jury's words. */
+/* The award: a laurel seal around the year, then the award and the jury's words.
+   The year sits in the wreath's open middle, well above the centre of its box
+   (the branches curl in and meet at the foot), as in every laurel on the site. */
 .premiere-award {
   position: relative;
   display: grid;
@@ -4670,8 +4659,11 @@ html:not(.motion) .figure-stage {
 }
 
 .premiere-seal-year {
-  position: relative;
-  margin-top: 8%;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  translate: -50% -50%;
+  line-height: 1;
   font-family: var(--font-display);
   font-size: clamp(1.9rem, 9vw, 2.6rem);
   letter-spacing: 0.04em;
@@ -4895,8 +4887,11 @@ html:not(.motion) .figure-stage {
 }
 
 .award-year {
-  position: relative;
-  margin-top: 8%;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  translate: -50% -50%;
+  line-height: 1;
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 10vw, 3.2rem);
   letter-spacing: 0.04em;
@@ -5768,8 +5763,11 @@ html:not(.motion) .figure-stage {
 }
 
 .lb-seal-year {
-  position: relative;
-  margin-top: 8%;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  translate: -50% -50%;
+  line-height: 1;
   font-family: var(--font-display);
   font-size: clamp(1.7rem, 8vw, 2.2rem);
   letter-spacing: 0.04em;

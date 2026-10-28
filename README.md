@@ -21,7 +21,7 @@ Then open http://localhost:5173. `npm run build` writes the static site to `dist
 - Styles: [`src/styles.css`](src/styles.css), written phone first (base rules are the 375px layout).
 - Motion (GSAP ScrollTrigger, Lenis): [`src/motion.js`](src/motion.js). Section colours that blend instead of cutting: [`src/tones.js`](src/tones.js).
 - The 3D world (three.js, lazy-loaded) in [`src/world/`](src/world): one fixed WebGL scene behind the page with the rose-quartz stone (`quartz.js`), the satin ribbon (`ribbon.js`), a quiet starfield (`stars.js`), the scroll-graded backdrop (`atmosphere.js`) and every photo redrawn as liquid (`media.js`). `index.js` runs the scene and keeps the stone with the hero.
-- First-visit portal, sound then language with a 5-second auto-pick: [`src/portal.js`](src/portal.js). Add `?intro` to any URL to see it again.
+- First-visit ritual (what BE BEAUTY is, and the stone to touch to enter with sound): [`src/portal.js`](src/portal.js). Add `?intro` to any URL to see it again.
 - "Bella Bayar presents", the dark title card between the portal and the hero: [`src/premiere.js`](src/premiere.js).
 - The Hudterapeuten cover that opens, riffles and shuts as a real magazine (three.js, loaded when the cover is near): [`src/magazine/`](src/magazine). `pages.js` paints the inside pages, `book.js` runs the paper physics.
 - Soundscape, composed live with Web Audio (no audio files): [`src/sound.js`](src/sound.js).

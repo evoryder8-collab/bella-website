@@ -113,27 +113,26 @@ export const copy = {
         cancel: 'Avbryt',
       },
     },
-    // The first-visit portal (src/portal.js), shown in the device's language.
-    // Stockholm Beauty Week, October 2026; the jury's words are translated from English.
+    // The title card after the first-visit ritual (src/premiere.js), and the
+    // award the ritual shows: Stockholm Beauty Week, October 2026. The jury's
+    // words are translated from English.
     premiere: {
       presents: 'presenterar',
       awardKicker: 'Stockholm Beauty Week',
       award: 'Bästa skönhetssalong',
       awardQuote: '”En sinnlig upplevelse bortom det vanliga, där öst möter väst. Inga nålar behövs.”',
     },
+    // The first-visit ritual (src/portal.js), first shown in the device's
+    // language: what BE BEAUTY is, said plainly, and the stone to touch. Its
+    // award comes from premiere.
     portal: {
-      soundTitle: 'Ljud på?',
-      soundLead: 'BE BEAUTY är skapat för att upplevas med ljud. Mjukt, stilla och nära.',
-      yes: 'Ja, med ljud',
-      recommended: 'Rekommenderas',
-      no: 'Nej tack, utan ljud',
-      langTitle: 'Välj språk',
-      langLead: 'Känn dig som hemma.',
-      detected: 'Vi hittade svenska',
-      auto: 'Fortsätter om {n}',
-      paused: 'Pausat',
-      pause: 'Pausa nedräkningen',
-      resume: 'Fortsätt nedräkningen',
+      eyebrow: 'Face sculpting · Stockholm',
+      title: 'Ett naturligt ansiktslyft, <em>för hand.</em>',
+      lead: 'Gua sha, buckal massage och lymfdränage. Inga nålar, ingen kirurgi.',
+      touch: 'Rör vid stenen för att kliva in',
+      enter: 'Kliv in på BE BEAUTY, med ljud',
+      silence: 'Kliv in i tystnad',
+      langLabel: 'Språk',
     },
     nav: {
       method: 'Metoden',
@@ -488,19 +487,17 @@ export const copy = {
       award: 'Best Beauty Salon',
       awardQuote: '“A sensory experience beyond the ordinary, where East meets West. No needles needed.”',
     },
+    // The first-visit ritual (src/portal.js), first shown in the device's
+    // language: what BE BEAUTY is, said plainly, and the stone to touch. Its
+    // award comes from premiere.
     portal: {
-      soundTitle: 'Sound on?',
-      soundLead: 'BE BEAUTY is made to be felt with sound. Soft, calm and close.',
-      yes: 'Yes, with sound',
-      recommended: 'Recommended',
-      no: 'No thanks, keep it quiet',
-      langTitle: 'Choose your language',
-      langLead: 'Make yourself at home.',
-      detected: 'We found English',
-      auto: 'Continuing in {n}',
-      paused: 'Paused',
-      pause: 'Pause the countdown',
-      resume: 'Resume the countdown',
+      eyebrow: 'Face sculpting · Stockholm',
+      title: 'A natural facelift, <em>by hand.</em>',
+      lead: 'Gua sha, buccal massage and lymphatic drainage. No needles, no surgery.',
+      touch: 'Touch the stone to enter',
+      enter: 'Enter BE BEAUTY, with sound',
+      silence: 'Enter in silence',
+      langLabel: 'Language',
     },
     nav: {
       method: 'The method',

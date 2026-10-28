@@ -146,10 +146,12 @@ decorative lines that looked like placeholders.
   pill that glides to the chosen one and a line saying it changes the sculpture; phones keep the row of chips.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
-- **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the
-  language, detected from the device and picked after a five-second countdown that can be paused. A
-  `?lang=` link skips the language step; `?intro` shows the portal again. The portal sits over the dark 3D
-  world with the stone turning alone; entering dissolves it into the hero's entrance.
+- **First-visit ritual** (`src/portal.js`): one screen in the dark 3D world that says plainly what BE BEAUTY
+  is ("Face sculpting · Stockholm", "A natural facelift, by hand.", the methods, her Best Beauty Salon 2026
+  award) round the rose-quartz stone. Touching the stone closes a ring of light round it, sends ripples out
+  and enters with sound; "Enter in silence" and Svenska · English (set from the device or a `?lang=` link,
+  no countdown) sit at the foot. `?intro` shows it again. An earlier couture-invitation version is kept
+  on the `portal-invitation` branch; the user found it unclear for newcomers.
 - **Premiere** (`src/premiere.js`): after the portal the screen goes dark with dust drifting in a beam of
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
   follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and
@@ -177,4 +179,4 @@ decorative lines that looked like placeholders.
   a once-per-visit sparkle for the 3D figures). The early generated crystal chimes were removed at the user's
   request. A header toggle mutes it; returning visitors who chose sound hear it from their first tap.
 - **Fallbacks**: without WebGL the page keeps its photos and blended colours; with reduced motion there is no
-  world, pinning or countdown animation; the portal still asks, without effects.
+  world, pinning or ritual animation; the ritual still asks, without effects.

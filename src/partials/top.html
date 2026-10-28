@@ -1,38 +1,39 @@
 <!-- Shared top of every page: skip link, first-visit portal, header, phone menu and page curtain. -->
   <a class="skip-link" href="#main" data-i18n="ui.skip"></a>
 
-  <!-- First visit: sound, then language (src/portal.js). It only shows while the
-       head script's .portal-open is set, so without JavaScript the site opens directly. -->
-  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
-    <p class="portal-mark" aria-hidden="true"><span class="foil foil-light">BE <em>BEAUTY</em></span></p>
-    <div class="portal-step" data-step="sound">
-      <span class="portal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-      <h2 class="portal-title" id="portal-title" data-portal-text="soundTitle"></h2>
-      <p class="portal-lead" data-portal-text="soundLead"></p>
-      <div class="portal-actions">
-        <button type="button" class="portal-yes" data-sound-choice="on">
-          <span class="portal-yes-label"><span data-portal-text="yes"></span><span class="portal-yes-tag" data-portal-text="recommended"></span></span>
-          <span class="portal-yes-arrow" aria-hidden="true">→</span>
-        </button>
-        <button type="button" class="portal-no" data-sound-choice="off" data-portal-text="no"></button>
-      </div>
+  <!-- First visit: the quartz ritual (src/portal.js). What BE BEAUTY is, said
+       plainly, round the rose-quartz stone of the 3D world: touching the stone
+       enters with sound. It only shows while the head script's .portal-open is
+       set, so without JavaScript the site opens directly. -->
+  <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title" tabindex="-1">
+    <div class="ritual-head">
+      <p class="portal-mark"><span class="foil foil-light">BE <em>BEAUTY</em></span></p>
+      <p class="ritual-eyebrow" data-portal-text="eyebrow"></p>
     </div>
-    <div class="portal-step" data-step="lang" hidden>
-      <h2 class="portal-title" data-portal-text="langTitle"></h2>
-      <p class="portal-lead" data-portal-text="langLead"></p>
-      <div class="portal-langs" role="group">
-        <button type="button" class="portal-lang" data-pick="sv" lang="sv">
-          <span class="portal-lang-name">Svenska</span><span class="portal-lang-code">SV</span>
-          <span class="portal-progress" aria-hidden="true"></span>
-        </button>
-        <button type="button" class="portal-lang" data-pick="en" lang="en">
-          <span class="portal-lang-name">English</span><span class="portal-lang-code">EN</span>
-          <span class="portal-progress" aria-hidden="true"></span>
-        </button>
-      </div>
-      <div class="portal-auto">
-        <p aria-live="polite"><span data-portal-detected></span> · <span data-portal-count></span></p>
-        <button type="button" class="portal-pause" data-portal-pause aria-pressed="false"><span class="portal-pause-icon" aria-hidden="true"></span><span class="visually-hidden" data-portal-pause-label></span></button>
+    <button type="button" class="ritual-stone" data-portal-stone data-portal-label="enter">
+      <span class="ritual-halo" aria-hidden="true"></span>
+      <svg class="ritual-ring" viewBox="0 0 100 100" focusable="false" aria-hidden="true">
+        <circle class="ritual-ring-track" cx="50" cy="50" r="48.5"/>
+        <circle class="ritual-ring-fill" cx="50" cy="50" r="48.5" pathLength="1"/>
+      </svg>
+      <span class="ritual-ripples" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="ritual-gem" aria-hidden="true"></span>
+    </button>
+    <p class="ritual-touch" data-portal-text="touch" aria-hidden="true"></p>
+    <div class="ritual-copy">
+      <h2 class="ritual-title" id="portal-title" data-portal-html="title"></h2>
+      <p class="ritual-lead" data-portal-text="lead"></p>
+      <p class="ritual-award">
+        <span class="ritual-wreath" aria-hidden="true"><svg class="award-laurel" data-laurel viewBox="0 0 320 200" focusable="false"></svg><span>2026</span></span>
+        <span class="ritual-award-text"><em data-portal-text="award"></em><span data-portal-text="awardKicker"></span></span>
+      </p>
+    </div>
+    <div class="ritual-foot">
+      <button type="button" class="ritual-silence" data-portal-silence data-portal-text="silence"></button>
+      <div class="ritual-langs" role="radiogroup" data-portal-label="langLabel">
+        <button type="button" role="radio" aria-checked="false" data-pick="sv" lang="sv">Svenska</button>
+        <span class="ritual-dot" aria-hidden="true"></span>
+        <button type="button" role="radio" aria-checked="false" data-pick="en" lang="en">English</button>
       </div>
     </div>
   </div>

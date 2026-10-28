@@ -102,6 +102,7 @@ export function initWorld() {
   // resting place beside another page's title. Found again on every page change.
   let portraitEl = null;
   let restEl = null;
+  const portalStone = document.querySelector('[data-portal-stone]');
   const findPage = () => {
     portraitEl = document.querySelector('.hero-media');
     restEl = document.querySelector('[data-stone-rest]');
@@ -160,14 +161,22 @@ export function initWorld() {
   let pulse = 0;
   window.addEventListener('bb:pulse', () => (pulse = 1));
 
-  // The stone belongs to the hero: presented alone in the portal, then resting
-  // by Bella's cheek and following a finger over her portrait. It leaves with
+  // The stone belongs to the hero: floating in the first-visit ritual's halo
+  // (brighter while touched), then resting by Bella's cheek and following a finger over her portrait. It leaves with
   // the hero as you scroll rather than following you down the page. On the
   // other pages it floats, turning slowly, beside the page's title.
   const target = (now, t) => {
     if (html.classList.contains('portal-open')) {
-      const lang = html.classList.contains('portal-picking');
-      return { x: vw / 2, y: vh * (lang ? 0.15 : 0.25), scale: (q.coarse ? 0.62 : 0.72) * (lang ? 0.8 : 1), glow: 0.45, follow: false, portrait: false };
+      const spot = portalStone?.getBoundingClientRect();
+      const touched = html.classList.contains('portal-touched');
+      return {
+        x: spot ? spot.left + spot.width / 2 : vw / 2,
+        y: spot ? spot.top + spot.height / 2 : vh * 0.3,
+        scale: (q.coarse ? 0.95 : 1.05) * (touched ? 1.06 : 1),
+        glow: touched ? 1 : 0.45,
+        follow: false,
+        portrait: false,
+      };
     }
     if (!portraitEl?.isConnected) {
       const rest = restEl?.isConnected ? restEl.getBoundingClientRect() : null;

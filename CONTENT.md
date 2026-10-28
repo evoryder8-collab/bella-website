@@ -12,7 +12,7 @@ All copy and contact details live in [`src/content.js`](src/content.js), in Swed
 - [ ] Academy: no new dates are listed yet ("Nya kursdatum släpps snart"). Interest goes to her email with a prefilled subject.
 - [ ] Facebook links to the share link the user sent (`facebookUrl` in `src/content.js`, `https://www.facebook.com/share/192DeLQmXT/`); swap in her page's own address if she prefers.
 - [ ] Whether to show a WhatsApp or phone number. None is published, so booking goes to Bokadirekt and contact goes to email and Instagram.
-- [ ] The first-visit portal copy ("Ljud på?" / "Välj språk", `portal` in `src/content.js`). The music is her signature song "Late Night Polish" (`src/music`), at 40% volume on computers and 20% on phones.
+- [ ] The first-visit ritual copy ("Ett naturligt ansiktslyft, för hand.", "Rör vid stenen för att kliva in", `portal` in `src/content.js`). The music is her signature song "Late Night Polish" (`src/music`), at 40% volume on computers and 20% on phones.
 
 - [ ] The "Bella Bayar presenterar" title card after the portal (`premiere` in `src/content.js`), with the Stockholm Beauty Week 2026 award ("Bästa skönhetssalong"). The jury's motivation is translated into Swedish from her English Instagram post of 19 October 2026.
 - [ ] The link in bio (`linkinbio/`, `pages.links` in `src/content.js`) is written in her own voice ("Mejla mig", "Jag ser fram emot att välkomna dig"), and its honours read "Silver · Europamästerskapen 2025", "Jury · Tokyo, Paris, Phuket", "4,9 ★ · 478 betyg" and "Skapare av Femina Bella Est®". Its save-contact card holds her email, both studios, Instagram and the Bokadirekt link.

@@ -508,7 +508,7 @@ main,
   font-style: italic;
 }
 
-/* Champagne foil for dark grounds: the open menu, the footer, the portal. */
+/* Champagne foil for dark grounds: the open menu, the footer, the first-visit ritual. */
 .foil-light,
 .menu-open .site-header .foil {
   --foil: #b97468 0%, #e7b3a5 14%, #fbe5dc 26%, #fffaf6 32%, #d9a090 44%, #a9605b 55%, #e0a898 67%, #fff4ee 77%, #c08176 89%, #b97468 100%;
@@ -3017,7 +3017,11 @@ main,
   }
 }
 
-/* ---------- First-visit portal: sound, then language ---------- */
+/* ---------- First-visit ritual ----------
+   The rose-quartz stone of the 3D world floats in the wine night, with what
+   BE BEAUTY is written plainly round it. Touching the stone (src/portal.js)
+   draws a ring of light round it, sends ripples out and enters with sound;
+   "Enter in silence" and the language sit quietly at the foot. */
 
 .portal {
   display: none;
@@ -3044,19 +3048,20 @@ main,
   z-index: 100;
   flex-direction: column;
   align-items: center;
-  padding: calc(22px + env(safe-area-inset-top, 0px)) var(--gutter) calc(30px + var(--safe-bottom));
+  padding: calc(24px + env(safe-area-inset-top, 0px)) var(--gutter) calc(22px + var(--safe-bottom));
   overflow-y: auto;
+  outline: none;
   color: var(--cream);
   text-align: center;
   background:
-    radial-gradient(110% 60% at 50% 26%, rgb(138 58 75 / 0.5), transparent 62%),
+    radial-gradient(110% 60% at 50% 30%, rgb(138 58 75 / 0.5), transparent 62%),
     linear-gradient(#1f1016, #120a0d);
-  transition: opacity 1.3s var(--ease);
+  transition: opacity 1.2s var(--ease);
 }
 
-/* Once the 3D world draws, it is the portal's backdrop: the stone turns in the open space above. */
+/* Once the 3D world draws, its starry wine night is the backdrop. */
 .has-world .portal {
-  background: radial-gradient(80% 50% at 50% 25%, transparent 30%, rgb(18 9 13 / 0.38) 75%);
+  background: radial-gradient(80% 50% at 50% 30%, transparent 30%, rgb(18 9 13 / 0.36) 78%);
 }
 
 .portal.is-leaving {
@@ -3064,308 +3069,418 @@ main,
   pointer-events: none;
 }
 
-.portal-mark {
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  letter-spacing: 0.26em;
+.portal > * {
   opacity: 0;
 }
 
-.portal.is-ready .portal-mark {
-  animation: portal-in 1.4s var(--ease) 0.2s both;
+.portal.is-ready > * {
+  animation: portal-in 1.3s var(--ease) both;
 }
 
-.portal-step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 440px;
-  margin-top: auto;
+.portal.is-ready > .ritual-head {
+  animation-delay: 0.2s;
 }
 
-.portal-step[hidden] {
-  display: none;
+.portal.is-ready > .ritual-stone {
+  animation-delay: 0.45s;
 }
 
-/* The language choice sits in the middle of the screen, where the eye and thumb already are. */
-.portal-step[data-step='lang'] {
-  margin-block: auto;
-  padding-top: 8vh;
+.portal.is-ready > .ritual-touch {
+  animation-delay: 1.5s;
 }
 
-.portal-step > * {
-  opacity: 0;
-}
-
-.portal.is-ready .portal-step:not([hidden]) > * {
-  animation: portal-in 1.2s var(--ease) both;
-}
-
-.portal.is-ready .portal-step > :nth-child(1) {
-  animation-delay: 0.55s;
-}
-
-.portal.is-ready .portal-step > :nth-child(2) {
-  animation-delay: 0.68s;
-}
-
-.portal.is-ready .portal-step > :nth-child(3) {
+.portal.is-ready > .ritual-copy {
   animation-delay: 0.8s;
 }
 
-.portal.is-ready .portal-step > :nth-child(4) {
-  animation-delay: 0.94s;
-}
-
-.portal-step.is-leaving > * {
-  animation: portal-out 0.55s var(--ease) both !important;
+.portal.is-ready > .ritual-foot {
+  animation-delay: 1.15s;
 }
 
 @keyframes portal-in {
   from {
     opacity: 0;
-    transform: translateY(18px);
+    translate: 0 16px;
     filter: blur(8px);
   }
   to {
     opacity: 1;
-    transform: none;
+    translate: 0 0;
     filter: none;
   }
 }
 
-@keyframes portal-out {
+.ritual-head {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.portal-mark {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.26em;
+}
+
+.ritual-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgb(255 226 218 / 0.72);
+}
+
+/* The stone itself is drawn by the world behind (src/world/index.js), right
+   here: this is its halo, its ring of light and where it is touched. */
+.ritual-stone {
+  position: relative;
+  flex: none;
+  width: min(66vw, 46vh, 300px);
+  aspect-ratio: 1;
+  margin-block: auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ritual-stone:focus-visible {
+  outline: none;
+}
+
+.ritual-stone:focus-visible .ritual-ring-track {
+  stroke: rgb(255 226 216 / 0.5);
+}
+
+.ritual-halo {
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 214 206 / 0.22), rgb(231 163 160 / 0.1) 55%, transparent);
+  animation: ritual-breathe 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes ritual-breathe {
+  from {
+    scale: 0.94;
+    opacity: 0.7;
+  }
+  to {
+    scale: 1.04;
+    opacity: 1;
+  }
+}
+
+.ritual-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  rotate: -90deg;
+}
+
+.ritual-ring circle {
+  fill: none;
+}
+
+.ritual-ring-track {
+  stroke: rgb(255 226 216 / 0.16);
+  stroke-width: 0.35;
+  transition: stroke 0.4s ease;
+}
+
+.ritual-ring-fill {
+  stroke: rgb(255 232 224 / 0.92);
+  stroke-width: 0.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  filter: drop-shadow(0 0 6px rgb(255 190 180 / 0.9));
+  opacity: 0;
+  transition:
+    stroke-dashoffset 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.portal.is-pressing .ritual-ring-fill {
+  stroke-dashoffset: 0;
+  opacity: 1;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.ritual-ripples i {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgb(255 222 212 / 0.7);
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.portal.is-entering .ritual-ripples i {
+  animation: ritual-ripple 1.6s cubic-bezier(0.2, 0.6, 0.3, 1) both;
+}
+
+.ritual-ripples i:nth-child(2) {
+  animation-delay: 0.16s !important;
+}
+
+.ritual-ripples i:nth-child(3) {
+  animation-delay: 0.32s !important;
+}
+
+@keyframes ritual-ripple {
+  from {
+    opacity: 0.85;
+    scale: 1;
+  }
+  to {
+    opacity: 0;
+    scale: 2.8;
+  }
+}
+
+/* Without the 3D world, a polished stone drawn in CSS. */
+.ritual-gem {
+  position: absolute;
+  inset: 32% 18%;
+  border-radius: 50% 46% 54% 48% / 60% 50% 50% 40%;
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 0.85) 0 6%, transparent 30%),
+    radial-gradient(circle at 50% 60%, #f3c3c2, #c97a84 70%, #8e4651);
+  box-shadow: 0 20px 40px -14px rgb(0 0 0 / 0.6);
+  rotate: -18deg;
+}
+
+.has-world .ritual-gem {
+  display: none;
+}
+
+.ritual-touch {
+  margin-top: 14px;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgb(255 232 226 / 0.85);
+}
+
+.ritual-copy {
+  display: grid;
+  justify-items: center;
+  margin-block: auto;
+  padding-top: 22px;
+}
+
+.ritual-title {
+  max-width: 14ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 9vw, 2.9rem);
+  line-height: 1.05;
+}
+
+.ritual-title em {
+  color: var(--rose);
+}
+
+.ritual-lead {
+  max-width: 31ch;
+  margin-top: 12px;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgb(255 240 234 / 0.8);
+}
+
+/* Her award: the laurel round the year, and the prize beside it. */
+.ritual-award {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 22px;
+  text-align: left;
+}
+
+.ritual-wreath {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  aspect-ratio: 320 / 200;
+}
+
+.ritual-wreath svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ritual-wreath > span {
+  position: relative;
+  margin-top: 10%;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  letter-spacing: 0.04em;
+}
+
+.ritual-award-text {
+  display: grid;
+  gap: 4px;
+}
+
+.ritual-award-text em {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  line-height: 1.1;
+}
+
+.ritual-award-text span {
+  font-size: 0.5625rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rose);
+}
+
+.ritual-foot {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding-top: 18px;
+}
+
+.ritual-silence,
+.ritual-langs button {
+  border: 0;
+  background: none;
+  color: rgb(255 232 226 / 0.62);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.4s var(--ease);
+}
+
+.ritual-silence {
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 232 226 / 0.3);
+  text-underline-offset: 5px;
+}
+
+.ritual-silence:hover,
+.ritual-langs button:hover {
+  color: var(--cream);
+}
+
+.ritual-langs {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ritual-langs button {
+  position: relative;
+  padding: 6px 2px;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.ritual-langs button[aria-checked='true'] {
+  color: var(--cream);
+}
+
+.ritual-langs button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0.3em;
+  bottom: 1px;
+  height: 1px;
+  background: var(--rose);
+  scale: 0 1;
+  transition: scale 0.6s var(--ease);
+}
+
+.ritual-langs button[aria-checked='true']::after {
+  scale: 1 1;
+}
+
+.ritual-silence:focus-visible,
+.ritual-langs button:focus-visible {
+  outline: 1px solid rgb(255 232 226 / 0.5);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ritual-dot {
+  width: 3px;
+  height: 3px;
+  rotate: 45deg;
+  background: rgb(231 163 160 / 0.8);
+}
+
+[data-portal-text],
+[data-portal-html] {
+  transition: opacity 0.26s ease;
+}
+
+.portal.is-relettering :is([data-portal-text], [data-portal-html]) {
+  opacity: 0;
+}
+
+/* Entering: the words fall away while the ripples spread and the stone glows. */
+.portal.is-entering > :not(.ritual-stone) {
+  animation: portal-away 0.7s var(--ease) both;
+}
+
+.portal.is-entering .ritual-halo {
+  animation: none;
+  scale: 1.5;
+  opacity: 1;
+  transition:
+    scale 1.2s var(--ease),
+    opacity 1.2s var(--ease);
+}
+
+@keyframes portal-away {
   from {
     opacity: 1;
   }
   to {
     opacity: 0;
-    transform: translateY(-12px);
+    translate: 0 -10px;
     filter: blur(6px);
   }
 }
 
-.portal-wave {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-  height: 22px;
-  margin-bottom: 18px;
-  color: var(--rose);
+@media (min-width: 900px) {
+  .ritual-stone {
+    width: min(40vh, 320px);
+  }
+
+  .ritual-title {
+    max-width: none;
+    font-size: clamp(2.4rem, 3.6vw, 3.2rem);
+  }
 }
 
-.portal-wave i {
-  width: 2px;
-  height: 30%;
-  border-radius: 1px;
-  background: currentColor;
-  animation: sound-bars 1.3s ease-in-out infinite;
-}
+@media (prefers-reduced-motion: reduce) {
+  .portal > * {
+    opacity: 1;
+    animation: none !important;
+  }
 
-.portal-wave i:nth-child(2n) {
-  animation-delay: -0.45s;
-}
-
-.portal-wave i:nth-child(3n) {
-  animation-delay: -0.8s;
-}
-
-.portal-title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2.8rem, 12vw, 4.2rem);
-  line-height: 1;
-}
-
-.portal-lead {
-  margin-top: 14px;
-  max-width: 30ch;
-  font-weight: 300;
-  font-size: 1rem;
-  opacity: 0.82;
-}
-
-.portal-actions {
-  display: grid;
-  justify-items: center;
-  gap: 14px;
-  width: 100%;
-  margin-top: 30px;
-}
-
-.portal-yes {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  min-height: 82px;
-  padding: 14px 14px 14px 26px;
-  border-radius: 26px;
-  background: var(--cream);
-  color: var(--wine);
-  text-align: left;
-  box-shadow:
-    0 24px 60px -24px rgb(231 163 160 / 0.7),
-    inset 0 1px 0 rgb(255 255 255 / 0.9);
-  transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
-}
-
-.portal-yes:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 30px 70px -22px rgb(231 163 160 / 0.85),
-    inset 0 1px 0 rgb(255 255 255 / 0.9);
-}
-
-.portal-yes:active {
-  transform: scale(0.98);
-}
-
-.portal-yes-label {
-  display: grid;
-  gap: 2px;
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  line-height: 1.15;
-}
-
-.portal-yes-tag {
-  font-family: var(--font-body);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--rose-deep);
-}
-
-.portal-yes-arrow {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: var(--wine);
-  color: var(--cream);
-  font-size: 1.2rem;
-}
-
-.portal-no {
-  min-height: 44px;
-  padding: 0 22px;
-  border: 1px solid var(--line-light);
-  border-radius: 999px;
-  font-size: 0.8125rem;
-  letter-spacing: 0.04em;
-  opacity: 0.8;
-  transition: opacity 0.3s, background-color 0.3s;
-}
-
-.portal-no:hover {
-  opacity: 1;
-  background: rgb(255 244 238 / 0.08);
-}
-
-.portal-langs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  width: 100%;
-  margin-top: 30px;
-}
-
-.portal-lang {
-  position: relative;
-  display: grid;
-  justify-items: start;
-  align-content: end;
-  gap: 4px;
-  min-height: 132px;
-  overflow: hidden;
-  padding: 18px;
-  border: 1px solid var(--line-light);
-  border-radius: 24px;
-  background: rgb(255 244 238 / 0.06);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
-  text-align: left;
-  transition: background-color 0.4s var(--ease), border-color 0.4s var(--ease), transform 0.4s var(--ease);
-}
-
-.portal-lang:hover {
-  background: rgb(255 244 238 / 0.12);
-}
-
-.portal-lang:active {
-  transform: scale(0.98);
-}
-
-.portal-lang.is-detected {
-  border-color: rgb(231 163 160 / 0.7);
-  background: rgb(231 163 160 / 0.14);
-}
-
-.portal-lang-name {
-  font-family: var(--font-display);
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
-.portal-lang-code {
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  opacity: 0.7;
-}
-
-.portal-progress {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 3px;
-  background: var(--rose);
-  transform-origin: left;
-  transform: scaleX(0);
-}
-
-.portal-auto {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 20px;
-  font-size: 0.8125rem;
-  opacity: 0.85;
-}
-
-.portal-pause {
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line-light);
-  border-radius: 50%;
-}
-
-/* Two bars while counting (pause); a triangle while paused (play). */
-.portal-pause-icon {
-  width: 10px;
-  height: 10px;
-  border-left: 3px solid currentColor;
-  border-right: 3px solid currentColor;
-}
-
-.portal-pause[aria-pressed='true'] .portal-pause-icon {
-  width: 0;
-  height: 0;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 9px solid currentColor;
-  border-right: 0;
-  margin-left: 3px;
+  .ritual-halo {
+    animation: none;
+  }
 }
 
 /* ---------- Treatment figures ----------
@@ -3545,8 +3660,7 @@ html:not(.motion) .figure-stage {
   .t-card,
   .team,
   .review-card,
-  .offer,
-  .portal-lang {
+  .offer {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -3569,10 +3683,6 @@ html:not(.motion) .figure-stage {
 
   .offer {
     background: rgb(36 20 26 / 0.82);
-  }
-
-  .portal-lang {
-    background: rgb(255 244 238 / 0.1);
   }
 }
 
@@ -4790,12 +4900,13 @@ html:not(.motion) .figure-stage {
   pointer-events: none;
 }
 
+/* Bella herself, cut out from her background: no frame, standing in the dark
+   with a soft rose glow behind her, and fading into the night below her shoulders. */
 .lb-portrait {
   position: relative;
-  width: min(56vw, 230px);
-  aspect-ratio: 4 / 5;
-  margin: 0 auto;
-  border-radius: 999px 999px 32px 32px;
+  width: min(74vw, 310px);
+  aspect-ratio: 5 / 6;
+  margin: -10px auto 0;
 }
 
 .lb-portrait img {
@@ -4803,33 +4914,19 @@ html:not(.motion) .figure-stage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 16%;
-  border-radius: inherit;
+  object-position: 50% 0%;
+  -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 97%);
+  mask-image: linear-gradient(to bottom, #000 58%, transparent 97%);
   transition:
-    clip-path 2s cubic-bezier(0.65, 0, 0.2, 1),
+    opacity 2s var(--ease),
+    translate 2.4s var(--ease),
     scale 2.6s var(--ease),
     filter 2s var(--ease);
 }
 
-/* A fine arch of rose light around her. */
-.lb-portrait::after {
-  content: '';
-  position: absolute;
-  inset: -9px;
-  padding: 1px;
-  border-radius: 999px 999px 40px 40px;
-  background: linear-gradient(160deg, rgb(255 236 228 / 0.85), rgb(185 116 104 / 0.15) 38%, rgb(241 201 185 / 0.7) 72%, rgb(185 116 104 / 0.12));
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  transition: opacity 1.6s var(--ease) 0.9s;
-}
-
 .lb-portrait-halo {
   position: absolute;
-  inset: -16% -22%;
+  inset: -6% -14% 30%;
   border-radius: 50%;
   background: radial-gradient(closest-side, rgb(231 163 160 / 0.5), rgb(231 163 160 / 0.12) 60%, transparent);
   filter: blur(10px);
@@ -4923,20 +5020,16 @@ html:not(.motion) .figure-stage {
   color: var(--rose);
 }
 
-/* Before it opens: dark, the portrait a sliver of light, the words waiting. */
+/* Before it opens: dark, Bella still in the shadow, the words waiting. */
 html.motion .lb-hero:not(.is-open) .lb-portrait img {
-  clip-path: inset(50% 30% 50% 30% round 999px);
-  scale: 1.16;
-  filter: brightness(0.6);
+  opacity: 0;
+  translate: 0 26px;
+  scale: 1.05;
+  filter: brightness(0.45) blur(6px);
 }
 
-html.motion .lb-hero:not(.is-open) .lb-portrait::after,
 html.motion .lb-hero:not(.is-open) .lb-portrait-halo {
   opacity: 0;
-}
-
-.lb-portrait img {
-  clip-path: inset(0 0 0 0 round 999px 999px 32px 32px);
 }
 
 [data-lb-rise] {

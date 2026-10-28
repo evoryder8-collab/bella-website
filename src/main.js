@@ -119,6 +119,33 @@ function initSocials() {
     window.removeEventListener('scroll', summon);
   };
   window.addEventListener('scroll', summon, { passive: true });
+  initLeave(dock);
+}
+
+// A gem never leaves the site on its own: a small card asks first, rising
+// from the gem that was tapped, with Continue (the real link) and Cancel.
+function initLeave(dock) {
+  const card = document.querySelector('[data-leave]');
+  if (!card?.showModal) return;
+  const go = card.querySelector('[data-leave-go]');
+  dock.addEventListener('click', (event) => {
+    const gem = event.target.closest('.social');
+    if (!gem) return;
+    event.preventDefault();
+    const network = gem.dataset.link;
+    card.querySelector('[data-leave-title]').textContent = network === 'facebook' ? 'Facebook' : 'Instagram';
+    card.querySelector('[data-leave-text]').textContent = copy[currentLang()].ui.leave[network];
+    card.querySelector('[data-leave-icon]').innerHTML = gem.querySelector('svg')?.outerHTML ?? '';
+    go.href = gem.href;
+    const from = gem.getBoundingClientRect();
+    card.style.setProperty('--from-x', `${Math.round(from.left + from.width / 2 - innerWidth / 2)}px`);
+    card.style.setProperty('--from-y', `${Math.round(from.top + from.height / 2 - innerHeight / 2)}px`);
+    card.showModal();
+    go.focus();
+  });
+  go.addEventListener('click', () => card.close());
+  // A tap on the dimmed page around the card cancels too.
+  card.addEventListener('click', (event) => event.target === card && card.close());
 }
 
 function initMenu() {
@@ -165,6 +192,8 @@ function initHeader() {
     // Hide while scrolling down past the hero, show again on any scroll up.
     const menuOpen = document.body.classList.contains('menu-open');
     header.classList.toggle('is-hidden', !menuOpen && y > lastY && y > window.innerHeight * 0.6);
+    // The wordmark's foil catches the light differently as the page moves.
+    if (!reducedMotion) header.style.setProperty('--sheen', `${(22 + 32 * Math.sin(y / 520)).toFixed(1)}%`);
     lastY = y;
   };
 

@@ -4,7 +4,7 @@
   <!-- First visit: sound, then language (src/portal.js). It only shows while the
        head script's .portal-open is set, so without JavaScript the site opens directly. -->
   <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
-    <p class="portal-mark" aria-hidden="true">BE <em>BEAUTY</em></p>
+    <p class="portal-mark" aria-hidden="true"><span class="foil foil-light">BE <em>BEAUTY</em></span></p>
     <div class="portal-step" data-step="sound">
       <span class="portal-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
       <h2 class="portal-title" id="portal-title" data-portal-text="soundTitle"></h2>
@@ -37,9 +37,29 @@
     </div>
   </div>
 
+  <!-- A couture masthead: the foil wordmark in the middle, the menu and sound on
+       its left, the language (and on wider screens the booking button) on its
+       right; on desktop the pages sit on a second row underneath. -->
   <header class="site-header" data-header>
     <div class="header-inner">
-      <a class="wordmark" href="{{root}}" data-nav>BE <em>BEAUTY</em></a>
+      <div class="header-start">
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
+          <span class="visually-hidden" data-i18n="ui.menu"></span>
+          <span class="menu-toggle-lines" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="sound-toggle" data-sound-toggle aria-pressed="false" data-i18n-attr="aria-label:ui.sound"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
+      </div>
+      <a class="wordmark" href="{{root}}" data-nav>
+        <span class="foil">BE <em>BEAUTY</em></span>
+        <span class="wordmark-tagline">Salon &amp; Academy</span>
+      </a>
+      <div class="header-end">
+        <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
+          <button type="button" data-lang="sv" aria-pressed="true">SV</button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <a class="btn btn-solid btn-small header-book" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
+      </div>
       <nav class="nav" data-i18n-attr="aria-label:ui.menu">
         <ul>
           <li><a href="{{root}}#metoden" data-nav data-i18n="nav.method"></a></li>
@@ -49,19 +69,8 @@
           <li><a href="{{root}}kontakt/" data-nav data-i18n="nav.contact"></a></li>
         </ul>
       </nav>
-      <div class="header-actions">
-        <button type="button" class="sound-toggle" data-sound-toggle aria-pressed="false" data-i18n-attr="aria-label:ui.sound"><span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span></button>
-        <div class="lang-switch" role="group" data-i18n-attr="aria-label:ui.langLabel">
-          <button type="button" data-lang="sv" aria-pressed="true">SV</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
-        </div>
-        <a class="btn btn-solid btn-small header-book" data-link="book" href="#" target="_blank" rel="noopener" data-i18n="ui.book"></a>
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" data-menu-toggle>
-          <span class="visually-hidden" data-i18n="ui.menu"></span>
-          <span class="menu-toggle-lines" aria-hidden="true"></span>
-        </button>
-      </div>
     </div>
+    <span class="header-rule" aria-hidden="true"></span>
   </header>
 
   <div class="mobile-menu" id="mobile-menu" data-menu hidden>

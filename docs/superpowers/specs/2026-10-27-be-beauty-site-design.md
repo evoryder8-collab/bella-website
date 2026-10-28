@@ -127,7 +127,15 @@ decorative lines that looked like placeholders.
   The models are ~100k triangles, meshopt-compressed (about 300 KB each).
   With reduced motion there are no figures and the space closes.
 - **Floating social gems**: rose-quartz Instagram and Facebook buttons fixed at the right edge, arriving one by
-  one once the visitor starts scrolling, then floating and catching a glint.
+  one once the visitor starts scrolling, then floating and catching a glint. A tap never leaves the site on its
+  own: a small card rises from the gem ("You're about to visit BE BEAUTY on Facebook") with Continue and Cancel.
+- **Couture masthead**: the BE BEAUTY wordmark centred in rose-gold foil with "Salon & Academy" beneath, the menu
+  and a sound gem on its left, the language pill (and on wider screens Book now) on its right, and on desktop the
+  pages on a second row. The foil's light drifts as the page scrolls, a glint sweeps across every eight seconds
+  and a small star twinkles off the Y; a rose-gold rule with its own glint runs under it. Once scrolled it
+  tightens into frosted glass without the tagline. The footer and portal marks use the same foil in champagne.
+- **Treatment selector (desktop)**: the sculpture stands on its own selector, three numbered choices with a wine
+  pill that glides to the chosen one and a line saying it changes the sculpture; phones keep the row of chips.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,
   the first time each comes into view (once more, gentler, if nobody has touched them).
 - **First-visit portal** (`src/portal.js`): "Sound on?" first (large recommended yes, smaller no), then the

@@ -105,6 +105,13 @@ export const copy = {
       socials: 'Följ BE BEAUTY',
       instagram: 'BE BEAUTY på Instagram',
       facebook: 'BE BEAUTY på Facebook',
+      // The card a social gem shows before leaving the site.
+      leave: {
+        instagram: 'Du är på väg till BE BEAUTY på Instagram. Den öppnas i en ny flik.',
+        facebook: 'Du är på väg till BE BEAUTY på Facebook. Den öppnas i en ny flik.',
+        go: 'Fortsätt',
+        cancel: 'Avbryt',
+      },
     },
     // The first-visit portal (src/portal.js), shown in the device's language.
     // Stockholm Beauty Week, October 2026; the jury's words are translated from English.
@@ -182,6 +189,7 @@ export const copy = {
       title: 'Välj din <em>behandling</em>',
       intro: 'Alla behandlingar är skapade av Bella och utförs av henne eller hennes certifierade team.',
       groups: ['Ansikte', 'Signatur TCM', 'Kropp'],
+      pick: 'Välj en för att byta skulptur',
       swipe: 'Svep för fler',
       items: withMeta(
         [
@@ -433,6 +441,12 @@ export const copy = {
       socials: 'Follow BE BEAUTY',
       instagram: 'BE BEAUTY on Instagram',
       facebook: 'BE BEAUTY on Facebook',
+      leave: {
+        instagram: 'You’re about to visit BE BEAUTY on Instagram. It opens in a new tab.',
+        facebook: 'You’re about to visit BE BEAUTY on Facebook. It opens in a new tab.',
+        go: 'Continue',
+        cancel: 'Cancel',
+      },
     },
     premiere: {
       presents: 'presents',
@@ -508,6 +522,7 @@ export const copy = {
       title: 'Choose your <em>treatment</em>',
       intro: 'Every treatment was created by Bella and is performed by her or her certified team.',
       groups: ['Face', 'Signature TCM', 'Body'],
+      pick: 'Choose one to change the sculpture',
       swipe: 'Swipe for more',
       items: withMeta(
         [

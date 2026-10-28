@@ -1,7 +1,7 @@
 <!-- Shared bottom of every page: footer and the phone booking bar. -->
   <footer class="site-footer" data-tone="dark">
     <div class="wrap footer-inner">
-      <p class="footer-mark" aria-hidden="true">BE BEAUTY</p>
+      <p class="footer-mark" aria-hidden="true"><span class="foil foil-light">BE BEAUTY</span></p>
       <p class="footer-tagline">Beauty. Balance. <em>Glow.</em></p>
       <p class="footer-sub" data-i18n="footer.sub"></p>
       <nav class="footer-nav" data-i18n-attr="aria-label:ui.menu">
@@ -31,3 +31,16 @@
     <a class="social" data-link="instagram" href="#" target="_blank" rel="noopener" data-i18n-attr="aria-label:ui.instagram"><span class="ig-icon"></span></a>
     <a class="social" data-link="facebook" href="#" target="_blank" rel="noopener" data-i18n-attr="aria-label:ui.facebook"><span class="fb-icon"></span></a>
   </nav>
+
+  <!-- Tapping a gem first asks before leaving for Instagram or Facebook, so a stray tap does nothing. -->
+  <dialog class="leave" data-leave aria-labelledby="leave-title" aria-describedby="leave-text">
+    <form class="leave-card" method="dialog">
+      <span class="leave-gem" data-leave-icon aria-hidden="true"></span>
+      <p class="leave-title" id="leave-title" data-leave-title></p>
+      <p class="leave-text" id="leave-text" data-leave-text></p>
+      <div class="leave-actions">
+        <button class="leave-cancel" value="cancel" data-i18n="ui.leave.cancel"></button>
+        <a class="leave-go" data-leave-go href="#" target="_blank" rel="noopener" data-i18n="ui.leave.go"></a>
+      </div>
+    </form>
+  </dialog>

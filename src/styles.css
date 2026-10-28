@@ -1198,10 +1198,40 @@ main,
   padding: calc(var(--header-h) + 24px) var(--gutter) calc(28px + var(--safe-bottom));
 }
 
-/* With a phone's tilt (src/world/media.js) the words drift against the portrait. */
+/* With a phone's tilt (src/world/media.js) the words drift against the portrait.
+   The eyebrow sits under the title here, so nothing crosses her face above it;
+   the spacing below is a little tighter, so the title does not rise to take its place. */
 @media (max-width: 899px) {
   .hero-copy {
+    display: flex;
+    flex-direction: column;
     translate: calc(var(--tilt-x, 0) * -9px) calc(var(--tilt-y, 0) * -7px);
+  }
+
+  .hero-copy > * {
+    order: 2;
+  }
+
+  .hero-copy > .hero-title {
+    order: 0;
+    margin-top: 0;
+  }
+
+  .hero-copy > .eyebrow {
+    order: 1;
+    margin-top: 12px;
+  }
+
+  .hero-copy > .hero-tagline {
+    margin-top: 12px;
+  }
+
+  .hero-copy > .hero-actions {
+    margin-top: 18px;
+  }
+
+  .hero-copy > .hero-founder {
+    margin-top: 14px;
   }
 }
 

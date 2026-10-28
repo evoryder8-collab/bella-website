@@ -1158,6 +1158,21 @@ main,
   object-position: 50% 18%;
 }
 
+/* Bella cut out from her background (src/world/media.js draws her into the
+   world with a rose halo behind her; this halo is the fallback without WebGL).
+   On phones she fills the screen below the masthead, her head clear of it. */
+.hero-media[data-gl-cutout] {
+  inset: calc(var(--header-h) - 6px) 0 0;
+  --halo-x: 0.5;
+  --halo-y: 0.76;
+  --halo-r: 0.78;
+  background: radial-gradient(80% 60% at 50% 24%, #dfb4aa, #b7837a 72%, rgb(183 131 122 / 0) 100%);
+}
+
+.hero-media[data-gl-cutout] .hero-img {
+  object-position: 50% 0%;
+}
+
 /* Wine light from below so the cream type reads over the blazer. */
 .hero-media::after {
   content: '';
@@ -1267,6 +1282,25 @@ main,
 
   .hero-media::after {
     background: radial-gradient(120% 80% at 50% 100%, rgb(58 31 38 / 0.18), transparent 60%);
+  }
+
+  /* No frame: she stands in the right half, rising from the bottom edge. */
+  .hero-media[data-gl-cutout] {
+    inset: calc(var(--header-h) + 4px) 2% 0 44%;
+    border-radius: 0;
+    --halo-x: 0.5;
+    --halo-y: 0.72;
+    --halo-r: 0.5;
+    background: radial-gradient(46% 54% at 50% 30%, #dfb4aa, #b7837a 70%, rgb(183 131 122 / 0) 100%);
+  }
+
+  .hero-media[data-gl-cutout]::after {
+    display: none;
+  }
+
+  .hero-media[data-gl-cutout] .hero-img {
+    object-fit: contain;
+    object-position: 50% 100%;
   }
 
   .hero-copy {

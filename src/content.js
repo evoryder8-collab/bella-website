@@ -151,7 +151,7 @@ export const copy = {
       founder: 'Grundat av Bella Bayar',
       cta: 'Boka tid',
       secondary: 'Se behandlingar',
-      imageAlt: 'Bella Bayar, grundare av BE BEAUTY, i krämvit kavaj mot en rosa vägg',
+      imageAlt: 'Bella Bayar, grundare av BE BEAUTY, i krämvit kavaj och spetsblus',
     },
     approach: {
       label: 'Vårt förhållningssätt',
@@ -518,7 +518,7 @@ export const copy = {
       founder: 'Founded by Bella Bayar',
       cta: 'Book now',
       secondary: 'See treatments',
-      imageAlt: 'Bella Bayar, founder of BE BEAUTY, in a cream blazer against a pink wall',
+      imageAlt: 'Bella Bayar, founder of BE BEAUTY, in a cream blazer and lace blouse',
     },
     approach: {
       label: 'Our approach',

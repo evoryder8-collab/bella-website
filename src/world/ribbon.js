@@ -1,7 +1,8 @@
 import { BufferAttribute, BufferGeometry, Color, DoubleSide, Mesh, MeshPhysicalMaterial, Vector3 } from 'three';
 
 // A satin ribbon that runs the full height of the page, the thread the camera
-// follows as you scroll. In the hero it sweeps in front of the portrait; after
+// follows as you scroll. In the hero it wraps around Bella: behind her head and
+// shoulders, out past the left edge, and back across in front of her; after
 // that it weaves between the edges and crosses at section changes in a long,
 // soft S, behind the photos and the copy. It rolls gently rather than spinning,
 // so its rose face stays to you, ripples on its own and parts around a finger.
@@ -80,10 +81,14 @@ export function createRibbon() {
       for (let y = -0.4 * vh; y <= total + 0.4 * vh; y += TRACE) {
         let z = -1.6 + Math.sin(y / (vh * 0.95) + 1.2) * 0.95;
         let nx = sideAt(y) * (1.0 + 0.05 * Math.sin(y / (vh * 0.37)));
-        // Hero: one diagonal sweep in front of the portrait, then back behind the photos.
-        const hero = sweep ? 1 - smooth(vh * 0.55, vh * 0.95, y) : 0;
-        nx = nx * (1 - hero) + (-1.25 + 2.45 * smooth(vh * 0.12, vh * 0.8, y)) * hero;
-        z = z * (1 - hero) + 0.7 * hero;
+        // Hero: behind her from the upper right to past the left edge, where
+        // (out of sight) it comes forward, then back across in front of her
+        // waist, and on behind the photos.
+        const hero = sweep ? 1 - smooth(vh * 0.86, vh * 1.15, y) : 0;
+        const heroX = 1.2 - 2.45 * smooth(0, vh * 0.34, y) + 2.2 * smooth(vh * 0.46, vh * 0.84, y);
+        const heroZ = -1.1 + 1.85 * smooth(vh * 0.34, vh * 0.47, y);
+        nx = nx * (1 - hero) + heroX * hero;
+        z = z * (1 - hero) + heroZ * hero;
         // Placed so the point crosses the centre of the screen exactly when page
         // position y does; at other depths it then drifts with natural parallax
         // either side of that moment instead of slipping further off down the page.

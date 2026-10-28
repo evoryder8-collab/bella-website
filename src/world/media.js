@@ -19,6 +19,14 @@ import { tilt } from '../tilt.js';
 // it, a rose aura glows outside it, a glint of light sweeps across the photo as
 // it scrolls, and the whole frame tilts in 3D towards the finger. The hero
 // portrait stays opaque (cut, not blended) so the stone can refract it.
+//
+// A photo marked data-gl-cutout (the hero's Bella, retouched and freed from
+// her background) uses its own transparency: she stands in the world itself,
+// with a halo of rose light behind her, and the ribbon passes behind her and
+// in front. She is drawn twice: her solid core
+// in the opaque pass, so the stone still refracts her, then her soft edges,
+// hair and halo blended over it. The halo is placed by --halo-x, --halo-y
+// (from the bottom) and --halo-r on the photo's container.
 
 const POINTS = 12;
 const LOAD_AHEAD = 1.5; // viewport heights
@@ -60,6 +68,9 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uGlow;
   uniform vec3 uPearl;
   uniform vec3 uStone;
+  uniform vec3 uHalo;
+  uniform vec3 uHaloCore;
+  uniform vec3 uHaloEdge;
   varying vec2 vUv;
 
   float hash(vec2 p) {
@@ -73,11 +84,20 @@ const fragmentShader = /* glsl */ `
     return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + 1.0), u.x), u.y);
   }
 
-  vec3 photo(vec2 uv) {
+  vec4 photo(vec2 uv) {
     uv = (uv - 0.5) / (uZoom * (1.0 + uRoom)) + 0.5;
     uv.y += uShift;
     uv += uTilt * 0.02 + uDrift;
-    return texture2D(uImage, uv * uCover.xy + uCover.zw).rgb;
+    vec2 t = uv * uCover.xy + uCover.zw;
+    vec4 c = texture2D(uImage, t);
+    #ifdef CUTOUT
+      // Uploaded premultiplied, so her edges never pick up the colour hidden
+      // under the transparent pixels around her; straightened again here.
+      c.rgb /= max(c.a, 0.004);
+      // Nothing beyond the picture's own edges (it may be smaller than its box).
+      c.a *= step(0.0, t.x) * step(t.x, 1.0) * step(0.0, t.y) * step(t.y, 1.0);
+    #endif
+    return c;
   }
 
   void main() {
@@ -126,7 +146,8 @@ const fragmentShader = /* glsl */ `
 
     vec2 suv = uv - flow * 0.06;
     vec2 split = flow * 0.012;
-    vec3 color = vec3(photo(suv + split).r, photo(suv).g, photo(suv - split).b);
+    vec4 base = photo(suv);
+    vec3 color = vec3(photo(suv + split).r, base.g, photo(suv - split).b);
     color += uGlow * clamp(heat, 0.0, 1.0) * 0.1;
 
     vec2 s = (uv - uStone.xy) * vec2(aspect, 1.0);
@@ -137,6 +158,29 @@ const fragmentShader = /* glsl */ `
     color += uPearl * (exp(-band * band / 0.004) * 0.22 + exp(-band * band / 0.04) * 0.06) * uAlive;
 
     color = mix(color, uGlow * 1.25, revealRim * 0.85);
+
+    #ifdef CUTOUT
+    {
+      float a = base.a * (uFade > 0.0 ? smoothstep(0.0, uFade, uv.y) : 1.0);
+      #ifdef FRINGE
+        // Her soft edges over a halo of rose light, brightest behind her head.
+        vec2 hc = (uv - uHalo.xy) * vec2(aspect, 1.0);
+        float halo = exp(-dot(hc, hc) / uHalo.z);
+        // It fades out before the sides and top of her box, never showing its edge.
+        float inBox = smoothstep(0.0, 0.16, min(uv.x, 1.0 - uv.x)) * smoothstep(0.0, 0.14, 1.0 - uv.y);
+        float haloAlpha = smoothstep(0.0, 0.9, halo) * 0.92 * inBox * uReveal;
+        vec3 haloColor = mix(uHaloEdge, uHaloCore, smoothstep(0.35, 1.0, halo));
+        float outAlpha = a + haloAlpha * (1.0 - a);
+        gl_FragColor = vec4((color * a + haloColor * haloAlpha * (1.0 - a)) / max(outAlpha, 1e-4), outAlpha);
+      #else
+        // Only what is fully solid here; everything softer is the fringe's.
+        if (a < 0.97) discard;
+        gl_FragColor = vec4(color, 1.0);
+      #endif
+      #include <colorspace_fragment>
+      return;
+    }
+    #endif
 
     if (uAlive < 0.5) {
       gl_FragColor = vec4(color, uFade > 0.0 ? smoothstep(0.0, uFade, uv.y) : 1.0);
@@ -187,6 +231,8 @@ export function createMedia(scene) {
   const geometry = new PlaneGeometry(1, 1, 24, 24);
   const glow = new Color('#f2a7a4');
   const pearl = new Color('#fff6f1');
+  const haloCore = new Color('#dfb4aa');
+  const haloEdge = new Color('#b7837a');
   let count = 0;
   const track = (container) => {
     const order = count++;
@@ -216,16 +262,30 @@ export function createMedia(scene) {
       uGlow: { value: glow },
       uPearl: { value: pearl },
       uStone: { value: new Vector3() },
+      uHalo: { value: new Vector3(0.5, 0.75, 0.2) },
+      uHaloCore: { value: haloCore },
+      uHaloEdge: { value: haloEdge },
     };
-    const material = new ShaderMaterial({ uniforms, vertexShader, fragmentShader, transparent: alive || fade > 0, depthWrite: !alive && !fade });
+    const cutout = container.hasAttribute('data-gl-cutout');
+    const defines = cutout ? { CUTOUT: '' } : {};
+    // A cut-out's core stays in the opaque pass even when it fades, so the stone refracts it.
+    const blended = !cutout && (alive || fade > 0);
+    const material = new ShaderMaterial({ uniforms, vertexShader, fragmentShader, defines, transparent: blended, depthWrite: !blended });
     const mesh = new Mesh(geometry, material);
     mesh.visible = false;
     mesh.frustumCulled = false;
+    if (cutout) {
+      // Her soft edges and halo, drawn over her core (same place, same uniforms).
+      const fringe = new Mesh(geometry, new ShaderMaterial({ uniforms, vertexShader, fragmentShader, defines: { CUTOUT: '', FRINGE: '' }, transparent: true, depthWrite: false }));
+      fringe.frustumCulled = false;
+      mesh.add(fringe);
+    }
     scene.add(mesh);
     return {
       container,
       img,
       alive,
+      cutout,
       // The element GSAP zooms or parallaxes, whose transform the shader copies.
       source: container.querySelector('[data-parallax], [data-hero-frame]') || img,
       // The element whose --reveal drives the dissolve.
@@ -250,6 +310,7 @@ export function createMedia(scene) {
     item.state = 'loading';
     loader.load(item.img.currentSrc || item.img.src, (texture) => {
       texture.colorSpace = SRGBColorSpace;
+      texture.premultiplyAlpha = item.cutout;
       texture.minFilter = LinearFilter;
       texture.generateMipmaps = false;
       item.uniforms.uImage.value = texture;
@@ -260,15 +321,20 @@ export function createMedia(scene) {
     });
   };
 
-  // object-fit: cover with the image's own object-position, in texture space.
+  // The image's object-fit (cover, or contain for a cut-out that stands in its
+  // box) and object-position, in texture space.
   const fit = (item, width, height) => {
     const style = getComputedStyle(item.img);
     const [px = 50, py = 50] = style.objectPosition.split(' ').map((v) => parseFloat(v));
     const aspect = width / height;
-    const sx = Math.min(1, aspect / item.aspect);
-    const sy = Math.min(1, item.aspect / aspect);
+    const size = style.objectFit === 'contain' ? Math.max : Math.min;
+    const sx = size(1, aspect / item.aspect);
+    const sy = size(1, item.aspect / aspect);
     item.uniforms.uCover.value.set(sx, sy, (1 - sx) * (px / 100), (1 - sy) * (1 - py / 100));
-    item.uniforms.uRadius.value = parseFloat(getComputedStyle(item.container).borderTopLeftRadius) || 0;
+    const box = getComputedStyle(item.container);
+    item.uniforms.uRadius.value = parseFloat(box.borderTopLeftRadius) || 0;
+    const halo = (name, fallback) => parseFloat(box.getPropertyValue(name)) || fallback;
+    item.uniforms.uHalo.value.set(halo('--halo-x', 0.5), halo('--halo-y', 0.75), halo('--halo-r', 0.45) ** 2);
   };
 
   const at = (x, y) => items.find(({ rect, state }) => state === 'ready' && rect && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);
@@ -281,6 +347,7 @@ export function createMedia(scene) {
         if (item.container.isConnected) return true;
         scene.remove(item.mesh);
         item.mesh.material.dispose();
+        item.mesh.children.forEach((child) => child.material.dispose());
         item.uniforms.uImage.value?.dispose();
         return false;
       });

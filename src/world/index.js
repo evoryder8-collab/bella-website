@@ -193,8 +193,8 @@ export function initWorld() {
     }
     // Idle: a slow figure-of-eight over the cheek, a gua sha ritual on its own.
     return {
-      x: rect.left + rect.width * (0.74 + 0.05 * Math.sin(t * 0.9)),
-      y: rect.top + rect.height * (q.coarse ? 0.36 : 0.42) + rect.height * 0.04 * Math.sin(t * 1.3),
+      x: rect.left + rect.width * ((q.coarse ? 0.74 : 0.68) + 0.05 * Math.sin(t * 0.9)),
+      y: rect.top + rect.height * 0.36 + rect.height * 0.04 * Math.sin(t * 1.3),
       scale,
       glow: 0.05,
       follow: false,

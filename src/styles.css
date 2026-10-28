@@ -2518,6 +2518,43 @@ html.film-on .book-bar {
   color: var(--wine-soft);
 }
 
+/* Her silver as a 3D medal turning slowly in place of the word (src/medal.js);
+   the word stays for screen readers, and shows itself where there is no medal. */
+.stat-medal {
+  display: none;
+}
+
+/* As wide as it needs, flush left like the numbers beside it. */
+html.motion .stat-silver:not(.no-medal) .stat-medal {
+  position: relative;
+  display: block;
+  width: 92px;
+  height: 116px;
+  margin: -10px 0 -2px -14px;
+}
+
+html.motion .stat-silver:not(.no-medal) .stat-word {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.stat-medal-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+
+.stat-medal-canvas.is-drawn {
+  opacity: 1;
+}
+
 .proof-images {
   position: relative;
   padding-bottom: 12%;
@@ -3080,6 +3117,13 @@ html.film-on .book-bar {
   font-style: italic;
   font-size: 1.35rem;
   line-height: 1.35;
+}
+
+@media (min-width: 900px) {
+  html.motion .stat-silver:not(.no-medal) .stat-medal {
+    width: 112px;
+    height: 140px;
+  }
 }
 
 @media (min-width: 900px) {

@@ -172,6 +172,11 @@ decorative lines that looked like placeholders.
   melts in through a long eased fade on a still wrapper.
 - **The award**: after "presents", a laurel wreath grows round 2026 over "Best Beauty Salon", Stockholm Beauty
   Week (October 2026), with the jury's motivation, before the dark opens on the hero.
+- **The silver medal** (`src/medal.js`, 2026-10-28): in the proof stats the word "Silver" became a 3D medal of
+  polished silver on a short rose satin ribbon, turning slowly by itself (Zoltan's medal without the play):
+  a laurel round "II" with 2025 and "European Massage Championship" on the front, "Silver", the category,
+  Bella Bayar and Paris · France on the back, engraved with a height map. The word stays for screen readers
+  and shows where there is no WebGL or with reduced motion.
 - **Corporate Wellness** (2026-10-28): the Signature TCM head in rose gold, its points and lift lines lit,
   rises in the card's glow above the title (a `data-figure="1"` stage, as on the treatments page).
 - **The award film** (`src/award.js`, 2026-10-28): after the three pillars, with a breath of night between, the

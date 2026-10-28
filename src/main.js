@@ -48,6 +48,19 @@ function mountPage({ entering = false } = {}) {
   initDeck(document.querySelector('[data-deck]'), { signal });
   initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'), { signal });
   initAwardFilm(document.querySelector('[data-award]'), { signal, reduced: reducedMotion });
+  // Her silver medal, turning slowly in 3D (three.js loads once it is near).
+  const medal = document.querySelector('[data-medal]');
+  if (medal && !reducedMotion) {
+    const near = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      near.disconnect();
+      import('./medal.js')
+        .then(({ mountMedal }) => mountMedal(medal, { signal }))
+        .catch(() => medal.closest('.stat-silver')?.classList.add('no-medal'));
+    }, { rootMargin: '600px 0px' });
+    near.observe(medal);
+    signal.addEventListener('abort', () => near.disconnect());
+  }
   // The 3D treatment figures, each in its own sharp canvas, loaded ahead of time.
   const stages = document.querySelectorAll('[data-figure-stage]');
   if (stages.length && !reducedMotion) {

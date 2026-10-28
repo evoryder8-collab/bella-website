@@ -21,6 +21,7 @@ new ResizeObserver(() => paintCssBackground()).observe(document.body);
 initI18n();
 initMenu();
 initHeader();
+initSatin();
 initBookBar();
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 initSocials();
@@ -203,6 +204,31 @@ function initHeader() {
 
   window.addEventListener('scroll', update, { passive: true });
   update();
+}
+
+// The header's satin catches the light: its sheen leans towards a nearby
+// pointer, and blooms where a finger presses before easing back.
+function initSatin() {
+  const header = document.querySelector('[data-header]');
+  const cloths = header.querySelectorAll('.sound-toggle, .lang-switch');
+  const lean = (x, y) => {
+    for (const el of cloths) {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--px', `${Math.max(-10, Math.min(110, ((x - r.left) / r.width) * 100)).toFixed(1)}%`);
+      el.style.setProperty('--py', `${Math.max(-10, Math.min(110, ((y - r.top) / r.height) * 100)).toFixed(1)}%`);
+    }
+  };
+  const rest = () => cloths.forEach((el) => el.style.removeProperty('--px') || el.style.removeProperty('--py'));
+  header.addEventListener('pointermove', (event) => event.pointerType === 'mouse' && lean(event.clientX, event.clientY), { passive: true });
+  header.addEventListener('pointerleave', rest);
+  header.addEventListener(
+    'pointerdown',
+    (event) => {
+      lean(event.clientX, event.clientY);
+      if (event.pointerType !== 'mouse') setTimeout(rest, 900);
+    },
+    { passive: true },
+  );
 }
 
 // The phone booking bar appears once the hero (which has its own button) is

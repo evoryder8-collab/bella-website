@@ -783,57 +783,208 @@ main,
   display: none;
 }
 
-/* The jewel ring shared by the sound and language controls. */
+/* ---------- Satin: the header's living controls ----------
+   The sound gem and the language pill are cushions of pearl-rose satin rather
+   than metal: soft folds of light drift across them at two angles and two
+   speeds, their edges feather away into a pillowy glow instead of a rim, and
+   each cushion breathes a little beneath its crisp icon or letters. The sheen
+   leans towards a nearby pointer and blooms under a finger (src/main.js). */
+
+@property --px {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 34%;
+}
+
+@property --py {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 22%;
+}
+
+@property --bloom {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
 .sound-toggle,
 .lang-switch {
-  border: 1px solid transparent;
-  background:
-    linear-gradient(160deg, rgb(255 251 249 / 0.6), rgb(255 251 249 / 0.12)) padding-box,
-    linear-gradient(150deg, #f1c9b9, #a9605b 42%, #f8ddd2 68%, #8e4651) border-box;
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.6),
-    0 6px 14px -9px rgb(58 31 38 / 0.5);
+  position: relative;
+  isolation: isolate;
+  border-radius: 999px;
+  transition:
+    --px 0.7s var(--ease),
+    --py 0.7s var(--ease),
+    --bloom 0.5s var(--ease);
 }
 
-.menu-open .sound-toggle,
-.menu-open .lang-switch {
+.satin,
+.lang-thumb {
+  position: absolute;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.satin {
+  inset: 0;
   background:
-    linear-gradient(160deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.03)) padding-box,
-    linear-gradient(150deg, #f1c9b9, #a9605b 42%, #f8ddd2 68%, #c08176) border-box;
+    /* the light, where it falls */
+    radial-gradient(62% 58% at var(--px) var(--py), rgb(255 253 251 / calc(0.82 + var(--bloom) * 0.18)), rgb(255 247 243 / 0) 72%),
+    /* long soft folds catching it */
+    linear-gradient(112deg, transparent 16%, rgb(255 255 255 / 0.5) 33%, transparent 47%, rgb(255 250 247 / 0.3) 61%, transparent 76%) 0 0 / 300% 300%,
+    /* the cloth */
+    linear-gradient(165deg, #fbebe5, #f0cdc2 42%, #e6b6aa 76%, #dda598);
+  filter: blur(0.7px);
+  box-shadow:
+    0 0 10px -1px rgb(253 232 225 / 0.9),
+    0 7px 16px -9px rgb(142 70 81 / 0.6);
+  animation:
+    satin-fold 9s ease-in-out infinite alternate,
+    satin-breathe 5.5s ease-in-out infinite;
+}
+
+/* A second fold, at another angle and pace, so the sheen never repeats. */
+.satin::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(58deg, transparent 22%, rgb(255 244 238 / 0.55) 42%, transparent 58%) 0 0 / 260% 260%;
+  mix-blend-mode: soft-light;
+  animation: satin-fold 13s ease-in-out -4s infinite alternate-reverse;
+}
+
+@keyframes satin-fold {
+  from {
+    background-position:
+      0 0,
+      0% 0%,
+      0 0;
+  }
+  to {
+    background-position:
+      0 0,
+      100% 100%,
+      0 0;
+  }
+}
+
+@keyframes satin-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
+/* Pressed, the cushion gives a little and the light blooms. */
+.sound-toggle:active .satin,
+.lang-switch button:active ~ .satin {
+  scale: 0.93;
+}
+
+.satin {
+  transition: scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sound-toggle:active,
+.lang-switch:active {
+  --bloom: 1;
+}
+
+/* Over the dark of the open menu: dusk satin, the same cloth in shadow. */
+.menu-open .satin {
+  background:
+    radial-gradient(62% 58% at var(--px) var(--py), rgb(255 236 229 / 0.42), rgb(255 236 229 / 0) 72%),
+    linear-gradient(112deg, transparent 16%, rgb(255 255 255 / 0.2) 33%, transparent 47%, rgb(255 250 247 / 0.12) 61%, transparent 76%) 0 0 / 300% 300%,
+    linear-gradient(165deg, rgb(255 232 224 / 0.22), rgb(231 163 160 / 0.12));
+  box-shadow: 0 0 12px -2px rgb(231 163 160 / 0.35);
 }
 
 .lang-switch {
-  position: relative;
   display: inline-grid;
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   padding: 3px;
-  border-radius: 999px;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.1em;
 }
 
-/* The chosen language sits in a rose-gold pill that glides between the two. */
-.lang-switch::before {
-  content: '';
-  position: absolute;
+/* The chosen language rests in a droplet of deeper rose satin, which stretches
+   as it glides to the other side and settles back into shape. */
+.lang-thumb {
   inset: 3px auto 3px 3px;
+  z-index: 0;
   width: calc(50% - 3px);
-  border-radius: 999px;
-  background: linear-gradient(160deg, #fbe5dc, #d9a090 55%, #b97468);
+  background:
+    radial-gradient(70% 66% at 38% 26%, rgb(255 245 240 / 0.85), rgb(255 245 240 / 0) 70%),
+    linear-gradient(112deg, transparent 20%, rgb(255 255 255 / 0.42) 38%, transparent 54%) 0 0 / 300% 300%,
+    linear-gradient(165deg, #f3cabf, #e0a597 52%, #cc8d82);
+  filter: blur(0.4px);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.75),
-    0 2px 6px -2px rgb(110 52 64 / 0.5);
-  transition: transform 0.55s var(--ease);
+    0 0 8px -1px rgb(253 222 212 / 0.9),
+    0 5px 12px -5px rgb(142 70 81 / 0.6);
+  transition: translate 0.65s cubic-bezier(0.65, 0, 0.25, 1);
+  animation: satin-fold 7s ease-in-out infinite alternate;
 }
 
-.lang-switch:has([data-lang='en'][aria-pressed='true'])::before {
-  transform: translateX(100%);
+.lang-switch:has([data-lang='en'][aria-pressed='true']) .lang-thumb {
+  translate: 100% 0;
+  animation:
+    satin-fold 7s ease-in-out infinite alternate,
+    droplet-to-en 0.65s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+.lang-switch:has([data-lang='sv'][aria-pressed='true']) .lang-thumb {
+  animation:
+    satin-fold 7s ease-in-out infinite alternate,
+    droplet-to-sv 0.65s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
+@keyframes droplet-to-en {
+  0% {
+    scale: 1 1;
+  }
+  40% {
+    scale: 1.42 0.8;
+  }
+  72% {
+    scale: 0.94 1.06;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+@keyframes droplet-to-sv {
+  0% {
+    scale: 1 1;
+  }
+  40% {
+    scale: 1.42 0.8;
+  }
+  72% {
+    scale: 0.94 1.06;
+  }
+  100% {
+    scale: 1 1;
+  }
+}
+
+.menu-open .lang-thumb {
+  background:
+    radial-gradient(70% 66% at 38% 26%, rgb(255 245 240 / 0.7), rgb(255 245 240 / 0) 70%),
+    linear-gradient(165deg, #f6d6cc, #e7b3a5 55%, #d39a8e);
 }
 
 .lang-switch button {
   position: relative;
+  z-index: 1;
   min-width: 34px;
   min-height: 30px;
   padding: 0 7px;
@@ -847,6 +998,18 @@ main,
 .lang-switch button[aria-pressed='true'] {
   color: var(--wine);
   opacity: 1;
+}
+
+.menu-open .lang-switch button[aria-pressed='true'] {
+  color: var(--night);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .satin,
+  .satin::after,
+  .lang-thumb {
+    animation: none !important;
+  }
 }
 
 .menu-toggle {
@@ -2393,6 +2556,28 @@ main,
   background: var(--wine);
 }
 
+/* Desktop: the title and the two studios sit in the middle, over the map's centre. */
+@media (min-width: 900px) {
+  .studios > .wrap:first-child {
+    text-align: center;
+  }
+
+  .studios .section-label {
+    justify-content: center;
+  }
+
+  .studios .section-label::after {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .map-chips {
+    justify-content: center;
+  }
+}
+
 .map-pin {
   display: flex;
   align-items: center;
@@ -2665,12 +2850,11 @@ main,
   transition: box-shadow 0.4s var(--ease);
 }
 
-/* Playing: the gem glows softly. */
-.sound-toggle.is-playing {
+/* Playing: the satin warms, with a soft rose glow around it. */
+.sound-toggle.is-playing .satin {
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.6),
-    0 0 0 3px rgb(231 163 160 / 0.18),
-    0 6px 18px -6px rgb(185 116 104 / 0.7);
+    0 0 14px 1px rgb(247 196 186 / 0.85),
+    0 7px 18px -8px rgb(185 116 104 / 0.75);
 }
 
 /* A speaker: struck through while quiet; while playing the stroke lifts away,
@@ -2726,9 +2910,9 @@ main,
   position: absolute;
   inset: -2px;
   border: 1.5px solid transparent;
-  border-right-color: rgb(231 163 160 / 0.95);
+  border-right-color: rgb(240 184 176 / 0.9);
   border-radius: 50%;
-  filter: drop-shadow(0 0 4px rgb(231 163 160 / 0.9));
+  filter: blur(0.6px) drop-shadow(0 0 5px rgb(247 196 186 / 0.95));
   opacity: 0;
   pointer-events: none;
 }

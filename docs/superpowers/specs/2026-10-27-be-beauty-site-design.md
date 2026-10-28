@@ -154,7 +154,8 @@ decorative lines that looked like placeholders.
   thanks"; that tap starts the sound. 2) The language, as on the Zoltan site: the visitor's own (device,
   `?lang=` link or earlier choice) is lit and fills over a five-second countdown with a ring, "Continuing in
   English" and Pause; touching a choice or the keyboard pauses it. 3) The stone grows to the centre with
-  "A natural facelift, by hand." and her Best Beauty Salon 2026 award, and the step loads by itself: a ring
+  "A natural facelift, by hand." (her award is left to the "presents" card that follows), and the step
+  loads by itself: a ring
   of light closes round the stone in 1.6 s, ripples spread and the site opens into "Bella Bayar presents"
   and her greeting. Until the 3D world draws, the stone's place stays empty (the drawn stand-in shows only
   where there is no WebGL, reduced motion or the data saver), and the world starts at once behind the ritual. The header's wordmark, clicked on the home page, shows it again

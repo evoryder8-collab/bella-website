@@ -3603,9 +3603,9 @@ html.film-on .book-bar {
 /* ---------- First-visit ritual ----------
    The rose-quartz stone of the 3D world floats in the wine night with the
    house's name engraved on it, above one question at a time (src/portal.js):
-   sound, then the language with its countdown. Then it grows to the centre,
-   with what BE BEAUTY is in a line and her award beneath; touching it draws a
-   ring of light round it, sends ripples out and enters. */
+   sound, then the language with its countdown. Then it grows to the centre
+   with what BE BEAUTY is in a line beneath, a ring of light closes round it,
+   ripples spread and the site opens. */
 
 .portal {
   display: none;
@@ -4158,61 +4158,6 @@ html:not(.no-world) .ritual-gem {
 /* "för hand." / "by hand." on a line of its own. */
 .ritual-title em {
   display: block;
-  color: var(--rose);
-}
-
-/* Her award: the laurel round the year, and the prize beside it. */
-.ritual-award {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 22px;
-  text-align: left;
-}
-
-.ritual-wreath {
-  position: relative;
-  flex: none;
-  width: 74px;
-  aspect-ratio: 320 / 200;
-}
-
-.ritual-wreath svg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-/* The year in the wreath's open middle, which sits well above the centre of
-   its box (the branches curl in and meet at the foot). */
-.ritual-wreath > span {
-  position: absolute;
-  left: 50%;
-  top: 40%;
-  translate: -50% -50%;
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  line-height: 1;
-  letter-spacing: 0.06em;
-}
-
-.ritual-award-text {
-  display: grid;
-  gap: 4px;
-}
-
-.ritual-award-text em {
-  font-family: var(--font-display);
-  font-size: 1.0625rem;
-  line-height: 1.1;
-}
-
-.ritual-award-text span {
-  font-size: 0.5625rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
   color: var(--rose);
 }
 

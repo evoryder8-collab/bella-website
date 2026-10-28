@@ -1,6 +1,5 @@
 import { copy, LANGS } from './content.js';
 import { savedLang, setLang } from './i18n.js';
-import { laurel } from './laurel.js';
 import { declineSound, prepareGreeting, startSound, tap, whoosh } from './sound.js';
 
 // The first visits' ritual, in three steps round the rose-quartz stone of the
@@ -10,8 +9,9 @@ import { declineSound, prepareGreeting, startSound, tap, whoosh } from './sound.
 //       thanks". That tap is the gesture browsers ask for before sound can start.
 //   2 · The language. The visitor's own (the device's, a ?lang= link's or the
 //       one they chose before) is lit and chosen after a five-second countdown.
-//   3 · The stone, with what BE BEAUTY is in a line and her award, loading by
-//       itself: a ring of light closes round it, then the site opens.
+//   3 · The stone, with what BE BEAUTY is in a line, loading by itself: a
+//       ring of light closes round it, then the site opens (her award follows
+//       on the "presents" card).
 // The head script decides whether it opens (the first three visits, or
 // ?intro); each entry is counted. On the home page the header's wordmark
 // opens it again.
@@ -74,7 +74,7 @@ export function initPortal({ onEnter }) {
     history.replaceState(history.state, '', location.pathname + (query ? `?${query}` : '') + location.hash);
   }
 
-  const text = () => ({ ...copy[lang].portal, award: copy[lang].premiere.award, awardKicker: copy[lang].premiere.awardKicker });
+  const text = () => copy[lang].portal;
   const letter = () => {
     const words = text();
     portal.lang = lang;
@@ -83,7 +83,6 @@ export function initPortal({ onEnter }) {
     for (const el of portal.querySelectorAll('[data-portal-label]')) el.setAttribute('aria-label', words[el.dataset.portalLabel]);
   };
   letter();
-  portal.querySelector('[data-laurel]').innerHTML = laurel('ritual-gold');
 
   // ---- The steps: one question on the screen at a time ----
   const panels = [...portal.querySelectorAll('[data-step-panel]')];

@@ -151,7 +151,6 @@ export const copy = {
       founder: 'Grundat av Bella Bayar',
       cta: 'Boka tid',
       secondary: 'Se behandlingar',
-      hint: 'Dra stenen över porträttet',
       imageAlt: 'Bella Bayar, grundare av BE BEAUTY, i krämvit kavaj mot en rosa vägg',
     },
     approach: {
@@ -484,7 +483,6 @@ export const copy = {
       founder: 'Founded by Bella Bayar',
       cta: 'Book now',
       secondary: 'See treatments',
-      hint: 'Draw the stone across the portrait',
       imageAlt: 'Bella Bayar, founder of BE BEAUTY, in a cream blazer against a pink wall',
     },
     approach: {

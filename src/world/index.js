@@ -97,11 +97,9 @@ export function initWorld() {
   atmosphere.uniforms.uDim.value = html.classList.contains('portal-open') ? 1 : 0;
   // What the stone belongs to on this page: the home page's portrait, or the
   // resting place beside another page's title. Found again on every page change.
-  let hint = null;
   let portraitEl = null;
   let restEl = null;
   const findPage = () => {
-    hint = document.querySelector('[data-hero-hint]');
     portraitEl = document.querySelector('.hero-media');
     restEl = document.querySelector('[data-stone-rest]');
   };
@@ -191,7 +189,6 @@ export function initWorld() {
       pointer.y > rect.top - 40 &&
       pointer.y < rect.bottom + 40;
     if (touching) {
-      hint?.classList.add('is-done');
       // On touch, hover the stone just above the fingertip so the finger never hides it.
       return { x: pointer.x, y: pointer.y - (q.coarse ? 70 : 0), scale, glow: 0.08, follow: true, portrait: true };
     }

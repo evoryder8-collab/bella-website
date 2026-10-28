@@ -159,12 +159,12 @@ export const copy = {
         {
           word: 'Beauty',
           text: 'Behandlingar som framhäver dina naturliga drag och respekterar din huds unika karaktär.',
-          imageAlt: 'Bella visar en skulpterande ansiktsbehandling inför publik',
+          imageAlt: 'En Gua Sha-sten formar kindbenet under en behandling',
         },
         {
           word: 'Balance',
           text: 'Med Gua Sha, buckal massage och lymfdränage återställer vi harmonin i ansikte och kropp.',
-          imageAlt: 'En Gua Sha-sten formar kindbenet under en behandling',
+          imageAlt: 'Bella visar en skulpterande ansiktsbehandling inför publik',
         },
         {
           word: 'Glow',
@@ -526,12 +526,12 @@ export const copy = {
         {
           word: 'Beauty',
           text: 'Treatments that bring out your natural features while respecting what makes your skin unique.',
-          imageAlt: 'Bella demonstrates a sculpting face treatment in front of an audience',
+          imageAlt: 'A gua sha stone sculpting the cheekbone during a treatment',
         },
         {
           word: 'Balance',
           text: 'Through gua sha, buccal massage and lymphatic drainage we restore harmony to face and body.',
-          imageAlt: 'A gua sha stone sculpting the cheekbone during a treatment',
+          imageAlt: 'Bella demonstrates a sculpting face treatment in front of an audience',
         },
         {
           word: 'Glow',

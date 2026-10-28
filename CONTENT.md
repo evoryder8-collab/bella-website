@@ -62,9 +62,9 @@ originals are available without watermarks or in higher resolution, swap them in
 |---|---|
 | `src/images/hero-bella-cutout.webp` | Home hero: Bella retouched, upscaled and cut out by the user (1600 × 2158, 148 KB, exported with Finalova's WebP encoder) |
 | `src/images/hero-bella.jpg` | The original portrait, still used by the link in bio and the magazine's pages |
-| `src/images/treatment-tokyo.jpg` | Approach: Beauty (Bella demonstrating a face treatment at a championship workshop; framed to leave out a small gold photographer's logo in the corner, so Bella should confirm the credit) |
+| `src/images/treatment-tokyo.jpg` | Approach: Balance (Bella demonstrating a face treatment at a championship workshop; framed to leave out a small gold photographer's logo in the corner, so Bella should confirm the credit) |
 | `src/images/studio.jpg` | About and Contact pages, link in bio |
-| `src/images/guasha.jpg` | Approach: Balance |
+| `src/images/guasha.jpg` | Approach: Beauty |
 | `src/images/glow-bella.jpg` | Approach: Glow (a close-up from the user's retouched portrait, on dusty rose with a soft bloom) |
 | `src/images/treatment-light.jpg` | Link in bio and the magazine's pages |
 | `src/images/treatment-hands.jpg` | Femina Bella Est |

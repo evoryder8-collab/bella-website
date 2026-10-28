@@ -1491,6 +1491,32 @@ main,
   box-shadow: 0 30px 60px -24px rgb(58 31 38 / 0.6);
 }
 
+/* The magazine animation's canvas (src/magazine/book.js); the photo hides
+   while it plays and fades back in as it lands. */
+.press-book {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.press.is-flipping .press-book {
+  opacity: 1;
+}
+
+.press.is-flipping img {
+  opacity: 0;
+}
+
+.press.is-landing .press-book {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.press.is-landing img {
+  transition: opacity 0.5s ease;
+}
+
 .press figcaption {
   margin-top: 12px;
   font-size: 0.8125rem;
@@ -2959,4 +2985,131 @@ main,
   .technique-track span:nth-child(n + 7) {
     display: none;
   }
+}
+
+/* ---------- Premiere: "Bella Bayar presents" (src/premiere.js) ---------- */
+
+.premiere {
+  display: none;
+}
+
+.is-premiere .premiere {
+  display: grid;
+}
+
+.is-premiere {
+  overflow: hidden;
+}
+
+.premiere {
+  --iris: 0;
+  --glow: 0;
+  --ix: 50%;
+  --iy: 32%;
+  --soft: 32vmax;
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  place-items: center;
+  padding: 0 var(--gutter);
+  color: var(--cream);
+  background:
+    radial-gradient(
+      circle at var(--ix) var(--iy),
+      transparent calc(var(--iris) * 1px - var(--soft)),
+      rgb(255 196 182 / calc(0.42 * var(--glow))) calc(var(--iris) * 1px - var(--soft) * 0.45),
+      transparent calc(var(--iris) * 1px + 4vmax)
+    ),
+    radial-gradient(60% 75% at 50% -12%, rgb(255 205 190 / 0.13), transparent 70%),
+    #0b0608;
+  /* The dark opens like an iris: transparent inside the circle, a wide soft edge. */
+  -webkit-mask-image: radial-gradient(circle at var(--ix) var(--iy), transparent calc(var(--iris) * 1px - var(--soft)), #000 calc(var(--iris) * 1px));
+  mask-image: radial-gradient(circle at var(--ix) var(--iy), transparent calc(var(--iris) * 1px - var(--soft)), #000 calc(var(--iris) * 1px));
+}
+
+.premiere-dust {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.premiere-title {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  margin-top: -6vh;
+  text-align: center;
+}
+
+.premiere-name {
+  position: relative;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 17vw, 9rem);
+  line-height: 1.05;
+  white-space: nowrap;
+  color: #f4ddd3;
+  text-shadow: 0 0 34px rgb(255 186 170 / 0.35);
+}
+
+.premiere-letter {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+}
+
+/* A glint of light runs across the name once it is written. */
+.premiere-name::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: #fff;
+  text-shadow: 0 0 18px rgb(255 255 255 / 0.6);
+  -webkit-mask-image: linear-gradient(100deg, transparent 42%, #000 50%, transparent 58%);
+  mask-image: linear-gradient(100deg, transparent 42%, #000 50%, transparent 58%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.premiere-name.is-lit::after {
+  animation: premiere-glint 1.7s cubic-bezier(0.45, 0, 0.25, 1) both;
+}
+
+@keyframes premiere-glint {
+  from {
+    opacity: 1;
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    opacity: 1;
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+}
+
+.premiere-line {
+  display: block;
+  width: min(52vw, 240px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(246 227 218 / 0.75), transparent);
+  transform: scaleX(0);
+}
+
+.premiere-presents {
+  padding-left: 0.62em;
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 0.8rem;
+  line-height: 1;
+  letter-spacing: 0.62em;
+  text-transform: uppercase;
+  color: rgb(246 227 218 / 0.82);
+  opacity: 0;
 }

@@ -236,6 +236,33 @@ export function whoosh(strength = 1) {
   source.start(now);
 }
 
+// The flick of a magazine page; a low tone is the soft slap of it landing.
+let crisp = null;
+export function paper(strength = 1, tone = 2600) {
+  if (!isPlaying()) return;
+  const now = ctx.currentTime;
+  if (!crisp) {
+    crisp = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.3), ctx.sampleRate);
+    const data = crisp.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+  }
+  const source = ctx.createBufferSource();
+  source.buffer = crisp;
+  source.playbackRate.value = 0.85 + Math.random() * 0.3;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.Q.value = 0.8;
+  filter.frequency.setValueAtTime(tone, now);
+  filter.frequency.exponentialRampToValueAtTime(tone * 0.45, now + 0.16);
+  const env = ctx.createGain();
+  env.gain.setValueAtTime(0, now);
+  env.gain.linearRampToValueAtTime(0.09 * strength, now + 0.01);
+  env.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
+  source.connect(filter).connect(env).connect(bus);
+  source.start(now);
+  source.stop(now + 0.3);
+}
+
 // 0 = still, 1 = scrolling fast: the air grows and brightens.
 export function setScrollEnergy(energy) {
   if (!ctx) return;

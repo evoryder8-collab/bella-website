@@ -118,6 +118,15 @@ decorative lines that looked like placeholders.
   language, detected from the device and picked after a five-second countdown that can be paused. A
   `?lang=` link skips the language step; `?intro` shows the portal again. The portal sits over the dark 3D
   world with the stone turning alone; entering dissolves it into the hero's entrance.
+- **Premiere** (`src/premiere.js`): after the portal the screen goes dark with dust drifting in a beam of
+  light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
+  follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and
+  the BE BEAUTY title after it. A tap or key fast-forwards it. Returning visitors get the shorter hero entrance.
+- **The Hudterapeuten magazine** (`src/magazine/`): the first time the cover is fully in view it lifts off the
+  page, bursts open with its pages fanning, riffles back and shuts, landing exactly as the photo it started as.
+  Each leaf is simulated paper (flicked, rising against gravity, falling over the spine, a small bounce, an edge
+  that drags and flaps), with glossy light, a curved gutter and shadows from the leaf above. The inside pages are
+  editorial layouts painted from Bella's photos with text greyed into bars, made to be glimpsed, not read.
 - **Sound** (`src/sound.js`), composed live with Web Audio: an ambient pad through four chords, an air layer
   that follows scroll speed, crystal chimes for the stone's chapters and the treatment cards, a silk swish for
   thrown review cards. A header toggle mutes it; returning visitors who chose sound hear it from their first tap.

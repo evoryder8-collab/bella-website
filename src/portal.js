@@ -32,7 +32,7 @@ export function initPortal({ onEnter }) {
   const portal = document.querySelector('[data-portal]');
   if (!html.classList.contains('portal-open')) {
     portal.remove();
-    onEnter();
+    onEnter({ fromPortal: false });
     return;
   }
 
@@ -86,7 +86,7 @@ export function initPortal({ onEnter }) {
     portal.classList.add('is-leaving');
     html.classList.remove('portal-open', 'portal-picking');
     window.scrollTo(0, 0);
-    onEnter();
+    onEnter({ fromPortal: true });
     setTimeout(() => portal.remove(), 1400);
   };
 

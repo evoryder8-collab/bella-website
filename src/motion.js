@@ -60,14 +60,17 @@ export function initMotion() {
 // images; src/world/media.js turns the same value into a liquid dissolve.
 const reveal = (target, vars) => gsap.fromTo(target, { '--reveal': 0 }, { '--reveal': 1, ...vars });
 
-// The hero's entrance, played once the visitor is in (after the first-visit portal).
-export function playIntro() {
+// The hero's entrance, played once the visitor is in. After the premiere
+// ("Bella Bayar presents") it is slower: the portrait comes out of the dark
+// first and the title follows.
+export function playIntro({ fromDark = false } = {}) {
+  const pace = fromDark ? 1.45 : 1;
   const tl = gsap.timeline({ delay: 0.1, defaults: { ease: 'expo.out' } });
-  tl.add(reveal('.hero-media', { duration: 1.8, ease: 'power2.inOut' }))
-    .fromTo('[data-hero-frame]', { scale: 1.25 }, { scale: 1, duration: 2.6 }, 0.1)
+  tl.add(reveal('.hero-media', { duration: 1.8 * pace, ease: 'power2.inOut' }))
+    .fromTo('[data-hero-frame]', { scale: fromDark ? 1.4 : 1.25 }, { scale: 1, duration: 2.6 * pace }, 0.1)
     // y: 0 clears the pixel offset GSAP reads from the CSS starting transform.
-    .fromTo('[data-hero-line]', { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.4, stagger: 0.1 }, 0.55)
-    .fromTo('[data-hero-fade]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, stagger: 0.08 }, 0.85);
+    .fromTo('[data-hero-line]', { y: 0, yPercent: 110 }, { y: 0, yPercent: 0, duration: 1.4, stagger: 0.1 }, fromDark ? 1.5 : 0.55)
+    .fromTo('[data-hero-fade]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, stagger: 0.08 }, fromDark ? 1.85 : 0.85);
 }
 
 function heroSink() {

@@ -3,3 +3,6 @@
 .claude/launch.json
 node_modules/
 dist/
+
+# Bella's own files, kept on this computer only (never pushed)
+private-assets/

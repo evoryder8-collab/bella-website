@@ -35,6 +35,16 @@
 
   <!-- First visit: sound, then language (src/portal.js). It only shows while the
        head script's .portal-open is set, so without JavaScript the site opens directly. -->
+  <!-- Between the portal and the page: "Bella Bayar presents", then the dark opens on her portrait. -->
+  <div class="premiere" data-premiere aria-hidden="true">
+    <canvas class="premiere-dust" data-premiere-dust></canvas>
+    <div class="premiere-title">
+      <p class="premiere-name" data-premiere-name data-text="Bella Bayar">Bella Bayar</p>
+      <span class="premiere-line" data-premiere-line></span>
+      <p class="premiere-presents" data-premiere-presents data-i18n="premiere.presents"></p>
+    </div>
+  </div>
+
   <div class="portal" data-portal role="dialog" aria-modal="true" aria-labelledby="portal-title">
     <p class="portal-mark" aria-hidden="true">BE <em>BEAUTY</em></p>
     <div class="portal-step" data-step="sound">
@@ -340,7 +350,7 @@
           <figure class="proof-paris" data-reveal-image data-gl-media data-gl-alive>
             <img data-parallax src="./src/images/paris-championship.jpg" width="1000" height="959" loading="lazy" alt="" data-i18n-attr="alt:proof.parisAlt">
           </figure>
-          <figure class="press" data-tilt>
+          <figure class="press" data-tilt data-magazine>
             <img src="./src/images/hudterapeuten.jpg" width="573" height="809" loading="lazy" alt="" data-i18n-attr="alt:proof.pressAlt">
             <figcaption data-i18n="proof.press"></figcaption>
           </figure>

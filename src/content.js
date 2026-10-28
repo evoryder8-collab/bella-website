@@ -102,6 +102,7 @@ export const copy = {
       sound: 'Ljud',
     },
     // The first-visit portal (src/portal.js), shown in the device's language.
+    premiere: { presents: 'presenterar' },
     portal: {
       soundTitle: 'Ljud på?',
       soundLead: 'BE BEAUTY är skapat för att upplevas med ljud. Mjukt, stilla och nära.',
@@ -352,6 +353,7 @@ export const copy = {
       next: 'Next',
       sound: 'Sound',
     },
+    premiere: { presents: 'presents' },
     portal: {
       soundTitle: 'Sound on?',
       soundLead: 'BE BEAUTY is made to be felt with sound. Soft, calm and close.',

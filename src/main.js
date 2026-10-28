@@ -4,8 +4,10 @@ import { initMotion, lockScroll, playIntro, scrollToTarget } from './motion.js';
 import { initCarousel } from './carousel.js';
 import { initDeck } from './deck.js';
 import { initFigures } from './figures.js';
+import { initMagazine } from './magazine.js';
 import { initMap } from './map.js';
 import { initPortal } from './portal.js';
+import { playPremiere } from './premiere.js';
 import { isPlaying, onSoundChange, setMuted, soundPreference, startSound } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
@@ -28,6 +30,7 @@ document.querySelector('[data-year]').textContent = new Date().getFullYear();
 if (!reducedMotion) {
   initMotion();
   loadWorld();
+  initMagazine(document.querySelector('[data-magazine]'));
 }
 
 // The page waits behind the portal on a first visit; its entrance plays once
@@ -36,9 +39,20 @@ const portalOpen = document.documentElement.classList.contains('portal-open');
 if (portalOpen) lockScroll(true);
 initSoundToggle(portalOpen);
 initPortal({
-  onEnter: () => {
-    lockScroll(false);
-    if (!reducedMotion) playIntro();
+  onEnter: ({ fromPortal }) => {
+    if (reducedMotion || !fromPortal) {
+      document.querySelector('[data-premiere]')?.remove();
+      lockScroll(false);
+      if (!reducedMotion) playIntro();
+      return;
+    }
+    // Straight from the portal: "Bella Bayar presents", then the dark opens on the hero.
+    playPremiere({
+      onReveal: () => {
+        lockScroll(false);
+        playIntro({ fromDark: true });
+      },
+    });
   },
 });
 

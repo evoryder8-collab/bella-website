@@ -169,7 +169,7 @@ export const copy = {
         {
           word: 'Glow',
           text: 'Långvarig lyster och vitalitet. Resultat som syns och känns, inifrån och ut.',
-          imageAlt: 'Bella ger en ansiktsbehandling i mjukt fönsterljus',
+          imageAlt: 'Närbild av Bella Bayar med lysande, strålande hy',
         },
       ],
     },
@@ -536,7 +536,7 @@ export const copy = {
         {
           word: 'Glow',
           text: 'Lasting radiance and vitality. Results you can see and feel, from the inside out.',
-          imageAlt: 'Bella giving a facial in soft window light',
+          imageAlt: 'Close-up of Bella Bayar with radiant, glowing skin',
         },
       ],
     },

@@ -1399,10 +1399,15 @@ main,
   object-position: 72% 50%;
 }
 
-/* On wide screens only a band of the tall photo shows: her face and the arms she works with. */
+/* On wide screens only a band of the tall photos shows: her face and the arms
+   she works with, and the glow of her face from brow to chin. */
 @media (min-aspect-ratio: 1/1) {
   .approach-panel:nth-child(1) img {
     object-position: 50% 24%;
+  }
+
+  .approach-panel:nth-child(3) img {
+    object-position: 50% 20%;
   }
 }
 
@@ -1411,7 +1416,7 @@ main,
 }
 
 .approach-panel:nth-child(3) img {
-  object-position: 82% 40%;
+  object-position: 50% 30%;
 }
 
 .approach-media::after {

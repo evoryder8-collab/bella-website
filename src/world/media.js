@@ -22,11 +22,9 @@ import { tilt } from '../tilt.js';
 //
 // A photo marked data-gl-cutout (the hero's Bella, retouched and freed from
 // her background) uses its own transparency: she stands in the world itself,
-// with a halo of rose light behind her, and the ribbon passes behind her and
-// in front. She is drawn twice: her solid core
-// in the opaque pass, so the stone still refracts her, then her soft edges,
-// hair and halo blended over it. The halo is placed by --halo-x, --halo-y
-// (from the bottom) and --halo-r on the photo's container.
+// with nothing behind her but the page, and the ribbon passes behind her and in
+// front. She is drawn twice: her solid core in the opaque pass, so the stone
+// still refracts her, then her soft edges and hair blended over it.
 
 const POINTS = 12;
 const LOAD_AHEAD = 1.5; // viewport heights
@@ -68,9 +66,6 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uGlow;
   uniform vec3 uPearl;
   uniform vec3 uStone;
-  uniform vec3 uHalo;
-  uniform vec3 uHaloCore;
-  uniform vec3 uHaloEdge;
   varying vec2 vUv;
 
   float hash(vec2 p) {
@@ -163,15 +158,8 @@ const fragmentShader = /* glsl */ `
     {
       float a = base.a * (uFade > 0.0 ? smoothstep(0.0, uFade, uv.y) : 1.0);
       #ifdef FRINGE
-        // Her soft edges over a halo of rose light, brightest behind her head.
-        vec2 hc = (uv - uHalo.xy) * vec2(aspect, 1.0);
-        float halo = exp(-dot(hc, hc) / uHalo.z);
-        // It fades out before the sides and top of her box, never showing its edge.
-        float inBox = smoothstep(0.0, 0.16, min(uv.x, 1.0 - uv.x)) * smoothstep(0.0, 0.14, 1.0 - uv.y);
-        float haloAlpha = smoothstep(0.0, 0.9, halo) * 0.92 * inBox * uReveal;
-        vec3 haloColor = mix(uHaloEdge, uHaloCore, smoothstep(0.35, 1.0, halo));
-        float outAlpha = a + haloAlpha * (1.0 - a);
-        gl_FragColor = vec4((color * a + haloColor * haloAlpha * (1.0 - a)) / max(outAlpha, 1e-4), outAlpha);
+        // Her soft edges and hair, blended over whatever is behind her.
+        gl_FragColor = vec4(color, a);
       #else
         // Only what is fully solid here; everything softer is the fringe's.
         if (a < 0.97) discard;
@@ -231,8 +219,6 @@ export function createMedia(scene) {
   const geometry = new PlaneGeometry(1, 1, 24, 24);
   const glow = new Color('#f2a7a4');
   const pearl = new Color('#fff6f1');
-  const haloCore = new Color('#dfb4aa');
-  const haloEdge = new Color('#b7837a');
   let count = 0;
   const track = (container) => {
     const order = count++;
@@ -262,9 +248,6 @@ export function createMedia(scene) {
       uGlow: { value: glow },
       uPearl: { value: pearl },
       uStone: { value: new Vector3() },
-      uHalo: { value: new Vector3(0.5, 0.75, 0.2) },
-      uHaloCore: { value: haloCore },
-      uHaloEdge: { value: haloEdge },
     };
     const cutout = container.hasAttribute('data-gl-cutout');
     const defines = cutout ? { CUTOUT: '' } : {};
@@ -275,7 +258,7 @@ export function createMedia(scene) {
     mesh.visible = false;
     mesh.frustumCulled = false;
     if (cutout) {
-      // Her soft edges and halo, drawn over her core (same place, same uniforms).
+      // Her soft edges, drawn over her core (same place, same uniforms).
       const fringe = new Mesh(geometry, new ShaderMaterial({ uniforms, vertexShader, fragmentShader, defines: { CUTOUT: '', FRINGE: '' }, transparent: true, depthWrite: false }));
       fringe.frustumCulled = false;
       mesh.add(fringe);
@@ -331,10 +314,7 @@ export function createMedia(scene) {
     const sx = size(1, aspect / item.aspect);
     const sy = size(1, item.aspect / aspect);
     item.uniforms.uCover.value.set(sx, sy, (1 - sx) * (px / 100), (1 - sy) * (1 - py / 100));
-    const box = getComputedStyle(item.container);
-    item.uniforms.uRadius.value = parseFloat(box.borderTopLeftRadius) || 0;
-    const halo = (name, fallback) => parseFloat(box.getPropertyValue(name)) || fallback;
-    item.uniforms.uHalo.value.set(halo('--halo-x', 0.5), halo('--halo-y', 0.75), halo('--halo-r', 0.45) ** 2);
+    item.uniforms.uRadius.value = parseFloat(getComputedStyle(item.container).borderTopLeftRadius) || 0;
   };
 
   const at = (x, y) => items.find(({ rect, state }) => state === 'ready' && rect && x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom);

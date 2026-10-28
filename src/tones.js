@@ -1,4 +1,4 @@
-// The page's colour story. Every section carries data-tone="light|rose|dark";
+// The page's colour story. Every section carries data-tone="light|rose|dark" (the hero "studio");
 // neighbouring tones blend over part of a screen, so the page never changes
 // colour at a hard edge. The same stops paint the CSS background (always) and
 // the WebGL atmosphere (src/world/atmosphere.js) when it runs.
@@ -6,6 +6,8 @@
 export const TONES = {
   light: { base: '#f6e9e4', glow: '#ffffff' },
   rose: { base: '#efd6cf', glow: '#f7c3bd' },
+  // The hero: a dusty-rose studio backdrop behind Bella's cut-out.
+  studio: { base: '#d9afa5', glow: '#eccbc2' },
   dark: { base: '#24141a', glow: '#8e4651' },
 };
 

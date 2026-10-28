@@ -218,6 +218,10 @@ main:has(> :is([data-tone='light'], [data-tone='rose']):last-child) + .site-foot
   background: var(--blush-deep);
 }
 
+[data-tone='studio'] {
+  background: #d9afa5;
+}
+
 .has-tones [data-tone] {
   background: transparent;
 }
@@ -1158,15 +1162,16 @@ main,
   object-position: 50% 18%;
 }
 
-/* Bella cut out from her background (src/world/media.js draws her into the
-   world with a rose halo behind her; this halo is the fallback without WebGL).
-   On phones she fills the screen below the masthead, her head clear of it. */
+/* Bella cut out from her background, standing on the hero's own dusty rose
+   (the studio tone, edge to edge, so nothing outlines her). On phones she fills
+   the screen below the masthead, her head clear of it. */
 .hero-media[data-gl-cutout] {
   inset: calc(var(--header-h) - 6px) 0 0;
-  --halo-x: 0.5;
-  --halo-y: 0.76;
-  --halo-r: 0.78;
-  background: radial-gradient(80% 60% at 50% 24%, #dfb4aa, #b7837a 72%, rgb(183 131 122 / 0) 100%);
+}
+
+/* Only the wine from below: a light band from the top of her box would show its edge. */
+.hero-media[data-gl-cutout]::after {
+  background: linear-gradient(to top, rgb(36 20 26) 0%, rgb(36 20 26 / 0.9) 14%, rgb(36 20 26 / 0.76) 30%, rgb(36 20 26 / 0.56) 44%, rgb(36 20 26 / 0.26) 58%, rgb(36 20 26 / 0) 70%);
 }
 
 .hero-media[data-gl-cutout] .hero-img {
@@ -1288,10 +1293,7 @@ main,
   .hero-media[data-gl-cutout] {
     inset: calc(var(--header-h) + 4px) 2% 0 44%;
     border-radius: 0;
-    --halo-x: 0.5;
-    --halo-y: 0.72;
-    --halo-r: 0.5;
-    background: radial-gradient(46% 54% at 50% 30%, #dfb4aa, #b7837a 70%, rgb(183 131 122 / 0) 100%);
+    background: none;
   }
 
   .hero-media[data-gl-cutout]::after {

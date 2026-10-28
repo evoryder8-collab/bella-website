@@ -25,7 +25,7 @@ Then open http://localhost:5173. `npm run build` writes the static site to `dist
 - "Bella Bayar presents", the dark title card between the portal and the hero: [`src/premiere.js`](src/premiere.js).
 - The Hudterapeuten cover that opens, riffles and shuts as a real magazine (three.js, loaded when the cover is near): [`src/magazine/`](src/magazine). `pages.js` paints the inside pages, `book.js` runs the paper physics.
 - Soundscape, composed live with Web Audio (no audio files): [`src/sound.js`](src/sound.js).
-- Treatment figures, sculpted in 3D: [`src/world/figures.js`](src/world/figures.js), with the flower dress in [`src/world/flowers.js`](src/world/flowers.js). The models in [`src/models/`](src/models) come from Blender's [Human Base Meshes](https://www.blender.org/download/demo-files/#assets) (CC0), baked into a bust and a full figure with Blender 5.2.
+- Treatment figures, sculpted in 3D: [`src/sculpture/`](src/sculpture), each drawn in its own canvas at the screen's full sharpness and prepared well before it scrolls into view; the flower dress and back leaf are in [`src/sculpture/flowers.js`](src/sculpture/flowers.js). The models in [`src/models/`](src/models) come from Blender's [Human Base Meshes](https://www.blender.org/download/demo-files/#assets) (CC0), baked into a bust and a full figure with Blender 5.2.
 - Treatment carousel: [`src/carousel.js`](src/carousel.js). Review deck: [`src/deck.js`](src/deck.js).
 - Studio map (MapLibre GL JS 6.12): a NASA Blue Marble globe in space (`src/starfield.js`) that flies down to the studio, then OpenFreeMap streets recoloured to the palette with 3D buildings: [`src/map.js`](src/map.js).
 

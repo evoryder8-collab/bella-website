@@ -40,6 +40,13 @@ function mountPage({ entering = false } = {}) {
   initCarousel(document.querySelector('[data-carousel]'), document.querySelector('[data-chips]'), { signal });
   initDeck(document.querySelector('[data-deck]'), { signal });
   initMap(document.querySelector('[data-map]'), document.querySelectorAll('[data-studio]'), { signal });
+  // The 3D treatment figures, each in its own sharp canvas, loaded ahead of time.
+  const stages = document.querySelectorAll('[data-figure-stage]');
+  if (stages.length && !reducedMotion) {
+    import('./sculpture/index.js')
+      .then(({ mountSculptures }) => !signal.aborted && mountSculptures(stages, { signal }))
+      .catch((error) => console.warn('Treatment figures unavailable:', error));
+  }
   drawLaurels(document.querySelector('main'));
   let stopMotion = null;
   if (!reducedMotion) {

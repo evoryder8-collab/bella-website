@@ -109,19 +109,23 @@ decorative lines that looked like placeholders.
   view, hands over to the rose street map with 3D buildings, then orbits slowly.
 - **Scrolling on phones** is driven by Lenis (`syncTouch`) so the WebGL layer and the text move in the same frame,
   and phones use near-opaque glass instead of a per-frame blur.
-- **Treatment figures** (`src/world/figures.js`, 2026-10-28, replacing line drawings the user rejected): real 3D
+- **Treatment figures** (`src/sculpture/`, 2026-10-28, replacing line drawings the user rejected): real 3D
   sculptures from Blender's CC0 Human Base Meshes (the realistic female body, baked in Blender 5.2 into a bust
   and a full figure, `src/models/`). Face: a polished rose-gold bust that turns under a travelling light and
   fades out at the chest in a fine halftone. Signature TCM: the same bust deepening to satin rose bronze, with
   pearl acupoints on the real face, gold light flowing along the gua sha lift lines and a rose-quartz stone
   gliding up the cheek. Body: the full figure in rose bronze after the Chinese acupuncture statues, with gold
   meridians (front, arms and down the spine). It always forms facing you, holds a moment, then eases into a slow
-  turn. It is dressed in a blanket of mostly white and pink flowers across the chest (roses, peonies, blossoms,
-  buds, sage leaves), a bouquet over the hips and one large heart-shaped leaf laid over the back
-  (`src/world/flowers.js`), all opening as it forms. Each sculpture materialises upwards from its base along a
-  glowing scan line, with rose-gold sparkles and, for the figure, a pool of light as a pedestal. The models are
-  ~100k triangles, meshopt-compressed (about 300 KB each), and phones draw at up to 2x.
-  With reduced motion there is no world and the space closes.
+  turn. It is dressed like an editorial flower shoot (`src/sculpture/flowers.js`): a bandeau of many tightly
+  packed flowers over the chest (white daisies, pink gerberas, pink and white pompom carnations, white roses)
+  with straps of small flowers over the shoulders, a matching floral bikini band, and one large heart-shaped
+  leaf draped over the seat (laid on the outermost points of the body so nothing shows through, and cut where
+  there is no body behind it). Each sculpture materialises upwards from its base along a glowing scan line,
+  with rose-gold sparkles and, for the figure, a pool of light as a pedestal. Each stage has its own canvas at
+  up to 2.5x pixel density; models load as the page loads and each set is built, with its shaders compiled,
+  while still two screens away, so tapping a group starts the new figure at once (crossfading with the last).
+  The models are ~100k triangles, meshopt-compressed (about 300 KB each).
+  With reduced motion there are no figures and the space closes.
 - **Floating social gems**: rose-quartz Instagram and Facebook buttons fixed at the right edge, arriving one by
   one once the visitor starts scrolling, then floating and catching a glint.
 - **Swipe nudges**: the treatment cards lean left and spring back, and the top review card swings out and back,

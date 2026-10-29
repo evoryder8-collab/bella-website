@@ -86,11 +86,39 @@ function prerenderCopy() {
   };
 }
 
+// Give each page its own share title, description and URL, while using the
+// same branded preview image. This runs after the default copy is filled in so
+// link scrapers see complete metadata without executing JavaScript.
+function socialMetadata() {
+  return {
+    name: 'social-metadata',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html, { filename }) {
+        const page = relative(ROOT, filename).replace(/\\/g, '/');
+        if (!PAGES.includes(page)) throw new Error(`social-metadata: unexpected page ${page}`);
+        const title = html.match(/<title\s+data-i18n="([^"]+)">([^<]+)<\/title>/);
+        const description = html.match(/<meta name="description" content="([^"]*)" data-i18n-attr="content:([^"]+)">/);
+        if (!title || !description) throw new Error(`social-metadata: missing title or description in ${page}`);
+        const path = page === 'index.html' ? '' : page.replace(/index\.html$/, '');
+        const tags = [
+          `<meta property="og:url" content="https://bellabayar.com/${path}">`,
+          `<meta property="og:title" content="${escapeAttr(title[2])}" data-i18n-attr="content:${title[1]}">`,
+          `<meta property="og:description" content="${description[1]}" data-i18n-attr="content:${description[2]}">`,
+          `<meta name="twitter:title" content="${escapeAttr(title[2])}" data-i18n-attr="content:${title[1]}">`,
+          `<meta name="twitter:description" content="${description[1]}" data-i18n-attr="content:${description[2]}">`,
+        ];
+        return html.replace('</head>', `  ${tags.join('\n  ')}\n</head>`);
+      },
+    },
+  };
+}
+
 export default defineConfig({
   // Relative asset paths, so the build works under /bella-website/ on GitHub
   // Pages and on a custom domain later.
   base: './',
-  plugins: [includePartials(), prerenderCopy()],
+  plugins: [includePartials(), prerenderCopy(), socialMetadata()],
   worker: { format: 'es' },
   build: {
     // MapLibre is a ~1.1 MB chunk, but it is lazy-loaded near the map.

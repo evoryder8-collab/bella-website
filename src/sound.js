@@ -1,8 +1,11 @@
 // The soundscape: Bella's own signature song, "Late Night Polish" (src/music),
-// streamed and looping at 40% volume (20% on phones), with a breath of "air"
-// composed live that rises with scrolling like moving through silk. The
-// whooshes are recorded (src/sfx, about 130 KB in all, with a button click, the
-// magazine's riffle and a sparkle for the 3D figures) and load once sound
+// streamed and looping at 40% volume (20% on phones), with a breath of air (a
+// recorded wind, looping) that rises with scrolling like moving through silk.
+// Every effect is recorded (src/sfx): the user's own whooshes, button click,
+// magazine riffle and sparkle for the 3D figures, and, from Freesound (CC0, see
+// src/sfx/CREDITS.md), the ritual's breath, the magazine's cover closing, a
+// cotton swish for the menu and the leave card, the social stones' knock and a
+// soft tick for hovering on desktop. They load once sound
 // starts. Bella's spoken greeting (src/voice, in English and Swedish) loads in
 // the visitor's language as the ritual's stone is touched, and plays once as
 // the site opens with the song dipping under her voice. Everything is silent
@@ -23,6 +26,12 @@ const TAKES = {
   click: [new URL('./sfx/click.mp3', import.meta.url).href],
   riffle: [new URL('./sfx/pages-riffle.mp3', import.meta.url).href],
   magic: [new URL('./sfx/magic.mp3', import.meta.url).href],
+  breath: [new URL('./sfx/breath.mp3', import.meta.url).href],
+  cover: [new URL('./sfx/cover.mp3', import.meta.url).href],
+  silk: [new URL('./sfx/silk.mp3', import.meta.url).href],
+  stone: [new URL('./sfx/stone.mp3', import.meta.url).href],
+  tick: [new URL('./sfx/tick.mp3', import.meta.url).href],
+  air: [new URL('./sfx/air.mp3', import.meta.url).href],
   long: [new URL('./sfx/whoosh-long-a.mp3', import.meta.url).href, new URL('./sfx/whoosh-long-b.mp3', import.meta.url).href],
   short: [
     new URL('./sfx/whoosh-short-a.mp3', import.meta.url).href,
@@ -38,6 +47,11 @@ const VOICES = {
   sv: [new URL('./voice/bella-intro-sv.m4a', import.meta.url).href, new URL('./voice/bella-intro-sv.mp3', import.meta.url).href],
 };
 const DUCK = 0.3; // the song's own level while she speaks
+// The air's recording is a seamless 12 s loop with a quarter second of its own
+// continuation either side, so the loop points sit clear of the file's edges.
+const AIR_LOOP = [0.25, 12.25];
+const AIR_REST = 0.008; // its level when still, and how much scrolling adds
+const AIR_RUSH = 0.046;
 
 let ctx = null;
 let master = null;
@@ -89,17 +103,6 @@ function impulse(seconds, decay) {
   return buffer;
 }
 
-function noiseBuffer(seconds) {
-  const buffer = ctx.createBuffer(1, Math.floor(ctx.sampleRate * seconds), ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  let brown = 0;
-  for (let i = 0; i < data.length; i++) {
-    brown = (brown + 0.02 * (Math.random() * 2 - 1)) / 1.02;
-    data[i] = brown * 3.5;
-  }
-  return buffer;
-}
-
 // Streamed rather than decoded whole (it is three minutes long), through the
 // same master as everything else, so muting and fading treat it alike.
 function buildSong() {
@@ -112,18 +115,26 @@ function buildSong() {
   song.play().catch(() => {});
 }
 
+// The air: a gentle recorded wind, looping under everything, faded in once it
+// has loaded. Its band brightens and widens as the page moves.
 function buildAir() {
-  const source = ctx.createBufferSource();
-  source.buffer = noiseBuffer(3);
-  source.loop = true;
   airFilter = ctx.createBiquadFilter();
   airFilter.type = 'bandpass';
   airFilter.frequency.value = 900;
-  airFilter.Q.value = 0.7;
+  airFilter.Q.value = 0.5;
   airGain = ctx.createGain();
-  airGain.gain.value = 0.012;
-  source.connect(airFilter).connect(airGain).connect(bus);
-  source.start();
+  airGain.gain.value = 0;
+  airFilter.connect(airGain).connect(bus);
+}
+
+function startAir(buffer) {
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+  [source.loopStart, source.loopEnd] = AIR_LOOP;
+  source.connect(airFilter);
+  source.start(ctx.currentTime, AIR_LOOP[0]);
+  airGain.gain.setTargetAtTime(AIR_REST, ctx.currentTime, 2);
 }
 
 export function startSound() {
@@ -159,10 +170,10 @@ export function startSound() {
   const send = ctx.createGain();
   send.gain.value = 0.18;
   sfx.connect(send).connect(reverb);
+  buildAir();
   loadTakes();
 
   buildSong();
-  buildAir();
   master.gain.setTargetAtTime(MASTER, ctx.currentTime, 1.5);
   muted = false;
   notify();
@@ -206,7 +217,7 @@ function loadTakes() {
       fetch(url)
         .then((response) => response.arrayBuffer())
         .then((data) => new Promise((resolve, reject) => ctx.decodeAudioData(data, resolve, reject)))
-        .then((buffer) => (takes[kind][i] = { buffer, peak: peakOf(buffer) }))
+        .then((buffer) => (kind === 'air' ? startAir(buffer) : (takes[kind][i] = { buffer, peak: peakOf(buffer) })))
         .catch(() => {}),
     );
   }
@@ -304,17 +315,20 @@ function playTake(kind, strength, { peakIn = 0, startIn, rate = 1, vary = 0.04 }
   return true;
 }
 
-// A soft click for every button pressed.
+// A soft click for every button pressed (once, though a button's own handler
+// and the page-wide one may both ask for it).
+let lastTap = -1;
 export function tap() {
-  if (isPlaying()) playTake('click', 0.55, { vary: 0.03 });
+  if (!isPlaying() || ctx.currentTime - lastTap < 0.06) return;
+  lastTap = ctx.currentTime;
+  playTake('click', 0.55, { vary: 0.03 });
 }
 
 // The magazine's riffle, recorded, starting `startIn` seconds from now; the
-// magazine's leaves are flicked in time with its pages. False when it can't
-// play (sound off, or not loaded yet), so the leaves make their own sound.
+// magazine's leaves are flicked in time with its pages.
 export function riffle(startIn = 0) {
   // Kept low, 40% under its first level of 0.9, so it stays behind the pages.
-  return isPlaying() && playTake('riffle', 0.54, { startIn, vary: 0 });
+  if (isPlaying()) playTake('riffle', 0.54, { startIn, vary: 0 });
 }
 
 // A sparkle as a new 3D figure forms, heard once per visit (until the page is
@@ -324,51 +338,40 @@ export function magic() {
 }
 
 // A whoosh: short for a card thrown aside or a fling of the page, long for the
-// big transitions. Until the recordings have loaded, a swish of filtered noise.
+// big transitions. Silent until the recordings have loaded (a moment after
+// sound starts).
 export function whoosh(strength = 1, { long = false, peakIn = 0, rate = 1 } = {}) {
-  if (!isPlaying()) return;
-  if (playTake(long ? 'long' : 'short', strength, { peakIn, rate })) return;
-  const now = ctx.currentTime;
-  const source = ctx.createBufferSource();
-  source.buffer = noiseBuffer(0.9);
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.Q.value = 1.4;
-  filter.frequency.setValueAtTime(380, now);
-  filter.frequency.exponentialRampToValueAtTime(2600, now + 0.5);
-  const env = ctx.createGain();
-  env.gain.setValueAtTime(0, now);
-  env.gain.linearRampToValueAtTime(0.2 * strength, now + 0.08);
-  env.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
-  source.connect(filter).connect(env).connect(bus);
-  source.start(now);
+  if (isPlaying()) playTake(long ? 'long' : 'short', strength, { peakIn, rate });
 }
 
-// The flick of a magazine page; a low tone is the soft slap of it landing.
-let crisp = null;
-export function paper(strength = 1, tone = 2600) {
-  if (!isPlaying()) return;
-  const now = ctx.currentTime;
-  if (!crisp) {
-    crisp = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.3), ctx.sampleRate);
-    const data = crisp.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
-  }
-  const source = ctx.createBufferSource();
-  source.buffer = crisp;
-  source.playbackRate.value = 0.85 + Math.random() * 0.3;
-  const filter = ctx.createBiquadFilter();
-  filter.type = 'bandpass';
-  filter.Q.value = 0.8;
-  filter.frequency.setValueAtTime(tone, now);
-  filter.frequency.exponentialRampToValueAtTime(tone * 0.45, now + 0.16);
-  const env = ctx.createGain();
-  env.gain.setValueAtTime(0, now);
-  env.gain.linearRampToValueAtTime(0.09 * strength, now + 0.01);
-  env.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-  source.connect(filter).connect(env).connect(bus);
-  source.start(now);
-  source.stop(now + 0.3);
+// The magazine's cover closing on its pages.
+export function cover(strength = 1) {
+  if (isPlaying()) playTake('cover', 0.5 * strength, { vary: 0.03 });
+}
+
+// A breath drawn in, its fullest `peakIn` seconds from now: the ritual's ring
+// of light closing, just before the site opens.
+export function breath(peakIn) {
+  if (isPlaying()) playTake('breath', 0.62, { peakIn, vary: 0 });
+}
+
+// Cotton swishing through the air: the menu and the leave card opening.
+export function silk(strength = 1) {
+  if (isPlaying()) playTake('silk', 0.5 * strength, { vary: 0.06 });
+}
+
+// Two polished stones knocking, a little lower than the recording, for the
+// rose-quartz social stones.
+export function stone() {
+  if (isPlaying()) playTake('stone', 0.42, { rate: 0.86, vary: 0.04 });
+}
+
+// The faintest tick as the pointer finds a control (desktop only, see main.js).
+let lastTick = 0;
+export function hoverTick() {
+  if (!isPlaying() || ctx.currentTime - lastTick < 0.07) return;
+  lastTick = ctx.currentTime;
+  playTake('tick', 0.16, { vary: 0.05 });
 }
 
 // A strong fling of the page (speed in px per second) rushes past with a short
@@ -392,6 +395,7 @@ export function scrollRush(speed) {
 export function setScrollEnergy(energy) {
   if (!ctx) return;
   const now = ctx.currentTime;
-  airGain.gain.setTargetAtTime(0.012 + energy * 0.06, now, 0.25);
+  if (airGain.gain.value < AIR_REST * 0.5) return; // still loading, or fading in
+  airGain.gain.setTargetAtTime(AIR_REST + energy * AIR_RUSH, now, 0.25);
   airFilter.frequency.setTargetAtTime(700 + energy * 2400, now, 0.3);
 }

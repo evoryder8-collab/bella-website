@@ -1,7 +1,7 @@
 import { copy } from './content.js';
 import { currentLang, onLangChange } from './i18n.js';
 import { scrollToTarget } from './motion.js';
-import { duckSong, isPlaying, onSoundChange } from './sound.js';
+import { duckSong, isPlaying, onSoundChange, whoosh } from './sound.js';
 import { tilt } from './tilt.js';
 
 // The award film, as on the Zoltan site: her Best Beauty Salon moment at
@@ -194,6 +194,7 @@ export function initAwardFilm(section, { signal, reduced }) {
   let vh = 0;
   let rect = {};
   let last = 0;
+  let swept = false; // the frame's rush to full screen has been heard on this pass
   const pointer = { x: 0, y: 0 };
   on(window, 'pointermove', (event) => {
     pointer.x = event.clientX / innerWidth - 0.5;
@@ -229,6 +230,12 @@ export function initAwardFilm(section, { signal, reduced }) {
     s.setProperty('--rx', `${(float * (6 - ly * 8)).toFixed(2)}deg`);
     s.setProperty('--r', `${(lerp(30, rect.edge ? 0 : 18, k) + away * (rect.edge ? 26 : 8)).toFixed(1)}px`);
     s.setProperty('--pad', `${lerp(10, 0, k).toFixed(1)}px`);
+    // Halfway to full screen, one long whoosh carries it the rest of the way
+    // (heard again only once the frame has floated back).
+    if (k > 0.5 && !swept && p < GROW[1]) {
+      swept = true;
+      whoosh(0.6, { long: true, peakIn: 0.15 });
+    } else if (k < 0.05) swept = false;
     section.style.setProperty('--k', k.toFixed(3));
     section.style.setProperty('--away', away.toFixed(3));
     // Only while it holds the screen: halfway through letting go the header comes back.

@@ -12,7 +12,7 @@ import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
 import { initTilt } from './tilt.js';
 import { initRouter } from './router.js';
-import { greet, isPlaying, onSoundChange, setMuted, soundPreference, startSound, tap } from './sound.js';
+import { greet, hoverTick, isPlaying, onSoundChange, setMuted, silk, soundPreference, startSound, stone, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -27,8 +27,21 @@ initSatin();
 initBookBar();
 document.querySelector('[data-year]').textContent = new Date().getFullYear();
 initSocials();
-// Every button, and every link dressed as one, answers with a soft click.
-document.addEventListener('click', (event) => event.target.closest?.('button, .btn, .social, .leave-go') && tap());
+// Every button, and every link dressed as one, answers with a soft click; the
+// rose-quartz social stones knock like stone.
+document.addEventListener('click', (event) => {
+  if (event.target.closest?.('.social')) stone();
+  else if (event.target.closest?.('button, .btn, .leave-go')) tap();
+});
+// With a mouse, the faintest tick as the pointer finds a control.
+if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+  let over = null;
+  document.addEventListener('pointerover', (event) => {
+    const control = event.target.closest?.('button, .btn, .chip, .round-btn, [data-nav], .text-link, .lb-link, .lb-pill, .social');
+    if (control && control !== over && !control.disabled) hoverTick();
+    over = control;
+  });
+}
 
 if (!reducedMotion) {
   initMotion();
@@ -169,6 +182,7 @@ function initLeave(dock) {
     card.style.setProperty('--from-x', `${Math.round(from.left + from.width / 2 - innerWidth / 2)}px`);
     card.style.setProperty('--from-y', `${Math.round(from.top + from.height / 2 - innerHeight / 2)}px`);
     card.showModal();
+    silk(0.8);
     go.focus();
   });
   go.addEventListener('click', () => card.close());
@@ -182,6 +196,7 @@ function initMenu() {
   const label = toggle.querySelector('[data-i18n]');
 
   const setOpen = (open) => {
+    if (open !== !menu.hidden) silk(open ? 1 : 0.7);
     toggle.setAttribute('aria-expanded', String(open));
     menu.hidden = !open;
     document.body.classList.toggle('menu-open', open);

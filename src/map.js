@@ -1,5 +1,6 @@
 import { copy, DEFAULT_LANG, studios } from './content.js';
 import { paintStarfield } from './starfield.js';
+import { whoosh } from './sound.js';
 
 // The studios map (MapLibre GL JS 6.12, WebGL). It opens on the whole Earth as
 // a globe in deep space: NASA Blue Marble imagery with an atmosphere rim and a
@@ -134,7 +135,9 @@ async function load(container, chips, signal) {
     };
     map.on('moveend', orbit);
 
+    // A flight between the studios (or down from space) rushes past at its height.
     const focus = (i, duration) => {
+      if (animate && duration) whoosh(duration > 4000 ? 0.5 : 0.45, { long: true, peakIn: duration / 1000 * 0.45 });
       orbiting = false;
       map.stop();
       map.once('moveend', () => {

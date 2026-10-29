@@ -1,6 +1,6 @@
 import { copy, LANGS } from './content.js';
 import { savedLang, setLang } from './i18n.js';
-import { declineSound, prepareGreeting, startSound, tap, whoosh } from './sound.js';
+import { breath, declineSound, prepareGreeting, startSound, tap, whoosh } from './sound.js';
 
 // The first visits' ritual, in three steps round the rose-quartz stone of the
 // 3D world, which carries the house's name engraved on it (src/world/plate.js)
@@ -240,6 +240,8 @@ export function initPortal({ onEnter }) {
   function load() {
     if (reduced) return enter();
     portal.classList.add('is-loading');
+    // A breath drawn in as the ring closes, fullest as the site opens.
+    breath(LOAD_MS / 1000);
     setTimeout(enter, LOAD_MS);
   }
 }

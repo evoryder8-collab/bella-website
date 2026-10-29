@@ -1,5 +1,5 @@
 import { CanvasTexture, DoubleSide, Group, Mesh, PerspectiveCamera, PlaneGeometry, Scene, ShaderMaterial, Texture, Vector2, Vector4, WebGLRenderer } from 'three';
-import { paper, riffle } from '../sound.js';
+import { cover, riffle } from '../sound.js';
 import { paintPages } from './pages.js';
 
 // The Hudterapeuten cover as a real magazine. It lifts off the page, bursts
@@ -240,15 +240,13 @@ export async function createBook(figure, img) {
     let thump = 0;
     let thumpV = 0;
     const close = leaves[0].kicks[1];
-    // With the recording playing, the leaves stay quiet but for the cover's slap.
-    const recorded = riffle(RIFFLE_START);
+    // The recorded riffle carries the leaves; the cover closing has its own.
+    riffle(RIFFLE_START);
 
     const land = (leaf, i, speed) => {
-      if (speed < 3) return;
-      if (i === 0 && leaf.kicks[1] === close && time > close.at) {
-        thumpV -= 60;
-        paper(1.1, 520);
-      } else if (!recorded) paper(0.25, 1100);
+      if (speed < 3 || i !== 0 || leaf.kicks[1] !== close || time <= close.at) return;
+      thumpV -= 60;
+      cover();
     };
 
     const step = () => {
@@ -257,10 +255,6 @@ export async function createBook(figure, img) {
         for (const kick of leaf.kicks) {
           if (time < kick.at || time >= kick.at + KICK) continue;
           force += kick.speed / KICK;
-          if (!kick.fired) {
-            kick.fired = true;
-            if (!recorded) paper(i === 0 ? 0.9 : 0.45, i === 0 ? 2000 : 2600 + Math.random() * 900);
-          }
         }
         leaf.omega += force * STEP;
         leaf.phi += leaf.omega * STEP;

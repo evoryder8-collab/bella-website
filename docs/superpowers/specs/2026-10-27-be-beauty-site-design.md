@@ -208,13 +208,16 @@ decorative lines that looked like placeholders.
   Each leaf is simulated paper (flicked, rising against gravity, falling over the spine, a small bounce, an edge
   that drags and flaps), with glossy light, a curved gutter and shadows from the leaf above. The inside pages are
   editorial layouts painted from Bella's photos with text greyed into bars, made to be glimpsed, not read.
-- **Sound** (`src/sound.js`, Web Audio): Bella's signature song "Late Night Polish" looping at 40% (20% on phones), an air
-  layer (a recorded wind, looping) that follows scroll speed, and recorded effects only: the user's own
-  whooshes, button click, magazine riffle and once-per-visit sparkle for the 3D figures, and CC0 recordings
-  from Freesound (`src/sfx/CREDITS.md`) for the ritual's breath as its ring closes, the magazine's cover
-  closing, a cotton swish for the menu and the leave card, the social stones' knock and, with a mouse, a
-  faint tick on controls. The user's long whooshes also carry the award film's rush to full screen and the
-  map's flights. Bella's own spoken greeting (her cloned voice, `src/voice`)
+- **Sound** (`src/sound.js`, Web Audio): Bella's signature song "Late Night Polish" looping at 40% (20% on phones), the rustle
+  of cloth that is heard only while the page moves, and recorded effects only: the user's own whooshes,
+  button click, magazine riffle and once-per-visit sparkle for the 3D figures, and designs layered from
+  recordings in their sound library (`src/sfx/CREDITS.md`, each chosen and checked by listening with the
+  earshot tools): two singing bowls in the song's key and a slow breath as the ritual's ring closes, a draught
+  of air between its pages, stone on stone for the social stones (as they arrive and when tapped), cloth
+  for the menu and the leave card, paper for the magazine's cover and, with a mouse, a faint dull button on
+  controls. A bed sheet lifted lies under the long whoosh of a page change, and a card flicked under the
+  short whoosh of a review card thrown. The user's long whooshes also carry the award film's rush to full
+  screen and the map's flights. Nothing sounds over Bella's greeting, which covers the "presents" card. Bella's own spoken greeting (her cloned voice, `src/voice`)
   plays once as the site opens after the ritual, with the song dipping under it, in English or Swedish by the
   visitor's language (AAC, about 100 KB, with an MP3 fallback; only that language is fetched, as the stone is touched). The early generated crystal chimes were removed at the user's
   request. A header toggle mutes it; returning visitors who chose sound hear it from their first tap.

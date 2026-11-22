@@ -4,7 +4,7 @@ import { copy } from './content.js';
 import { currentLang, setLang } from './i18n.js';
 import { lookup } from './i18n-lookup.js';
 import { jumpTo, jumpToTop, scrollToTarget } from './motion.js';
-import { whoosh } from './sound.js';
+import { cloth, whoosh } from './sound.js';
 
 // Moving between pages without reloading, so the 3D world, the stone and the
 // music carry on. A satin curtain sweeps up over the page with the next page's
@@ -168,6 +168,7 @@ function createCurtain() {
       el.classList.add('is-active');
       // A long whoosh, peaking as the satin edge sweeps past the middle.
       whoosh(0.8, { long: true, peakIn: 0.38 });
+      cloth(0.38);
       return gsap
         .timeline({ onUpdate: draw })
         .to(edge, { topBend: -12, duration: 0.55, ease: 'power2.in' }, 0)

@@ -1,11 +1,13 @@
 // The soundscape: Bella's own signature song, "Late Night Polish" (src/music),
-// streamed and looping at 40% volume (20% on phones), with a breath of air (a
-// recorded wind, looping) that rises with scrolling like moving through silk.
+// streamed and looping at 40% volume (20% on phones), and the rustle of cloth
+// that is heard only while the page moves, like moving through silk.
 // Every effect is recorded (src/sfx): the user's own whooshes, button click,
-// magazine riffle and sparkle for the 3D figures, and, from Freesound (CC0, see
-// src/sfx/CREDITS.md), the ritual's breath, the magazine's cover closing, a
-// cotton swish for the menu and the leave card, the social stones' knock and a
-// soft tick for hovering on desktop. They load once sound
+// magazine riffle and sparkle for the 3D figures, and designs layered from
+// recordings in their sound library (src/sfx/CREDITS.md): singing bowls and a
+// breath for the ritual's ring, a draught of air between its pages, stone on
+// stone for the social stones, cloth for the menu, the leave card and the
+// page curtain, paper for the magazine's cover, a card for the reviews and a
+// small dull button for hovering on desktop. They load once sound
 // starts. Bella's spoken greeting (src/voice, in English and Swedish) loads in
 // the visitor's language as the ritual's stone is touched, and plays once as
 // the site opens with the song dipping under her voice. Everything is silent
@@ -26,10 +28,14 @@ const TAKES = {
   click: [new URL('./sfx/click.mp3', import.meta.url).href],
   riffle: [new URL('./sfx/pages-riffle.mp3', import.meta.url).href],
   magic: [new URL('./sfx/magic.mp3', import.meta.url).href],
-  breath: [new URL('./sfx/breath.mp3', import.meta.url).href],
+  ring: [new URL('./sfx/ring.mp3', import.meta.url).href],
+  draft: [new URL('./sfx/draft.mp3', import.meta.url).href],
   cover: [new URL('./sfx/cover.mp3', import.meta.url).href],
   silk: [new URL('./sfx/silk.mp3', import.meta.url).href],
+  curtain: [new URL('./sfx/curtain.mp3', import.meta.url).href],
+  card: [new URL('./sfx/card.mp3', import.meta.url).href],
   stone: [new URL('./sfx/stone.mp3', import.meta.url).href],
+  stones: [new URL('./sfx/stones.mp3', import.meta.url).href],
   tick: [new URL('./sfx/tick.mp3', import.meta.url).href],
   air: [new URL('./sfx/air.mp3', import.meta.url).href],
   long: [new URL('./sfx/whoosh-long-a.mp3', import.meta.url).href, new URL('./sfx/whoosh-long-b.mp3', import.meta.url).href],
@@ -47,11 +53,10 @@ const VOICES = {
   sv: [new URL('./voice/bella-intro-sv.m4a', import.meta.url).href, new URL('./voice/bella-intro-sv.mp3', import.meta.url).href],
 };
 const DUCK = 0.3; // the song's own level while she speaks
-// The air's recording is a seamless 12 s loop with a quarter second of its own
+// The cloth's recording is a seamless loop with a quarter second of its own
 // continuation either side, so the loop points sit clear of the file's edges.
-const AIR_LOOP = [0.25, 12.25];
-const AIR_REST = 0.008; // its level when still, and how much scrolling adds
-const AIR_RUSH = 0.046;
+const AIR_LOOP = [0.25, 11.05];
+const AIR_RUSH = 0.9; // its level with the page at full speed; still, it is silent
 
 let ctx = null;
 let master = null;
@@ -115,13 +120,12 @@ function buildSong() {
   song.play().catch(() => {});
 }
 
-// The air: a gentle recorded wind, looping under everything, faded in once it
-// has loaded. Its band brightens and widens as the page moves.
+// The air: cloth rustling, looping in silence until the page moves (see
+// setScrollEnergy).
 function buildAir() {
   airFilter = ctx.createBiquadFilter();
-  airFilter.type = 'bandpass';
-  airFilter.frequency.value = 900;
-  airFilter.Q.value = 0.5;
+  airFilter.type = 'highpass';
+  airFilter.frequency.value = 250;
   airGain = ctx.createGain();
   airGain.gain.value = 0;
   airFilter.connect(airGain).connect(bus);
@@ -134,7 +138,6 @@ function startAir(buffer) {
   [source.loopStart, source.loopEnd] = AIR_LOOP;
   source.connect(airFilter);
   source.start(ctx.currentTime, AIR_LOOP[0]);
-  airGain.gain.setTargetAtTime(AIR_REST, ctx.currentTime, 2);
 }
 
 export function startSound() {
@@ -344,26 +347,49 @@ export function whoosh(strength = 1, { long = false, peakIn = 0, rate = 1 } = {}
   if (isPlaying()) playTake(long ? 'long' : 'short', strength, { peakIn, rate });
 }
 
-// The magazine's cover closing on its pages.
+// The levels below were set against the user's own click in the mix with the
+// song (how far each lifts it between 400 Hz and 6 kHz), not by their numbers.
+
+// The magazine's cover closing on its pages: paper landing, with the weight of a book under it.
 export function cover(strength = 1) {
-  if (isPlaying()) playTake('cover', 0.5 * strength, { vary: 0.03 });
+  if (isPlaying()) playTake('cover', 0.9 * strength, { vary: 0.03 });
 }
 
-// A breath drawn in, its fullest `peakIn` seconds from now: the ritual's ring
-// of light closing, just before the site opens.
-export function breath(peakIn) {
-  if (isPlaying()) playTake('breath', 0.62, { peakIn, vary: 0 });
+// Two singing bowls rubbed until they hum (A, in the song's key), swelling for
+// 1.5 s with one slow breath out: the ritual's ring of light closing.
+export function ring() {
+  if (isPlaying()) playTake('ring', 0.65, { startIn: 0, vary: 0 });
 }
 
-// Cotton swishing through the air: the menu and the leave card opening.
+// A short draught of air: a page of the ritual giving way to the next.
+export function draft() {
+  if (isPlaying()) playTake('draft', 0.22, { vary: 0.05 });
+}
+
+// A slick curtain shaken out over a bed sheet: the menu and the leave card opening.
 export function silk(strength = 1) {
-  if (isPlaying()) playTake('silk', 0.5 * strength, { vary: 0.06 });
+  if (isPlaying()) playTake('silk', 0.75 * strength, { vary: 0.06 });
 }
 
-// Two polished stones knocking, a little lower than the recording, for the
-// rose-quartz social stones.
+// A bed sheet lifted, under the long whoosh of a page change: the satin
+// curtain's own cloth, loudest `peakIn` seconds from now.
+export function cloth(peakIn = 0) {
+  if (isPlaying()) playTake('curtain', 0.42, { peakIn, vary: 0.04 });
+}
+
+// A card flicked over, under the short whoosh of a review card thrown aside.
+export function flick() {
+  if (isPlaying()) playTake('card', 0.42, { vary: 0.06 });
+}
+
+// A small stone knocked on stone: a rose-quartz social stone tapped.
 export function stone() {
-  if (isPlaying()) playTake('stone', 0.42, { rate: 0.86, vary: 0.04 });
+  if (isPlaying()) playTake('stone', 0.62, { vary: 0.04 });
+}
+
+// Stones laid down, a quick double: the two social stones arriving.
+export function stones() {
+  if (isPlaying()) playTake('stones', 0.7, { vary: 0.04 });
 }
 
 // The faintest tick as the pointer finds a control (desktop only, see main.js).
@@ -371,7 +397,7 @@ let lastTick = 0;
 export function hoverTick() {
   if (!isPlaying() || ctx.currentTime - lastTick < 0.07) return;
   lastTick = ctx.currentTime;
-  playTake('tick', 0.16, { vary: 0.05 });
+  playTake('tick', 0.35, { vary: 0.05 });
 }
 
 // A strong fling of the page (speed in px per second) rushes past with a short
@@ -391,11 +417,9 @@ export function scrollRush(speed) {
   whoosh(Math.min(1, 0.45 + (speed - 3400) / 6000), { rate: Math.min(1.12, 0.94 + speed / 40000) });
 }
 
-// 0 = still, 1 = scrolling fast: the air grows and brightens.
+// 0 = still, 1 = scrolling fast: the cloth is heard only as the page moves.
 export function setScrollEnergy(energy) {
   if (!ctx) return;
   const now = ctx.currentTime;
-  if (airGain.gain.value < AIR_REST * 0.5) return; // still loading, or fading in
-  airGain.gain.setTargetAtTime(AIR_REST + energy * AIR_RUSH, now, 0.25);
-  airFilter.frequency.setTargetAtTime(700 + energy * 2400, now, 0.3);
+  airGain.gain.setTargetAtTime(energy * AIR_RUSH, now, 0.25);
 }

@@ -12,7 +12,7 @@ import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
 import { initTilt } from './tilt.js';
 import { initRouter } from './router.js';
-import { declineSound, greet, hoverTick, isPlaying, onSoundChange, setMuted, silk, soundPreference, startSound, stone, tap } from './sound.js';
+import { declineSound, greet, hoverTick, isPlaying, onSoundChange, setMuted, silk, soundPreference, startSound, stone, stones, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -165,6 +165,7 @@ function initSocials() {
     if (Math.abs(window.scrollY - start) < 24) return;
     dock.classList.add('is-summoned');
     window.removeEventListener('scroll', summon);
+    setTimeout(stones, 320); // laid down as they settle
     // As they arrive, the gems become 3D gua sha stones (three.js loads only now).
     import('./socials3d.js')
       .then(({ initSocialStones }) => initSocialStones(dock))

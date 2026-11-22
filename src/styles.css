@@ -986,6 +986,13 @@ main,
     linear-gradient(165deg, #f6d6cc, #e7b3a5 55%, #d39a8e);
 }
 
+/* Each language is touched over 44px of height, a little beyond the switch. */
+.lang-switch button::after {
+  content: '';
+  position: absolute;
+  inset: -7px -2px;
+}
+
 .lang-switch button {
   position: relative;
   z-index: 1;
@@ -3592,6 +3599,25 @@ html.motion .stat-silver:not(.no-medal) .stat-word {
   pointer-events: none;
 }
 
+/* On phones the sound control is touched over 44px, though it looks its 34:
+   the button is the larger box, and its satin and rings keep to the middle. */
+@media (max-width: 1079.98px) {
+  .sound-toggle {
+    width: 44px;
+    height: 44px;
+    margin: -5px;
+  }
+
+  .sound-toggle .satin {
+    inset: 5px;
+  }
+
+  .sound-toggle::before,
+  .sound-toggle::after {
+    inset: 3px;
+  }
+}
+
 .sound-toggle.is-playing::before {
   animation: sound-ring 2.2s cubic-bezier(0.2, 0.6, 0.35, 1) infinite;
 }
@@ -4210,10 +4236,6 @@ html:not(.no-world) .ritual-gem {
   transition: opacity 0.26s ease;
 }
 
-.portal.is-relettering :is([data-portal-text], [data-portal-html]) {
-  opacity: 0;
-}
-
 /* Entering: the words fall away while the ripples spread and the stone glows. */
 .portal.is-entering > :not(.ritual-stone) {
   animation: portal-away 0.7s var(--ease) both;
@@ -4535,7 +4557,13 @@ html:not(.motion) .figure-stage {
     ),
     radial-gradient(60% 75% at 50% -12%, rgb(255 205 190 / 0.13), transparent 70%),
     #0b0608;
-  /* The dark opens like an iris: transparent inside the circle, a wide soft edge. */
+}
+
+/* The dark opens like an iris: transparent inside the circle, a wide soft edge.
+   The mask goes on only as it opens (src/premiere.js): with the circle still at
+   zero iOS 26.5 hides the whole stage, and the name is drawn without a mask
+   over it. */
+.premiere[data-opening] {
   -webkit-mask-image: radial-gradient(circle at var(--ix) var(--iy), transparent calc(var(--iris) * 1px - var(--soft)), #000 calc(var(--iris) * 1px));
   mask-image: radial-gradient(circle at var(--ix) var(--iy), transparent calc(var(--iris) * 1px - var(--soft)), #000 calc(var(--iris) * 1px));
 }
@@ -4569,12 +4597,21 @@ html:not(.motion) .figure-stage {
   font-size: clamp(3.4rem, 17vw, 9rem);
   line-height: 1.05;
   white-space: nowrap;
+  /* The letters are set one by one, so without kerning; the glint (::after) is
+     the whole name, and must lie exactly over them. */
+  font-kerning: none;
   color: #f4ddd3;
   text-shadow: 0 0 34px rgb(255 186 170 / 0.35);
 }
 
+/* Each letter is blurred in by itself, and iPhones clip a blurred letter to its
+   own box: the box is given room for the glow and for what an italic letter
+   swings outside its width (the tail and arms of the y), taking none in the line. */
 .premiere-letter {
+  --room: max(44px, 0.35em);
   display: inline-block;
+  padding: var(--room);
+  margin: calc(-1 * var(--room));
   will-change: transform, opacity, filter;
 }
 

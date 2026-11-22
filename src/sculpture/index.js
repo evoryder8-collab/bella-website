@@ -548,12 +548,18 @@ let assets = null;
 const loadAssets = () =>
   (assets ??= (() => {
     const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
-    return Promise.all([loadGeometry(loader, bustUrl), loadGeometry(loader, figureUrl)]).then(([bust, figure]) => ({
-      bust,
-      figure,
-      bustAt: surface(bust, 0.01),
-      bodyAt: surface(figure, 0.015),
-    }));
+    return Promise.all([loadGeometry(loader, bustUrl), loadGeometry(loader, figureUrl)])
+      .then(([bust, figure]) => ({
+        bust,
+        figure,
+        bustAt: surface(bust, 0.01),
+        bodyAt: surface(figure, 0.015),
+      }))
+      .catch((error) => {
+        // A failed download is tried again by the next stage, not remembered.
+        assets = null;
+        throw error;
+      });
   })());
 
 const approachTo = (value, target, dt) => value + Math.sign(target - value) * Math.min(Math.abs(target - value), (target > value ? FORM : LEAVE) * dt);
@@ -749,6 +755,7 @@ function createStage(el, { group, pointer, signal }) {
           set.dress.open(1);
           return renderer.compileAsync(scene, camera).then(() => {
             set.dress.open(0);
+            bloomed = -1; // posed again from where the figure has got to meanwhile
             el.dataset.figureReady = '';
           });
         }),

@@ -12,7 +12,7 @@ import { initPortal } from './portal.js';
 import { playPremiere } from './premiere.js';
 import { initTilt } from './tilt.js';
 import { initRouter } from './router.js';
-import { greet, hoverTick, isPlaying, onSoundChange, setMuted, silk, soundPreference, startSound, stone, tap } from './sound.js';
+import { declineSound, greet, hoverTick, isPlaying, onSoundChange, setMuted, silk, soundPreference, startSound, stone, tap } from './sound.js';
 import { paintCssBackground } from './tones.js';
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -128,19 +128,30 @@ function initSoundToggle(portalOpen) {
     toggle.classList.toggle('is-playing', on);
   };
   onSoundChange(render);
-  toggle.addEventListener('click', () => (isPlaying() ? setMuted(true) : startSound()));
-
-  // Browsers only start audio after a gesture, so a returning visitor who chose
-  // sound hears it from their first tap or key press (unless that tap is the toggle).
-  if (portalOpen || soundPreference() !== 'on') return;
-  render(true);
+  // A returning visitor who chose sound: it is shown as on, and waits for their
+  // first tap or key press (browsers only start audio after a gesture; a
+  // finger going down is not one yet, the tap it completes is).
+  let waiting = !portalOpen && soundPreference() === 'on';
   const arm = (event) => {
-    if (event.target.closest?.('[data-sound-toggle]')) return;
-    window.removeEventListener('pointerdown', arm);
+    // The toggle answers for itself (a key pressed on it is followed by its click).
+    if (!waiting || event.target.closest?.('[data-sound-toggle]')) return;
+    waiting = false;
+    window.removeEventListener('click', arm);
     window.removeEventListener('keydown', arm);
     startSound();
   };
-  window.addEventListener('pointerdown', arm);
+  toggle.addEventListener('click', () => {
+    if (!waiting) return isPlaying() ? setMuted(true) : startSound();
+    // Shown as on though nothing plays yet: this tap turns it off.
+    waiting = false;
+    window.removeEventListener('click', arm);
+    window.removeEventListener('keydown', arm);
+    declineSound();
+    render(false);
+  });
+  if (!waiting) return;
+  render(true);
+  window.addEventListener('click', arm);
   window.addEventListener('keydown', arm);
 }
 
@@ -222,7 +233,7 @@ function initMenu() {
       toggle.focus();
     }
   });
-  matchMedia('(min-width: 1080px)').addEventListener('change', (event) => event.matches && setOpen(false));
+  matchMedia('(min-width: 1080px)').addEventListener('change', (event) => event.matches && !menu.hidden && setOpen(false));
 }
 
 function initHeader() {

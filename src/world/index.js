@@ -357,7 +357,9 @@ export function initWorld() {
   canvas.addEventListener('webglcontextlost', (event) => {
     event.preventDefault();
     gsap.ticker.remove(frame);
+    // The page falls back to how it looks without the world (its own photos, the drawn stone).
     document.documentElement.classList.remove('has-world');
+    document.documentElement.classList.add('no-world');
   });
   return true;
 }

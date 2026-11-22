@@ -32,8 +32,12 @@ export function jumpToTop() {
   else window.scrollTo(0, 0);
 }
 
+// An element, or a scroll position in pixels.
 export function jumpTo(target) {
-  if (lenis) lenis.scrollTo(target, { immediate: true, force: true });
+  if (lenis) {
+    lenis.resize(); // the page has just been swapped: its own height, not the last one's
+    lenis.scrollTo(target, { immediate: true, force: true });
+  } else if (typeof target === 'number') window.scrollTo(0, target);
   else target.scrollIntoView();
 }
 

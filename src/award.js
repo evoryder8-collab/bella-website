@@ -51,14 +51,24 @@ export function initAwardFilm(section, { signal, reduced }) {
   let inWindow = false;
   let ended = false;
 
-  // The source suits the screen, and is set only once the film is near.
+  // The source suits the screen, and is set only once the film is near (or, to
+  // unlock its sound, in the tap that turns the site's sound on); it is fetched
+  // ahead only once it is near.
   const load = () => {
     if (video.src) return;
     const sharp = innerWidth * (devicePixelRatio || 1) >= 900 && !navigator.connection?.saveData;
+    video.preload = 'metadata';
     video.src = sharp ? SOURCES.sharp : SOURCES.light;
-    video.preload = 'auto';
   };
-  const near = new IntersectionObserver((entries) => entries.some((entry) => entry.isIntersecting) && (load(), near.disconnect()), { rootMargin: '1400px 0px' });
+  const near = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      near.disconnect();
+      load();
+      video.preload = 'auto';
+    },
+    { rootMargin: '1400px 0px' },
+  );
   near.observe(section);
   signal.addEventListener('abort', () => near.disconnect());
 
@@ -66,6 +76,7 @@ export function initAwardFilm(section, { signal, reduced }) {
   // the tap that turns the site's sound on starts it muted and stops it at once.
   on(window, 'bb:sound-gesture', () => {
     wantSound = true;
+    if (playing) return; // already rolling: it is simply unmuted (onSoundChange, below)
     load();
     video.muted = true;
     video.play()?.catch(() => {});
@@ -89,11 +100,11 @@ export function initAwardFilm(section, { signal, reduced }) {
   };
   const stopLang = onLangChange(showSound);
   signal.addEventListener('abort', stopLang);
-  onSoundChange((sound) => {
-    if (signal.aborted) return;
+  const stopSound = onSoundChange((sound) => {
     wantSound = sound;
     if (playing) setMuted(!sound);
   });
+  signal.addEventListener('abort', stopSound);
   showSound();
 
   const play = async () => {

@@ -101,9 +101,9 @@ function nudge(root, topCard, signal) {
       if (!entries.some((entry) => entry.isIntersecting)) return;
       seen.disconnect();
       setTimeout(() => {
-        if (touched) return;
+        if (touched || signal?.aborted) return;
         swing(1);
-        setTimeout(() => !touched && swing(0.5), 3800);
+        setTimeout(() => !touched && !signal?.aborted && swing(0.5), 3800);
       }, 500);
     },
     { threshold: 0.6 },

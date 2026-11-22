@@ -89,7 +89,7 @@ function remember(value) {
 }
 
 export const isPlaying = () => Boolean(ctx) && !muted;
-export const onSoundChange = (fn) => listeners.add(fn);
+export const onSoundChange = (fn) => (listeners.add(fn), () => listeners.delete(fn));
 const notify = () => listeners.forEach((fn) => fn(isPlaying()));
 
 // A stereo reverb tail: decaying noise, generated rather than loaded.

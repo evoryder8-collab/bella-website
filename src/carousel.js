@@ -99,9 +99,9 @@ function nudge(track, signal) {
       if (!entries.some((entry) => entry.isIntersecting)) return;
       seen.disconnect();
       setTimeout(() => {
-        if (touched) return;
+        if (touched || signal?.aborted) return;
         lean(Math.min(96, track.clientWidth * 0.22));
-        setTimeout(() => !touched && lean(Math.min(48, track.clientWidth * 0.11)), 3600);
+        setTimeout(() => !touched && !signal?.aborted && lean(Math.min(48, track.clientWidth * 0.11)), 3600);
       }, 450);
     },
     { threshold: 0.6 },

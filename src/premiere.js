@@ -18,6 +18,7 @@ export function playPremiere({ onReveal }) {
     return;
   }
   const name = stage.querySelector('[data-premiere-name]');
+  const line = parseFloat(getComputedStyle(name).fontSize) * 1.05; // the name's line height
   const letters = [...name.textContent].map((char) => {
     const span = document.createElement('span');
     span.className = 'premiere-letter';
@@ -49,8 +50,8 @@ export function playPremiere({ onReveal }) {
   tl.fromTo(stage, { opacity: 0 }, { opacity: 1, duration: 0.9, ease: 'power2.out' }, 0)
     .fromTo(
       letters,
-      { opacity: 0, yPercent: 45, scale: 1.18, filter: 'blur(14px)' },
-      { opacity: 1, yPercent: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'expo.out', stagger: 0.075 },
+      { opacity: 0, y: line * 0.45, scale: 1.18, filter: 'blur(14px)' },
+      { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1.5, ease: 'expo.out', stagger: 0.075 },
       0.55,
     )
     .add(() => name.classList.add('is-lit'), 1.6)
@@ -62,7 +63,7 @@ export function playPremiere({ onReveal }) {
       1.8,
     )
     // The name lifts away; the laurel grows around the award.
-    .to(letters, { opacity: 0, yPercent: -35, filter: 'blur(12px)', duration: 0.9, ease: 'power2.in', stagger: { each: 0.035, from: 'center' } }, 3.1)
+    .to(letters, { opacity: 0, y: line * -0.35, filter: 'blur(12px)', duration: 0.9, ease: 'power2.in', stagger: { each: 0.035, from: 'center' } }, 3.1)
     .to(['[data-premiere-line]', '[data-premiere-presents]'], { opacity: 0, y: -10, duration: 0.7, ease: 'power2.in' }, 3.15)
     .set(award, { opacity: 1 }, 3.7)
     .fromTo(wreath.querySelectorAll('.laurel-stem'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.3, ease: 'power2.inOut' }, 3.7)
@@ -79,6 +80,8 @@ export function playPremiere({ onReveal }) {
     .call(() => whoosh(1, { long: true, peakIn: 1 }), null, 6.75)
     .call(onReveal, null, 6.75)
     .to(stage, { '--glow': 1, duration: 0.6, ease: 'power1.out' }, 6.75)
+    // The mask goes on with the circle already open a touch (see styles.css).
+    .set(stage, { '--iris': 1, attr: { 'data-opening': 'true' } }, 6.8)
     .to(stage, { '--iris': reach, duration: 2.4, ease: 'power2.inOut' }, 6.8);
 
   // Development only: pause and seek it, to inspect a moment.

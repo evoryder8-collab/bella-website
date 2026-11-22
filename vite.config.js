@@ -102,6 +102,7 @@ function socialMetadata() {
         if (!title || !description) throw new Error(`social-metadata: missing title or description in ${page}`);
         const path = page === 'index.html' ? '' : page.replace(/index\.html$/, '');
         const tags = [
+          `<link rel="canonical" href="https://bellabayar.com/${path}">`,
           `<meta property="og:url" content="https://bellabayar.com/${path}">`,
           `<meta property="og:title" content="${escapeAttr(title[2])}" data-i18n-attr="content:${title[1]}">`,
           `<meta property="og:description" content="${description[1]}" data-i18n-attr="content:${description[2]}">`,

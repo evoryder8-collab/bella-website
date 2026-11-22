@@ -93,6 +93,7 @@ export const copy = {
     ui: {
       skip: 'Hoppa till innehållet',
       menu: 'Meny',
+      footerNav: 'Sidfot',
       close: 'Stäng meny',
       langLabel: 'Språk',
       book: 'Boka tid',
@@ -479,6 +480,7 @@ export const copy = {
     ui: {
       skip: 'Skip to content',
       menu: 'Menu',
+      footerNav: 'Footer',
       close: 'Close menu',
       langLabel: 'Language',
       book: 'Book now',

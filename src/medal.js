@@ -249,6 +249,8 @@ export async function mountMedal(stage, { signal }) {
     sizes.disconnect();
     seen.disconnect();
     renderer.dispose();
+    // Phones allow only so many WebGL contexts: give this one back at once.
+    renderer.forceContextLoss();
     canvas.remove();
   });
 }

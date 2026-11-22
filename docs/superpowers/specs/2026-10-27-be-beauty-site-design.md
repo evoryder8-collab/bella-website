@@ -165,6 +165,9 @@ decorative lines that looked like placeholders.
   light; "Bella Bayar" writes itself letter by letter in champagne light, a glint crosses it and "presents"
   follows. The name lifts away and the dark opens like an iris from her face, so the portrait arrives first and
   the BE BEAUTY title after it. A tap or key fast-forwards it. Returning visitors get the shorter hero entrance.
+  The iris is a mask on the stage, applied only as it opens: with its circle still at zero iOS 26.5 hid the
+  whole stage, and each letter of the name has room in its own box for its glow and its italic overhang,
+  which iPhones otherwise clip while the letter is blurred in.
 - **Seamless chapters** (2026-10-28): where neighbouring sections change colour they leave extra room
   (`--tone-gap`), and the colour eases across it in many stops, so no band or line shows. The hero and the
   approach scene both end in the same night colour, the approach photos fade out at their bottom edge in
@@ -197,7 +200,9 @@ decorative lines that looked like placeholders.
   full menu per group with its figure and prices), Academy (`akademi/`: courses and Corporate Wellness) and
   Contact (`kontakt/`: the studios map, hours, email and Instagram). Page changes happen under a satin curtain
   without reloading, so the 3D world, stone and sound continue; on other pages the stone floats beside the
-  title and the ribbon rides the edge from the start. With reduced motion, links load pages normally.
+  title and the ribbon rides the edge from the start. With reduced motion, links load pages normally. Back
+  returns to where each page was left, and each page carries its own canonical address. An
+  address with no page gets `public/404.html`, a stand-alone page in the ritual's night that leads home.
 - **The Hudterapeuten magazine** (`src/magazine/`): the first time the cover is fully in view it lifts off the
   page, bursts open with its pages fanning, riffles back and shuts, landing exactly as the photo it started as.
   Each leaf is simulated paper (flicked, rising against gravity, falling over the spine, a small bounce, an edge

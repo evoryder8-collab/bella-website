@@ -49,29 +49,40 @@ export function initRouter({ mount }) {
   const go = async (url, { push = true } = {}) => {
     if (busy) return;
     busy = true;
+    const from = location.href;
     try {
       const html = fetchPage(url);
       const page = pageOf(url);
       await curtain.cover(page === 'home' ? 'BE <em>BEAUTY</em>' : lookup(copy[currentLang()], NAMES[page]) ?? '');
       const doc = new DOMParser().parseFromString(await html, 'text/html');
+      // Back or Forward pressed while the curtain rose: history has already
+      // moved, so it is left alone and followed once this change is done.
+      const write = push && location.href === from;
+      // Where this page was left, for coming back to it with Back.
+      if (write) history.replaceState({ y: scrollY }, '');
       unmount();
       swap(doc, url);
-      if (push) history.pushState(null, '', url.href);
+      if (write) history.pushState(null, '', url.href);
       current = url.pathname;
       setLang(currentLang(), { persist: false });
-      const target = url.hash && document.querySelector(url.hash);
+      const target = (!push && history.state?.y) || (url.hash && document.querySelector(url.hash));
       target ? jumpTo(target) : jumpToTop();
       unmount = mount({ entering: true });
       markCurrent();
       window.dispatchEvent(new CustomEvent('bb:page'));
       ScrollTrigger.refresh();
+      // Again, now that the page's pinned scenes have their full height.
+      if (typeof target === 'number') jumpTo(target);
       await curtain.lift();
     } catch (error) {
       console.warn('Page change failed, loading normally:', error);
       location.href = url.href;
+      return;
     } finally {
       busy = false;
     }
+    // Back or Forward pressed again meanwhile: follow the address bar.
+    if (location.pathname !== current) go(new URL(location.href), { push: false });
   };
 
   document.addEventListener('click', (event) => {
@@ -113,8 +124,8 @@ export function initRouter({ mount }) {
 function swap(doc, url) {
   const next = doc.querySelector('main');
   // Its own relative paths (images, links) were written for its address.
-  for (const el of next.querySelectorAll('[src], [href]')) {
-    for (const attr of ['src', 'href']) {
+  for (const el of next.querySelectorAll('[src], [href], [poster]')) {
+    for (const attr of ['src', 'href', 'poster']) {
       const value = el.getAttribute(attr);
       if (value && !/^(#|[a-z][a-z0-9+.-]*:)/i.test(value)) el.setAttribute(attr, new URL(value, url).href);
     }
@@ -122,6 +133,11 @@ function swap(doc, url) {
   document.querySelector('main').replaceWith(document.adoptNode(next));
   document.querySelector('title').dataset.i18n = doc.querySelector('title').dataset.i18n;
   document.querySelector('meta[name="description"]').dataset.i18nAttr = doc.querySelector('meta[name="description"]').dataset.i18nAttr;
+  // The page's own address, which phones use when it is shared.
+  for (const selector of ['link[rel="canonical"]', 'meta[property="og:url"]']) {
+    const [here, there] = [document.querySelector(selector), doc.querySelector(selector)];
+    for (const attr of ['href', 'content']) if (there?.hasAttribute(attr)) here?.setAttribute(attr, there.getAttribute(attr));
+  }
 }
 
 // The nav link for the current page reads as current.

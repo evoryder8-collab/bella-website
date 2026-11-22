@@ -16,7 +16,7 @@ To put the whole earlier set back on the live site while keeping every other
 fix, revert the sound commits, newest first:
 
 ```bash
-git revert --no-edit HEAD_OF_OPENING_CHANGE 6ba435b
+git revert --no-edit f2544f6 6ba435b
 ```
 
 ```bash

@@ -3,8 +3,8 @@
 // that is heard only while the page moves, like moving through silk.
 // Every effect is recorded (src/sfx): the user's own whooshes, button click,
 // magazine riffle and sparkle for the 3D figures, and designs layered from
-// recordings in their sound library (src/sfx/CREDITS.md): singing bowls and a
-// breath for the ritual's ring, a draught of air between its pages, stone on
+// recordings in their sound library (src/sfx/CREDITS.md): a draught of air
+// between the ritual's pages (its ring closes on a breath, from Freesound), stone on
 // stone for the social stones, cloth for the menu, the leave card and the
 // page curtain, paper for the magazine's cover, a card for the reviews and a
 // small dull button for hovering on desktop. They load once sound
@@ -28,7 +28,7 @@ const TAKES = {
   click: [new URL('./sfx/click.mp3', import.meta.url).href],
   riffle: [new URL('./sfx/pages-riffle.mp3', import.meta.url).href],
   magic: [new URL('./sfx/magic.mp3', import.meta.url).href],
-  ring: [new URL('./sfx/ring.mp3', import.meta.url).href],
+  breath: [new URL('./sfx/breath.mp3', import.meta.url).href],
   draft: [new URL('./sfx/draft.mp3', import.meta.url).href],
   cover: [new URL('./sfx/cover.mp3', import.meta.url).href],
   silk: [new URL('./sfx/silk.mp3', import.meta.url).href],
@@ -355,10 +355,11 @@ export function cover(strength = 1) {
   if (isPlaying()) playTake('cover', 0.9 * strength, { vary: 0.03 });
 }
 
-// Two singing bowls rubbed until they hum (A, in the song's key), swelling for
-// 1.5 s with one slow breath out: the ritual's ring of light closing.
-export function ring() {
-  if (isPlaying()) playTake('ring', 0.65, { startIn: 0, vary: 0 });
+// A breath drawn in, its fullest `peakIn` seconds from now: the ritual's ring
+// of light closing, just before the site opens. (The owner's choice over two
+// singing bowls swelling there, which sounded eerie on the dark screen.)
+export function breath(peakIn) {
+  if (isPlaying()) playTake('breath', 0.62, { peakIn, vary: 0 });
 }
 
 // A short draught of air: a page of the ritual giving way to the next.

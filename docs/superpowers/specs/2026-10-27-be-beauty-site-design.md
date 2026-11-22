@@ -212,8 +212,8 @@ decorative lines that looked like placeholders.
   of cloth that is heard only while the page moves, and recorded effects only: the user's own whooshes,
   button click, magazine riffle and once-per-visit sparkle for the 3D figures, and designs layered from
   recordings in their sound library (`src/sfx/CREDITS.md`, each chosen and checked by listening with the
-  earshot tools): two singing bowls in the song's key and a slow breath as the ritual's ring closes, a draught
-  of air between its pages, stone on stone for the social stones (as they arrive and when tapped), cloth
+  earshot tools): a draught of air between the ritual's pages (its ring closes on a breath drawn in, a CC0
+  recording from Freesound; two singing bowls swelling were tried there and sounded eerie on the dark screen), stone on stone for the social stones (as they arrive and when tapped), cloth
   for the menu and the leave card, paper for the magazine's cover and, with a mouse, a faint dull button on
   controls. A bed sheet lifted lies under the long whoosh of a page change, and a card flicked under the
   short whoosh of a review card thrown. The user's long whooshes also carry the award film's rush to full

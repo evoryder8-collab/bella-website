@@ -8,19 +8,25 @@ recordings were not touched.
 The earlier set is kept, exactly as it was live, at the tag
 **`sfx-october-2026`** (commit `6d1847e`).
 
-To put it back on the live site while keeping every later fix:
+Since then the opening has gone back to its earlier sound: the ring of light
+closes on the October breath again, not on singing bowls (the owner found the
+bowls eerie there). Everything after the opening keeps the new sounds.
+
+To put the whole earlier set back on the live site while keeping every other
+fix, revert the sound commits, newest first:
 
 ```bash
-git revert 6ba435b
+git revert --no-edit HEAD_OF_OPENING_CHANGE 6ba435b
 ```
 
 ```bash
 git push origin main
 ```
 
-That one commit holds the whole change (the files in `src/sfx/`, their levels
-and triggers in `src/sound.js`, and the four call sites), so reverting it
-restores the old sounds and removes the new ones in one step. To hear the
+Those commits hold the whole change (the files in `src/sfx/`, their levels and
+triggers in `src/sound.js`, and the call sites), so reverting them restores the
+old sounds and removes the new ones. Any later commit that changes the sounds
+is added to the front of that list here. To hear the
 earlier set without changing anything, check the tag out in a second folder:
 
 ```bash
